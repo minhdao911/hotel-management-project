@@ -22,20 +22,20 @@
 hs_err_pid*
 
 #ant specific
-/HotelApp/dist/
-/HotelApp/build/
+/main/dist/
+/main/build/
 
 #netbeans specific
-/HotelApp/core
-/HotelApp/nbproject/*
-!/HotelApp/nbproject/project.properties
-!/HotelApp/nbproject/project.xml
+/main/core
+/main/nbproject/*
+/main/!nbproject/project.properties
+/main/!nbproject/project.xml
 
 #java specific
 *.class
 
 #glassfish-resources
-/HotelApp/web/WEB-INF/glassfish-resources.xml
+/main/web/WEB-INF/glassfish-resources.xml
 
 #general swap/backup files
 *.so
@@ -46,5 +46,4 @@ hs_err_pid*
 *.DS_Store
 *.lock
 
-/HotelApp/nbproject/private/
-/Java/nbproject/private/
+/main/nbproject/private/
