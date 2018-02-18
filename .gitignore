@@ -45,3 +45,4 @@ nbproject/*
 *.swp
 *.DS_Store
 *.lock
+/HotelApp/nbproject/private/
