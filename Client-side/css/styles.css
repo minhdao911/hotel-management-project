@@ -1,0 +1,268 @@
+@charset"utf-8";
+ @media screen and (max-width: 600px) {
+    li {
+        width: 100%;
+        float:left;
+    }
+     
+     #nav-tab, #process-tab{
+         display: none;
+     }
+     
+     #main-tab{
+         height: 35em !important;
+         margin: auto !important;
+         margin-left: 3em !important;
+         width: 25em !important;
+     }
+     
+     #task-list{
+        height: 31.5em !important;
+        -webkit-box-shadow: -0.063em 0.125em 1.188em 0.188em rgba(0,0,0,0.75);
+         -moz-box-shadow: -0.063em 0.125em 1.188em 0.188em rgba(0,0,0,0.75);
+        box-shadow: -0.063em 0.125em 1.188em 0.188em rgba(0,0,0,0.75);
+     }
+     
+     body{
+         background-image: url(../image/background.png) no-repeat 0 0;
+         height: 55em !important;
+         width: 600px; !important;
+         margin: 0 auto;
+         position: relative;
+         background-size: auto;
+     }
+     #body{
+         height: 45em !important;
+         max-width: 33em !important;
+     }
+     #wrapper{
+         height: 45em !important;
+         width: 26em;
+         margin: 0 auto !important;
+     }
+    .nav li:last-child{
+        width: 6.8em !important;
+        border-right: none !important;
+     }
+     
+     .add-btn-hidden{
+        height: 2.5em !important;
+        width: 2.5em !important; 
+        visibility: visible !important;
+     }
+     .add-btn-form-hidden{
+        position: absolute;
+        bottom: 7.5em !important;
+        right: 5em !important;
+     }
+
+     .add-btn{
+         visibility: hidden;
+     }
+}
+
+body{
+    background-image: url("../image/background.png");
+    background: cover;
+    max-height: 48.750em - 4.875em;
+    max-width: 1600px;
+    margin: 0 auto;
+    position: relative;
+}
+
+#body{
+    margin: 3.125em 3.125em;
+    margin-left: 1.563em;
+    margin-top: 3.125em;
+    padding-bottom: 0.938em;
+    background-color: white;
+    backface-visibility: visible;
+    height: 43.750em;
+    width: 95em;
+}
+
+#wrapper{
+    padding: 1.875em;
+    height: 40.625em;
+    margin: 3.125em 3.125em;
+    display: grid;
+    grid-template-columns: 14.375em 35.625em 35.625em;
+    grid-gap: 0.625em;
+    grid-auto-rows: minmax(6.250em, auto);
+}
+
+#nav-tab{
+    background-color: greenyellow;
+    text-align: center;
+    width: 14.375em;
+    height: 100%;
+}
+
+#prof-card{
+    width: 12.5em;
+    margin: 1.25em;
+    background-color: white;
+    text-align: center;
+    margin: 0.625em auto;
+}
+
+
+.avt-pic{
+    padding: 0.313em;
+    text-align: center;
+    width: 11.250em;
+    height: 11.250em;
+}
+
+#hotel-icon{
+    position: absolute;
+    bottom: 3.5em;
+    left: 10em;
+}
+
+
+.htl-pic{
+    width: 7.5em;
+    height: 7.5em;
+}
+
+#username{
+    color: white;
+}
+
+.btn-wrapper{
+    background-color: black;
+    color: white;
+    width: 11.250em;
+    margin: 0 auto;
+    text-align: left;
+    padding-left: 0.625em;
+}
+
+#main-tab{
+    width: 100%;
+    height: 100%;
+}
+
+#nav-bar{
+    margin-bottom: 0.625em;
+    width: 100%;
+    height: 2.500em;
+    background-color: #fff;
+    -webkit-box-shadow: -0.063em 0.125em 1.188em 0.188em rgba(0,0,0,0.75);
+    -moz-box-shadow: -0.063em 0.125em 1.188em 0.188em rgba(0,0,0,0.75);
+    box-shadow: -0.063em 0.125em 1.188em 0.188em rgba(0,0,0,0.75);
+}
+
+.nav{
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+.nav li{
+    text-align: center;
+    padding: 0.625em 0;
+    float: left;
+    width: 24%;
+    height: 1.250em;
+    border: 0.063em solid black;
+    border-top:none;
+    border-bottom: none;
+    border-left: none;
+}
+
+.nav li:last-child{
+    width: 9.789em;
+    border-right: none !important;
+}
+a.nav-links:link, a.nav-links:visited{
+    display: block;
+    font-weight: bold;
+    text-align: center;
+    padding: 0.250em;
+    text-decoration: none;
+    text-transform: uppercase;
+}
+
+.nav li:hover, .nav li:active {
+    background-color: #000;
+    color: #fff;
+}
+
+#task-list{
+    height: 37.188em;
+    -webkit-box-shadow: -0.063em 0.125em 1.188em 0.188em rgba(0,0,0,0.75);
+    -moz-box-shadow: -0.063em 0.125em 1.188em 0.188em rgba(0,0,0,0.75);
+    box-shadow: -0.063em 0.125em 1.188em 0.188em rgba(0,0,0,0.75);
+}
+
+#process-tab{
+    height: 100%;
+    width: 100%;
+    -webkit-box-shadow: -0.063em 0.125em 1.188em 0.188em rgba(0,0,0,0.75);
+    -moz-box-shadow: -0.063em 0.125em 1.188em 0.188em rgba(0,0,0,0.75);
+    box-shadow: -0.063em 0.125em 1.188em 0.188em rgba(0,0,0,0.75);
+}
+
+#proc-header{
+    height: 2.500em;
+    text-align: center;
+}
+
+.add-btn{
+    height: 3.125em;
+    width: 3.125em; 
+}
+.add-btn-form{
+    position: absolute;
+    bottom: 3em;
+    right: 6em;
+}
+
+#hidden-add-form{
+    width: 25em;
+    height: 25em;
+    position: absolute;
+    padding: 1.25em;
+    visibility: hidden;
+    position:absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: -12.5em; /*set to a negative number 1/2 of your height*/
+    margin-left: -12.5em; /*set to a negative number 1/2 of your width*/
+    border: 1px solid #ccc;
+    background-color: #f3f3f3;
+}
+
+#form-header, #cancel{
+    display: inline;
+}
+
+#cancel{
+    float: right;
+    font-size: 1.25em;
+    font-weight: 700;
+}
+
+#department, #select{
+    position: flex;
+    float: right;
+    margin-right: 2em;
+}
+
+#select{
+    width: 10em;
+}
+
+.add-btn-hidden{
+    height: 3.125em;
+    width: 3.125em; 
+    visibility: hidden;
+}
+
+.add-btn-form-hidden{
+    position: absolute;
+    bottom: 2.5em;
+    right: 6.5em;
+}
