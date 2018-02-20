@@ -69,7 +69,7 @@ public class Task implements Serializable {
     private Date completionTime;
     
     @JoinColumn(name = "department", referencedColumnName = "id")
-    @ManyToOne(optional = false)
+    @ManyToOne
     private Department department;
     
     @JoinColumn(name = "completionUser", referencedColumnName = "id")

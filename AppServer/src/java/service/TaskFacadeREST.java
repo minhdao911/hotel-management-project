@@ -9,6 +9,10 @@ import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -18,6 +22,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import model.Department;
+import model.Task;
 import model.Task;
 
 /**
@@ -25,7 +31,7 @@ import model.Task;
  * @author minhdao
  */
 @Stateless
-@Path("model.task")
+@Path("task")
 public class TaskFacadeREST extends AbstractFacade<Task> {
 
     @PersistenceContext(unitName = "AppServerPU")
@@ -81,6 +87,21 @@ public class TaskFacadeREST extends AbstractFacade<Task> {
     @Produces(MediaType.TEXT_PLAIN)
     public String countREST() {
         return String.valueOf(super.count());
+    }
+    
+    @GET
+    @Path("dep/{departmentid}")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public List<Task> getTaskOfDepartment(@PathParam("departmentid") int id){
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Task> cq = cb.createQuery(Task.class);
+        Root<Task> task = cq.from(Task.class);
+        cq.select(task);
+        cq.where(
+            cb.equal(task.get("department"), new Department(id))
+        );
+        TypedQuery<Task> q = em.createQuery(cq);
+        return q.getResultList();
     }
 
     @Override

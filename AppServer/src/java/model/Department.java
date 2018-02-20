@@ -40,13 +40,13 @@ public class Department implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Integer id;
+    private int id;
     
     @NotNull
     @Column(name = "name")
     private String name;
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "department")
+    @OneToMany(mappedBy = "department")
     private Collection<Task> taskCollection;
     
     @OneToMany(mappedBy = "department")
@@ -55,20 +55,20 @@ public class Department implements Serializable {
     public Department() {
     }
 
-    public Department(Integer id) {
+    public Department(int id) {
         this.id = id;
     }
 
-    public Department(Integer id, String name) {
+    public Department(int id, String name) {
         this.id = id;
         this.name = name;
     }
 
-    public Integer getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(int id) {
         this.id = id;
     }
 

@@ -9,6 +9,10 @@ import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -36,10 +40,27 @@ public class EmployeeFacadeREST extends AbstractFacade<Employee> {
     }
 
     @POST
-    @Override
-    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public void create(Employee entity) {
-        super.create(entity);
+    @Path("login/{username}/{password}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces({MediaType.APPLICATION_XML})
+    public Employee login(@PathParam("username") String usrname, 
+            @PathParam("password") String pass) {
+        
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Employee> cq = cb.createQuery(Employee.class);
+        Root<Employee> emp = cq.from(Employee.class);
+        cq.select(emp);
+        cq.where(
+            cb.and(
+                cb.equal(emp.get("userName"), usrname),
+                cb.equal(emp.get("password"), pass)
+            )
+        );
+        TypedQuery<Employee> q = em.createQuery(cq);
+        if (q.getResultList().isEmpty()){
+            return null;
+        }
+        return q.getSingleResult();
     }
 
     @PUT
