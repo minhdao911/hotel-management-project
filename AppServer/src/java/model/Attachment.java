@@ -9,8 +9,11 @@ import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -28,25 +31,41 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Attachment.findAll", query = "SELECT a FROM Attachment a")
-    , @NamedQuery(name = "Attachment.findByFilePath", query = "SELECT a FROM Attachment a WHERE a.filePath = :filePath")})
+    , @NamedQuery(name = "Attachment.findById", query = "SELECT a FROM Attachment a WHERE a.id = :id")})
 public class Attachment implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @Basic(optional = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private int id;
+    
     @NotNull
-    @Size(min = 1, max = 100)
     @Column(name = "filePath")
     private String filePath;
-    @JoinColumn(name = "taskId", referencedColumnName = "id")
-    @ManyToOne
-    private Task taskId;
+    
+    @JoinColumn(name = "task", referencedColumnName = "id")
+    @ManyToOne(optional = false)
+    private Task task;
 
     public Attachment() {
     }
 
-    public Attachment(String filePath) {
+    public Attachment(int id) {
+        this.id = id;
+    }
+
+    public Attachment(int id, String filePath) {
+        this.id = id;
         this.filePath = filePath;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getFilePath() {
@@ -57,18 +76,18 @@ public class Attachment implements Serializable {
         this.filePath = filePath;
     }
 
-    public Task getTaskId() {
-        return taskId;
+    public Task getTask() {
+        return task;
     }
 
-    public void setTaskId(Task taskId) {
-        this.taskId = taskId;
+    public void setTask(Task task) {
+        this.task = task;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (filePath != null ? filePath.hashCode() : 0);
+        hash += (id > 0 ? id : 0);
         return hash;
     }
 
@@ -79,7 +98,7 @@ public class Attachment implements Serializable {
             return false;
         }
         Attachment other = (Attachment) object;
-        if ((this.filePath == null && other.filePath != null) || (this.filePath != null && !this.filePath.equals(other.filePath))) {
+        if ((this.id < 0 && other.id > 0) || (this.id > 0 && this.id == other.id)) {
             return false;
         }
         return true;
@@ -87,7 +106,7 @@ public class Attachment implements Serializable {
 
     @Override
     public String toString() {
-        return "model.Attachment[ filePath=" + filePath + " ]";
+        return "model.Attachment[ id=" + id + " ]";
     }
     
 }

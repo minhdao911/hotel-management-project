@@ -47,3 +47,7 @@ hs_err_pid*
 *.lock
 
 /main/nbproject/private/
+/HotelApp/nbproject/private/
+/AppServer/nbproject/private/
+/AppServer/build/
+/AppServer/dist/

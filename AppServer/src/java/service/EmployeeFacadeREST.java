@@ -25,10 +25,10 @@ import model.Employee;
  * @author minhdao
  */
 @Stateless
-@Path("model.employee")
+@Path("employee")
 public class EmployeeFacadeREST extends AbstractFacade<Employee> {
 
-    @PersistenceContext(unitName = "HotelAppPU")
+    @PersistenceContext(unitName = "AppServerPU")
     private EntityManager em;
 
     public EmployeeFacadeREST() {

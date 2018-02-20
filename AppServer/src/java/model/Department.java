@@ -8,6 +8,7 @@ package model;
 import java.io.Serializable;
 import java.util.Collection;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -38,19 +39,17 @@ public class Department implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
-    @Basic(optional = false)
+    
     @NotNull
-    @Size(min = 1, max = 40)
     @Column(name = "name")
     private String name;
-    @OneToMany(mappedBy = "departmentId")
-    private Collection<EmployeeTitle> employeeTitleCollection;
-    @OneToMany(mappedBy = "departmentId")
+    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "department")
     private Collection<Task> taskCollection;
-    @OneToMany(mappedBy = "departmentId")
+    
+    @OneToMany(mappedBy = "department")
     private Collection<Employee> employeeCollection;
 
     public Department() {
@@ -82,15 +81,6 @@ public class Department implements Serializable {
     }
 
     @XmlTransient
-    public Collection<EmployeeTitle> getEmployeeTitleCollection() {
-        return employeeTitleCollection;
-    }
-
-    public void setEmployeeTitleCollection(Collection<EmployeeTitle> employeeTitleCollection) {
-        this.employeeTitleCollection = employeeTitleCollection;
-    }
-
-    @XmlTransient
     public Collection<Task> getTaskCollection() {
         return taskCollection;
     }
@@ -111,7 +101,7 @@ public class Department implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
+        hash += (id > 0 ? id : 0);
         return hash;
     }
 
@@ -122,7 +112,7 @@ public class Department implements Serializable {
             return false;
         }
         Department other = (Department) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+        if ((this.id < 0 && other.id > 0) || (this.id > 0 && this.id == other.id)) {
             return false;
         }
         return true;

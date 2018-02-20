@@ -9,12 +9,14 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -38,8 +40,6 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Task.findAll", query = "SELECT t FROM Task t")
     , @NamedQuery(name = "Task.findById", query = "SELECT t FROM Task t WHERE t.id = :id")
     , @NamedQuery(name = "Task.findByName", query = "SELECT t FROM Task t WHERE t.name = :name")
-    , @NamedQuery(name = "Task.findByPlace", query = "SELECT t FROM Task t WHERE t.place = :place")
-    , @NamedQuery(name = "Task.findByDescription", query = "SELECT t FROM Task t WHERE t.description = :description")
     , @NamedQuery(name = "Task.findByCreationTime", query = "SELECT t FROM Task t WHERE t.creationTime = :creationTime")
     , @NamedQuery(name = "Task.findByCompletionTime", query = "SELECT t FROM Task t WHERE t.completionTime = :completionTime")})
 public class Task implements Serializable {
@@ -47,55 +47,55 @@ public class Task implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
     @Column(name = "id")
-    private Integer id;
-    @Basic(optional = false)
+    private int id;
+    
     @NotNull
-    @Size(min = 1, max = 40)
     @Column(name = "name")
     private String name;
-    @Size(max = 100)
-    @Column(name = "place")
-    private String place;
-    @Size(max = 1000)
+    
+    @Column(name = "location")
+    private String location;
+
     @Column(name = "description")
     private String description;
-    @Basic(optional = false)
-    @NotNull
+    
     @Column(name = "creationTime")
     @Temporal(TemporalType.TIMESTAMP)
     private Date creationTime;
+    
     @Column(name = "completionTime")
     @Temporal(TemporalType.TIMESTAMP)
     private Date completionTime;
-    @JoinColumn(name = "departmentId", referencedColumnName = "id")
+    
+    @JoinColumn(name = "department", referencedColumnName = "id")
+    @ManyToOne(optional = false)
+    private Department department;
+    
+    @JoinColumn(name = "completionUser", referencedColumnName = "id")
     @ManyToOne
-    private Department departmentId;
-    @JoinColumn(name = "employeeId", referencedColumnName = "id")
-    @ManyToOne
-    private Employee employeeId;
-    @OneToMany(mappedBy = "taskId")
+    private Employee completionUser;
+    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "task")
     private Collection<Attachment> attachmentCollection;
 
     public Task() {
     }
 
-    public Task(Integer id) {
+    public Task(int id) {
         this.id = id;
     }
 
-    public Task(Integer id, String name, Date creationTime) {
+    public Task(int id, String name) {
         this.id = id;
         this.name = name;
-        this.creationTime = creationTime;
     }
 
-    public Integer getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -107,12 +107,12 @@ public class Task implements Serializable {
         this.name = name;
     }
 
-    public String getPlace() {
-        return place;
+    public String getLocation() {
+        return location;
     }
 
-    public void setPlace(String place) {
-        this.place = place;
+    public void setLocation(String location) {
+        this.location = location;
     }
 
     public String getDescription() {
@@ -139,20 +139,20 @@ public class Task implements Serializable {
         this.completionTime = completionTime;
     }
 
-    public Department getDepartmentId() {
-        return departmentId;
+    public Department getDepartment() {
+        return department;
     }
 
-    public void setDepartmentId(Department departmentId) {
-        this.departmentId = departmentId;
+    public void setDepartment(Department department) {
+        this.department = department;
     }
 
-    public Employee getEmployeeId() {
-        return employeeId;
+    public Employee getCompletionUser() {
+        return completionUser;
     }
 
-    public void setEmployeeId(Employee employeeId) {
-        this.employeeId = employeeId;
+    public void setCompletionUser(Employee completionUser) {
+        this.completionUser = completionUser;
     }
 
     @XmlTransient
@@ -167,7 +167,7 @@ public class Task implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
+        hash += (id > 0 ? id : 0);
         return hash;
     }
 
@@ -178,7 +178,7 @@ public class Task implements Serializable {
             return false;
         }
         Task other = (Task) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+        if ((this.id < 0 && other.id > 0) || (this.id > 0 && this.id == other.id)) {
             return false;
         }
         return true;

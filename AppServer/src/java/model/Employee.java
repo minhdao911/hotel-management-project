@@ -19,6 +19,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -42,42 +43,56 @@ public class Employee implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
     @Column(name = "id")
-    private Integer id;
-    @Size(max = 40)
+    private int id;
+    
+    @NotNull
     @Column(name = "userName")
     private String userName;
-    @Size(max = 40)
+    
+    @NotNull
     @Column(name = "firstName")
     private String firstName;
-    @Size(max = 40)
+    
+    @NotNull
     @Column(name = "lastName")
     private String lastName;
-    @Size(max = 40)
+    
+    @NotNull
     @Column(name = "password")
     private String password;
-    @OneToMany(mappedBy = "employeeId")
+    
+    @OneToMany(mappedBy = "completionUser")
     private Collection<Task> taskCollection;
-    @JoinColumn(name = "departmentId", referencedColumnName = "id")
+    
+    @JoinColumn(name = "department", referencedColumnName = "id")
     @ManyToOne
-    private Department departmentId;
-    @JoinColumn(name = "employeeTitleId", referencedColumnName = "id")
+    private Department department;
+    
+    @JoinColumn(name = "employeeType", referencedColumnName = "id")
     @ManyToOne
-    private EmployeeTitle employeeTitleId;
+    private EmployeeType employeeType;
 
     public Employee() {
     }
 
-    public Employee(Integer id) {
+    public Employee(int id) {
         this.id = id;
     }
 
-    public Integer getId() {
+    public Employee(int id, String userName, String firstName, String lastName, String password) {
+        this.id = id;
+        this.userName = userName;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.password = password;
+    }
+
+    public int getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -122,26 +137,26 @@ public class Employee implements Serializable {
         this.taskCollection = taskCollection;
     }
 
-    public Department getDepartmentId() {
-        return departmentId;
+    public Department getDepartment() {
+        return department;
     }
 
-    public void setDepartmentId(Department departmentId) {
-        this.departmentId = departmentId;
+    public void setDepartment(Department department) {
+        this.department = department;
     }
 
-    public EmployeeTitle getEmployeeTitleId() {
-        return employeeTitleId;
+    public EmployeeType getEmployeeType() {
+        return employeeType;
     }
 
-    public void setEmployeeTitleId(EmployeeTitle employeeTitleId) {
-        this.employeeTitleId = employeeTitleId;
+    public void setEmployeeType(EmployeeType employeeType) {
+        this.employeeType = employeeType;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
+        hash += (id > 0 ? id : 0);
         return hash;
     }
 
@@ -152,7 +167,7 @@ public class Employee implements Serializable {
             return false;
         }
         Employee other = (Employee) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+        if ((this.id < 0 && other.id > 0) || (this.id > 0 && this.id == other.id)) {
             return false;
         }
         return true;

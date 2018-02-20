@@ -13,8 +13,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -29,65 +27,53 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author minhdao
  */
 @Entity
-@Table(name = "employeeTitle")
+@Table(name = "employeeType")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "EmployeeTitle.findAll", query = "SELECT e FROM EmployeeTitle e")
-    , @NamedQuery(name = "EmployeeTitle.findById", query = "SELECT e FROM EmployeeTitle e WHERE e.id = :id")
-    , @NamedQuery(name = "EmployeeTitle.findByTitle", query = "SELECT e FROM EmployeeTitle e WHERE e.title = :title")})
-public class EmployeeTitle implements Serializable {
+    @NamedQuery(name = "EmployeeType.findAll", query = "SELECT e FROM EmployeeType e")
+    , @NamedQuery(name = "EmployeeType.findById", query = "SELECT e FROM EmployeeType e WHERE e.id = :id")
+    , @NamedQuery(name = "EmployeeType.findByName", query = "SELECT e FROM EmployeeType e WHERE e.name = :name")})
+public class EmployeeType implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
     @Column(name = "id")
-    private Integer id;
-    @Basic(optional = false)
+    private int id;
+    
     @NotNull
-    @Size(min = 1, max = 40)
-    @Column(name = "title")
-    private String title;
-    @JoinColumn(name = "departmentId", referencedColumnName = "id")
-    @ManyToOne
-    private Department departmentId;
-    @OneToMany(mappedBy = "employeeTitleId")
+    @Column(name = "name")
+    private String name;
+    
+    @OneToMany(mappedBy = "employeeType")
     private Collection<Employee> employeeCollection;
 
-    public EmployeeTitle() {
+    public EmployeeType() {
     }
 
-    public EmployeeTitle(Integer id) {
+    public EmployeeType(int id) {
         this.id = id;
     }
 
-    public EmployeeTitle(Integer id, String title) {
+    public EmployeeType(int id, String name) {
         this.id = id;
-        this.title = title;
+        this.name = name;
     }
 
-    public Integer getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(int id) {
         this.id = id;
     }
 
-    public String getTitle() {
-        return title;
+    public String getName() {
+        return name;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public Department getDepartmentId() {
-        return departmentId;
-    }
-
-    public void setDepartmentId(Department departmentId) {
-        this.departmentId = departmentId;
+    public void setName(String name) {
+        this.name = name;
     }
 
     @XmlTransient
@@ -102,18 +88,18 @@ public class EmployeeTitle implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
+        hash += (id > 0 ? id : 0);
         return hash;
     }
 
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof EmployeeTitle)) {
+        if (!(object instanceof EmployeeType)) {
             return false;
         }
-        EmployeeTitle other = (EmployeeTitle) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+        EmployeeType other = (EmployeeType) object;
+        if ((this.id < 0 && other.id > 0) || (this.id > 0 && this.id == other.id)) {
             return false;
         }
         return true;
@@ -121,7 +107,7 @@ public class EmployeeTitle implements Serializable {
 
     @Override
     public String toString() {
-        return "model.EmployeeTitle[ id=" + id + " ]";
+        return "model.EmployeeType[ id=" + id + " ]";
     }
     
 }
