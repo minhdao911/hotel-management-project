@@ -1,0 +1,65 @@
+@charset"utf-8";
+@media screen and (max-width: 600px) {
+    li {
+        width: 100%;
+        float:left;
+    }
+     
+     #nav-tab, #process-tab{
+         display: none;
+     }
+     
+     #main-tab{
+         height: 35em !important;
+         margin: auto !important;
+         margin-left: 3em !important;
+         width: 25em !important;
+     }
+     
+     #task-list{
+        height: 31.5em !important;
+        -webkit-box-shadow: -0.063em 0.125em 1.188em 0.188em rgba(0,0,0,0.75);
+         -moz-box-shadow: -0.063em 0.125em 1.188em 0.188em rgba(0,0,0,0.75);
+        box-shadow: -0.063em 0.125em 1.188em 0.188em rgba(0,0,0,0.75);
+     }
+     
+     body{
+         background-image: url(../image/background.png) no-repeat 0 0;
+         height: 55em !important;
+         width: 600px; !important;
+         margin: 0 auto;
+         position: relative;
+         background-size: auto;
+     }
+     #body{
+         height: 45em !important;
+         max-width: 33em !important;
+     }
+     #wrapper{
+         height: 45em !important;
+         width: 26em;
+         margin: 0 auto !important;
+     }
+    .nav li:last-child{
+        width: 6.8em !important;
+        border-right: none !important;
+     }
+     
+     .add-btn-hidden{
+        position: absolute !important;
+        left: 26.8em;
+        top: 33em;
+        height: 5em !important;
+        width: 2.5em !important; 
+        visibility: visible !important;
+     }
+     .add-btn-form-hidden{
+        position: absolute;
+        bottom: 7.5em !important;
+        right: 5em !important;
+     }
+
+     .add-btn{
+         visibility: hidden;
+     }
+}
