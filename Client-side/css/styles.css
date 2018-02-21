@@ -1,65 +1,4 @@
 @charset"utf-8";
- @media screen and (max-width: 600px) {
-    li {
-        width: 100%;
-        float:left;
-    }
-     
-     #nav-tab, #process-tab{
-         display: none;
-     }
-     
-     #main-tab{
-         height: 35em !important;
-         margin: auto !important;
-         margin-left: 3em !important;
-         width: 25em !important;
-     }
-     
-     #task-list{
-        height: 31.5em !important;
-        -webkit-box-shadow: -0.063em 0.125em 1.188em 0.188em rgba(0,0,0,0.75);
-         -moz-box-shadow: -0.063em 0.125em 1.188em 0.188em rgba(0,0,0,0.75);
-        box-shadow: -0.063em 0.125em 1.188em 0.188em rgba(0,0,0,0.75);
-     }
-     
-     body{
-         background-image: url(../image/background.png) no-repeat 0 0;
-         height: 55em !important;
-         width: 600px; !important;
-         margin: 0 auto;
-         position: relative;
-         background-size: auto;
-     }
-     #body{
-         height: 45em !important;
-         max-width: 33em !important;
-     }
-     #wrapper{
-         height: 45em !important;
-         width: 26em;
-         margin: 0 auto !important;
-     }
-    .nav li:last-child{
-        width: 6.8em !important;
-        border-right: none !important;
-     }
-     
-     .add-btn-hidden{
-        height: 2.5em !important;
-        width: 2.5em !important; 
-        visibility: visible !important;
-     }
-     .add-btn-form-hidden{
-        position: absolute;
-        bottom: 7.5em !important;
-        right: 5em !important;
-     }
-
-     .add-btn{
-         visibility: hidden;
-     }
-}
 
 body{
     background-image: url("../image/background.png");
@@ -176,25 +115,54 @@ body{
     width: 9.789em;
     border-right: none !important;
 }
-a.nav-links:link, a.nav-links:visited{
+
+a { color: inherit; }
+
+a.nav-links:link {
     display: block;
-    font-weight: bold;
     text-align: center;
     padding: 0.250em;
     text-decoration: none;
     text-transform: uppercase;
 }
 
-.nav li:hover, .nav li:active {
+
+.nav li:hover, .nav li:active, .activeLink{
     background-color: #000;
     color: #fff;
 }
 
-#task-list{
-    height: 37.188em;
+#task-list, #new-tab-list, #cplt-tab-list, #cancel-tab-list{
+    position: relative;
+    height: 37.488em;
     -webkit-box-shadow: -0.063em 0.125em 1.188em 0.188em rgba(0,0,0,0.75);
     -moz-box-shadow: -0.063em 0.125em 1.188em 0.188em rgba(0,0,0,0.75);
     box-shadow: -0.063em 0.125em 1.188em 0.188em rgba(0,0,0,0.75);
+}
+
+
+#list, #new-list, #cplt-list, #cancel-list, #in-process-list {
+    overflow: auto;
+    height: 31.488em;
+    padding: 1em;
+    width: 93%;
+    margin: auto;
+}
+
+#new-tab-list, #cplt-tab-list, #cancel-tab-list {
+    background-color: black;
+    visibility: hidden;
+}
+
+
+.task-on-list, .task-cancelled, .task-cplted, .task-new {
+    margin: 1em;
+    padding: 0.625em;
+    list-style: none;
+    border: 1px solid #000;
+    -webkit-box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.75);
+    -moz-box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.75);
+    box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.75);
 }
 
 #process-tab{
@@ -205,10 +173,39 @@ a.nav-links:link, a.nav-links:visited{
     box-shadow: -0.063em 0.125em 1.188em 0.188em rgba(0,0,0,0.75);
 }
 
-#proc-header{
-    height: 2.500em;
+#process-header{
+    position: absolute;
+    margin-bottom: 10em !important;
+    width: 35.6em;
+    height: 2.5em;
     text-align: center;
 }
+
+#in-process-table{
+    position: relative;
+    margin: 2em 0;
+    height: 34.488em;
+}
+
+#in-process-list {
+    overflow: auto;
+    height: 31em;
+    padding: 1em;
+    width: 94%;
+    margin: 0.125em auto;
+}
+
+.task-in-process {
+    margin: 1em;
+    margin-top: 1.25em;
+    padding: 0.625em;
+    list-style: none;
+    border: 1px solid #000;
+    -webkit-box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.75);
+    -moz-box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.75);
+    box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.75);
+}
+
 
 .add-btn{
     height: 3.125em;
@@ -266,3 +263,5 @@ a.nav-links:link, a.nav-links:visited{
     bottom: 2.5em;
     right: 6.5em;
 }
+
+
