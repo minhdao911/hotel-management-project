@@ -6,10 +6,8 @@
 package model;
 
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.Date;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -20,14 +18,12 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -41,7 +37,9 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Task.findById", query = "SELECT t FROM Task t WHERE t.id = :id")
     , @NamedQuery(name = "Task.findByName", query = "SELECT t FROM Task t WHERE t.name = :name")
     , @NamedQuery(name = "Task.findByCreationTime", query = "SELECT t FROM Task t WHERE t.creationTime = :creationTime")
-    , @NamedQuery(name = "Task.findByCompletionTime", query = "SELECT t FROM Task t WHERE t.completionTime = :completionTime")})
+    , @NamedQuery(name = "Task.findByCompletionTime", query = "SELECT t FROM Task t WHERE t.completionTime = :completionTime")
+    , @NamedQuery(name = "Task.findByIsCancelled", query = "SELECT t FROM Task t WHERE t.isCancelled = :isCancelled")
+    , @NamedQuery(name = "Task.findByIsUrgent", query = "SELECT t FROM Task t WHERE t.isUrgent = :isUrgent")})
 public class Task implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -56,7 +54,7 @@ public class Task implements Serializable {
     
     @Column(name = "location")
     private String location;
-
+    
     @Column(name = "description")
     private String description;
     
@@ -68,16 +66,21 @@ public class Task implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date completionTime;
     
+    @NotNull
+    @Column(name = "isCancelled")
+    private boolean isCancelled;
+
+    @NotNull
+    @Column(name = "isUrgent")
+    private boolean isUrgent;
+    
     @JoinColumn(name = "department", referencedColumnName = "id")
-    @ManyToOne
+    @ManyToOne(optional = false)
     private Department department;
     
     @JoinColumn(name = "completionUser", referencedColumnName = "id")
     @ManyToOne
     private Employee completionUser;
-    
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "task")
-    private Collection<Attachment> attachmentCollection;
 
     public Task() {
     }
@@ -86,9 +89,11 @@ public class Task implements Serializable {
         this.id = id;
     }
 
-    public Task(int id, String name) {
+    public Task(int id, String name, boolean isCancelled, boolean isUrgent) {
         this.id = id;
         this.name = name;
+        this.isCancelled = isCancelled;
+        this.isUrgent = isUrgent;
     }
 
     public int getId() {
@@ -139,6 +144,22 @@ public class Task implements Serializable {
         this.completionTime = completionTime;
     }
 
+    public boolean getIsCancelled() {
+        return isCancelled;
+    }
+
+    public void setIsCancelled(boolean isCancelled) {
+        this.isCancelled = isCancelled;
+    }
+
+    public boolean getIsUrgent() {
+        return isUrgent;
+    }
+
+    public void setIsUrgent(boolean isUrgent) {
+        this.isUrgent = isUrgent;
+    }
+
     public Department getDepartment() {
         return department;
     }
@@ -153,15 +174,6 @@ public class Task implements Serializable {
 
     public void setCompletionUser(Employee completionUser) {
         this.completionUser = completionUser;
-    }
-
-    @XmlTransient
-    public Collection<Attachment> getAttachmentCollection() {
-        return attachmentCollection;
-    }
-
-    public void setAttachmentCollection(Collection<Attachment> attachmentCollection) {
-        this.attachmentCollection = attachmentCollection;
     }
 
     @Override

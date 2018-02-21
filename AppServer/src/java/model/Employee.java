@@ -40,27 +40,33 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Employee.findByPassword", query = "SELECT e FROM Employee e WHERE e.password = :password")})
 public class Employee implements Serializable {
 
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 64)
+    @Column(name = "userName")
+    private String userName;
+    @Basic(optional = false)    
+    @NotNull
+    @Size(min = 1, max = 64)
+    @Column(name = "firstName")
+    private String firstName;
+    @Basic(optional = false)    
+    @NotNull
+    @Size(min = 1, max = 64)
+    @Column(name = "lastName")
+    private String lastName;
+    @Basic(optional = false)    
+    @NotNull
+    @Size(min = 1, max = 64)
+    @Column(name = "password")
+    private String password;
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private int id;
     
-    @NotNull
-    @Column(name = "userName")
-    private String userName;
-    
-    @NotNull
-    @Column(name = "firstName")
-    private String firstName;
-    
-    @NotNull
-    @Column(name = "lastName")
-    private String lastName;
-    
-    @NotNull
-    @Column(name = "password")
-    private String password;
     
     @OneToMany(mappedBy = "completionUser")
     private Collection<Task> taskCollection;
@@ -96,37 +102,6 @@ public class Employee implements Serializable {
         this.id = id;
     }
 
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
 
     @XmlTransient
     public Collection<Task> getTaskCollection() {
@@ -176,6 +151,38 @@ public class Employee implements Serializable {
     @Override
     public String toString() {
         return "model.Employee[ id=" + id + " ]";
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
     
 }

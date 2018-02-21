@@ -103,6 +103,82 @@ public class TaskFacadeREST extends AbstractFacade<Task> {
         TypedQuery<Task> q = em.createQuery(cq);
         return q.getResultList();
     }
+    
+    @GET
+    @Path("dep/{departmentid}/new")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public List<Task> getNewTaskOfDepartment(@PathParam("departmentid") int id){
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Task> cq = cb.createQuery(Task.class);
+        Root<Task> task = cq.from(Task.class);
+        cq.select(task);
+        cq.where(
+            cb.and(
+                cb.equal(task.get("department"), new Department(id)),
+                cb.isNull(task.get("completionUser")),
+                cb.isFalse(task.get("isCancelled"))
+            ) 
+        );
+        TypedQuery<Task> q = em.createQuery(cq);
+        return q.getResultList();
+    }
+    
+    @GET
+    @Path("dep/{departmentid}/inprocess")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public List<Task> getInprocessTaskOfDepartment(@PathParam("departmentid") int id){
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Task> cq = cb.createQuery(Task.class);
+        Root<Task> task = cq.from(Task.class);
+        cq.select(task);
+        cq.where(
+            cb.and(
+                cb.equal(task.get("department"), new Department(id)),
+                cb.isNotNull(task.get("completionUser")),
+                cb.isNull(task.get("completionTime")),
+                cb.isFalse(task.get("isCancelled"))
+            ) 
+        );
+        TypedQuery<Task> q = em.createQuery(cq);
+        return q.getResultList();
+    }
+    
+    @GET
+    @Path("dep/{departmentid}/completed")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public List<Task> getCompletedTaskOfDepartment(@PathParam("departmentid") int id){
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Task> cq = cb.createQuery(Task.class);
+        Root<Task> task = cq.from(Task.class);
+        cq.select(task);
+        cq.where(
+            cb.and(
+                cb.equal(task.get("department"), new Department(id)),
+                cb.isNotNull(task.get("completionUser")),
+                cb.isNotNull(task.get("completionTime"))
+            ) 
+        );
+        TypedQuery<Task> q = em.createQuery(cq);
+        return q.getResultList();
+    }
+    
+    @GET
+    @Path("dep/{departmentid}/cancelled")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public List<Task> getCancelledTaskOfDepartment(@PathParam("departmentid") int id){
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Task> cq = cb.createQuery(Task.class);
+        Root<Task> task = cq.from(Task.class);
+        cq.select(task);
+        cq.where(
+            cb.and(
+                cb.equal(task.get("department"), new Department(id)),
+                cb.isTrue(task.get("isCancelled"))
+            ) 
+        );
+        TypedQuery<Task> q = em.createQuery(cq);
+        return q.getResultList();
+    }
 
     @Override
     protected EntityManager getEntityManager() {

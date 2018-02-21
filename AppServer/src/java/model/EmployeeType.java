@@ -35,15 +35,18 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "EmployeeType.findByName", query = "SELECT e FROM EmployeeType e WHERE e.name = :name")})
 public class EmployeeType implements Serializable {
 
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 64)
+    @Column(name = "name")
+    private String name;
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private int id;
     
-    @NotNull
-    @Column(name = "name")
-    private String name;
     
     @OneToMany(mappedBy = "employeeType")
     private Collection<Employee> employeeCollection;
@@ -68,13 +71,6 @@ public class EmployeeType implements Serializable {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 
     @XmlTransient
     public Collection<Employee> getEmployeeCollection() {
@@ -108,6 +104,14 @@ public class EmployeeType implements Serializable {
     @Override
     public String toString() {
         return "model.EmployeeType[ id=" + id + " ]";
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
     
 }
