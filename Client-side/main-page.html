@@ -2,6 +2,7 @@
 <head>
     <title>Team Power's Page</title>
     <link rel= "stylesheet" type="text/css" href="css/styles.css">
+    <link rel= "stylesheet" type="text/css" href="css/ipad-style.css">
 </head>
 
 <body>
@@ -30,27 +31,50 @@
         <div id="nav-bar"> <!--Navigate bar -->
             <nav>
                 <ul class="nav">
-                    <li><a hef="#" class="nav-links">All</a></li>
-                    <li><a hef="#" class="nav-links">New</a></li>
-                    <li><a hef="#" class="nav-links">Completed</a></li>
-                    <li><a hef="#" class="nav-links">Cancelled</a></li>
+                    <li class="activeLink"><a href="#" class="nav-links">All</a></li>
+                    
+                    <li><a href="#" class="nav-links" >New</a></li>
+                    
+                    <li><a href="#" class="nav-links" onclick="switchTabs(this); return false;" >Completed</a></li>
+                    
+                    <li><a href="#" class="nav-links" onclick="switchTabs(this); return false;" >Cancelled</a></li>
                 </ul>
             </nav>
         </div>
         <div id="task-list"> <!-- Table that show tasks -->
             <ul id="list"> <!--Blank table that uses JavaScript to add tasks -->
             </ul>
-            <!--<div class="add-btn-form-hidden">
-            <img src="image/plus.svg" class="add-btn-hidden" onclick="addButton()">
-            </div>-->
+            
+            <input type="image" src="image/plus.svg" class="add-btn-hidden" onclick="addButton()" >
+        </div>
+        
+        <div id="new-tab-list">
+            <ul id="new-list">
+            </ul>
+            <input type="image" src="image/plus.svg" class="add-btn-hidden" onclick="addButton()" >
+        </div>
+        
+        <div id="cplt-tab-list">
+            <ul id="cplt-list">
+            </ul>
+            <input type="image" src="image/plus.svg" class="add-btn-hidden" onclick="addButton()" >
+        </div>
+        
+        <div id="cancel-tab-list">
+            <ul id="cancel-list">
+            </ul>
             <input type="image" src="image/plus.svg" class="add-btn-hidden" onclick="addButton()" >
         </div>
     </div>
     
     <div id="process-tab"> <!--Third column -->
-        <h3 id="proc-header">In Process</h3>
-        <ul id="in-process=list">
-        </ul>
+        <div id="process-header">
+            <h3 id="proc-header">In Process</h3>
+        </div>
+        <div id="in-process-table">
+            <ul id="in-process-list">   
+            </ul>
+        </div>
         <div class="add-btn-form">
             <input type="image" src="image/plus.svg" class="add-btn" onclick="addButton()" >
         </div>
@@ -58,16 +82,16 @@
         
         <div id="hidden-add-form">
             
-            <form>
+            <form id="my-form">
                 <h2 id="form-header">Add New Task</h2>
-                <button id="cancel" onclick="cancelButton()">X</button>
+                <button id="cancel" onclick="cancelButton(); return false;" >X</button>
                 <br>Name<br>
-                <input type="text" id="task-name"><br>
+                <input type="text" id="task-name" pattern=".{3,}" /><br>
                 <div class="same-line-input">
                 <span id="place">Place</span> <span id="department">Department</span><br>
-                <input type="text" id="task-place">
+                <input type="text" id="task-place" required />
                 <select id="select">
-                    <option value="Blank"></option>
+                    <option value=""></option>
                     <option value="Cleanning">Cleaning</option>
                     <option value="Kitchen">Kitchen</option>
                     <option value="Receptionist">Receptionist</option>
@@ -76,10 +100,11 @@
                 </select><br>
                 </div>
                 Description<br>
-                <textarea rows="10" cols="50"></textarea><br>
-                <input type="radio" name="gender" value="other"> Urgent<br>
-                Attachment:<br><input type="file" name="fileToUpload" id="fileToUpload"><br>
-                <input type="submit" id="form-submit">
+                <textarea rows="10" cols="50" id="description"></textarea><br>
+                <input type="radio" name="urgent" value="other" id="urgent-btn"> Urgent<br>
+                Attachment:<br><input type="file" name="fileToUpload" id="fileToUpload" accept=".jpg, .png, .jpeg" onchange="previewFile()" ;/>
+                <img id="output" src="#" alt="Image preview" height=70 width=60><br>
+                <input type="submit" id="form-submit" onclick="addTask (); return false;" />
             </form>
             
         </div>
