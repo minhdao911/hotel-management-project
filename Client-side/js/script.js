@@ -238,8 +238,8 @@ function addTask (){
     newCheckButton.onclick = takeTask;
     
     
-
-    ul.appendChild(li);
+    let waitingTask = ul.querySelector("#waiting-task");
+    waitingTask.insertBefore(li, waitingTask.childNodes[0]);
     ulNew.appendChild(newLi);
     
     taskArray.push(li);
@@ -421,7 +421,10 @@ function doneTask (e) {
     duplicate.setAttribute('class', 'task-done');
     
     compList.appendChild(duplicate);
-    procList.appendChild(e.target.parentElement);
+    
+    let finishedTask = procList.querySelector("#finished-task");
+    
+    finishedTask.insertBefore(e.target.parentElement, finishedTask.childNodes[0]);
     
     e.target.parentElement.setAttribute("class", "task-done");
     
