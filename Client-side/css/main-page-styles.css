@@ -1,37 +1,37 @@
 @charset"utf-8";
 
 body{
+    height: 49.813em;
     background-image: url("../image/background.png");
-    background: cover;
-    max-height: 48.750em - 4.875em;
+    overflow: hidden;
     max-width: 1600px;
-    margin: 0 auto;
+    margin: 0;
     position: relative;
+    backface-visibility: hidden;
 }
 
 #body{
-    margin: 3.125em 3.125em;
-    margin-left: 1.563em;
-    margin-top: 3.125em;
+    margin: auto;
+    margin-top: 4.3em;
     padding-bottom: 0.938em;
-    background-color: white;
+    background-color: #fff;
     backface-visibility: visible;
-    height: 43.750em;
-    width: 95em;
+    height: 39.750em;
+    width: 95%;
 }
 
 #wrapper{
     padding: 1.875em;
-    height: 40.625em;
-    margin: 3.125em 3.125em;
+    height: 37.625em;
+    margin: 4.125em 3.125em;
     display: grid;
     grid-template-columns: 14.375em 35.625em 35.625em;
     grid-gap: 0.625em;
-    grid-auto-rows: minmax(6.250em, auto);
+    grid-auto-rows: minmax(6.250em, auto);  
 }
 
 #nav-tab{
-    background-color: greenyellow;
+    background-color: #009f45;
     text-align: center;
     width: 14.375em;
     height: 100%;
@@ -40,7 +40,7 @@ body{
 #prof-card{
     width: 12.5em;
     margin: 1.25em;
-    background-color: white;
+    background-color: #fff;
     text-align: center;
     margin: 0.625em auto;
 }
@@ -55,30 +55,41 @@ body{
 
 #hotel-icon{
     position: absolute;
-    bottom: 3.5em;
-    left: 10em;
+    top: 60%;
+    left: 10.9em;
 }
 
 
 .htl-pic{
-    width: 7.5em;
-    height: 7.5em;
+    width: 8em;
+    height: 8em;
 }
 
 #username{
-    color: white;
+    color: #fff;
 }
 
 .btn-wrapper{
-    background-color: black;
-    color: white;
-    width: 11.250em;
+    background-color: #009f45;
+    color: #fff;
+    width: 9em;
+    height: 2em;
     margin: 0 auto;
     text-align: left;
     padding-left: 0.625em;
 }
 
+.btn-wrapper:hover, .btn-wrapper:active, #btn-wrapper-active {
+    background-color: #fff;
+    color: #009f45;
+}
+
+.button {
+    padding-top: 0.5em;
+}
+
 #main-tab{
+    position: relative;
     width: 100%;
     height: 100%;
 }
@@ -127,14 +138,26 @@ a.nav-links:link {
 }
 
 
-.nav li:hover, .nav li:active, .activeLink{
-    background-color: #000;
+.nav li:hover, .nav li:active, .activeNav{
+    background-color: #fe0084;
     color: #fff;
 }
 
-#task-list, #new-tab-list, #cplt-tab-list, #cancel-tab-list{
+#task-list {
     position: relative;
-    height: 37.488em;
+    height: 34.488em;
+    -webkit-box-shadow: -0.063em 0.125em 1.188em 0.188em rgba(0,0,0,0.75);
+    -moz-box-shadow: -0.063em 0.125em 1.188em 0.188em rgba(0,0,0,0.75);
+    box-shadow: -0.063em 0.125em 1.188em 0.188em rgba(0,0,0,0.75);
+}
+
+#new-tab-list, #cplt-tab-list, #cancel-tab-list{
+    position: absolute;
+    background-color: #fff;
+    visibility: hidden;
+    bottom: 0.02em;
+    height: 34.488em;
+    width: 100%;
     -webkit-box-shadow: -0.063em 0.125em 1.188em 0.188em rgba(0,0,0,0.75);
     -moz-box-shadow: -0.063em 0.125em 1.188em 0.188em rgba(0,0,0,0.75);
     box-shadow: -0.063em 0.125em 1.188em 0.188em rgba(0,0,0,0.75);
@@ -147,23 +170,86 @@ a.nav-links:link {
     padding: 1em;
     width: 93%;
     margin: auto;
+    
 }
-
-#new-tab-list, #cplt-tab-list, #cancel-tab-list {
-    background-color: black;
-    visibility: hidden;
-}
-
 
 .task-on-list, .task-cancelled, .task-cplted, .task-new {
+    position: relative;
     margin: 1em;
     padding: 0.625em;
     list-style: none;
-    border: 1px solid #000;
+    border: 1px solid #878787;
     -webkit-box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.75);
     -moz-box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.75);
     box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.75);
 }
+
+.task-list-btn-cross {
+    position: absolute;
+    top: 1em;
+    right: 3.625em;
+    background-color: #009f45;
+    color: #fff;
+    border-radius: 50%;
+}
+
+.task-list-btn-check {
+    position: absolute;
+    top: 1em;
+    right: 1em;
+    background-color: #fe0084;
+    color: #fff;
+    border-radius: 50%;
+}
+
+.done-btn {
+    text-transform: uppercase;
+    position: absolute;
+    right: 1em;
+    top: 1em;
+    height: 2.8em;
+    width: 7em;
+    background-color: #009f45;
+    color: #fff;
+}
+
+
+.task-time, .task-time-done, .task-time-taken, .task-time-cancel{
+    position: absolute;
+    right: 1em;
+    top: 3em;
+}
+
+.done-not {
+    position: absolute;
+    right: 1em;
+    top: 0.5em;
+    width: 5em;
+    height: 1.5em;
+    text-align: center;
+    padding-top: 0.28em;
+    background-color: #fe0084;
+    color: #fff;
+    text-transform: uppercase;
+}
+
+.cancel-not{
+    position: absolute;
+    right: 1em;
+    top: 0.5em;
+    width: 5em;
+    height: 1.5em;
+    text-align: center;
+    padding-top: 0.28em;
+    background-color: #fe0084;
+    color: #fff;
+    text-transform: uppercase;
+}
+
+.invisible {
+    display: none;
+}
+
 
 #process-tab{
     height: 100%;
@@ -195,12 +281,13 @@ a.nav-links:link {
     margin: 0.125em auto;
 }
 
-.task-in-process {
+.task-in-process, .task-done {
+    position: relative;
     margin: 1em;
     margin-top: 1.25em;
     padding: 0.625em;
     list-style: none;
-    border: 1px solid #000;
+    border: 1px solid #878787;
     -webkit-box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.75);
     -moz-box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.75);
     box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.75);
@@ -213,19 +300,19 @@ a.nav-links:link {
 }
 .add-btn-form{
     position: absolute;
-    bottom: 3em;
-    right: 6em;
+    top: 73%;
+    right: 6%;
 }
 
 #hidden-add-form{
-    width: 25em;
-    height: 25em;
+    width: 23em;
+    height: 27em;
     position: absolute;
     padding: 1.25em;
     visibility: hidden;
     position:absolute;
-    top: 50%;
-    left: 50%;
+    top: 38%;
+    left: 55%;
     margin-top: -12.5em; /*set to a negative number 1/2 of your height*/
     margin-left: -12.5em; /*set to a negative number 1/2 of your width*/
     border: 1px solid #ccc;
@@ -237,15 +324,55 @@ a.nav-links:link {
 }
 
 #cancel{
+    cursor: pointer;
     float: right;
     font-size: 1.25em;
     font-weight: 700;
 }
 
-#department, #select{
-    position: flex;
+.same-line-input{
+    position: relative;
+    margin-top: 0.75em;
+    width: 23em;
+    height: 3em;
+}
+
+.in-block-input-dep{
+    display: inline;
     float: right;
-    margin-right: 2em;
+}
+
+.in-block-input-pl{
+    display: inline;
+    float: left;
+}
+
+.descp-form {
+    height: 11.2em;
+}
+
+#description{
+    margin-top: 0.5em;
+}
+
+.urgent-form {
+    margin: 0.25em 0; 
+}
+
+.attachment-form {
+    margin: 0.125em 0;
+}
+
+#fileToUpload {
+    width: 16em;
+}
+
+#form-submit {
+    height: 2.8em;
+    width: 5em;
+    position: absolute;
+    right: 1em;
+    bottom: 1.5em
 }
 
 #select{
@@ -262,6 +389,11 @@ a.nav-links:link {
     position: absolute;
     bottom: 2.5em;
     right: 6.5em;
+}
+
+.task-image {
+    height: 12em;
+    width: 10em;
 }
 
 
