@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <head>
     <title>Team Power's Page</title>
-    <link rel= "stylesheet" type="text/css" href="css/styles.css">
-    <link rel= "stylesheet" type="text/css" href="css/ipad-style.css">
+    <link rel= "stylesheet" type="text/css" href="css/main-page-styles.css">
+    <link rel= "stylesheet" type="text/css" href="css/main-page-ipad-style.css">
 </head>
 
 <body>
@@ -18,8 +18,8 @@
         <h3 id="username">Username</h3>
         
         <div class="nav-buttons"> <!--Buttons to show tasks or messages -->
-            <div id="task-wrapper" class="btn-wrapper"><h4 class="button" id="tasks-btn">Tasks</h4></div>
-            <div id="msg-wrapper" class="btn-wrapper"><h4 class="button" id="msg-btn">Messages</h4></div>
+            <div id="btn-wrapper-active" class="btn-wrapper"><h4 class="button" id="tasks-btn">Tasks</h4></div>
+            <div class="btn-wrapper"><h4 class="button" id="msg-btn">Messages</h4></div>
         </div>
         
         <div id="hotel-icon">
@@ -31,13 +31,13 @@
         <div id="nav-bar"> <!--Navigate bar -->
             <nav>
                 <ul class="nav">
-                    <li class="activeLink"><a href="#" class="nav-links">All</a></li>
+                    <li class="activeNav"><a href="#" class="nav-links">All</a></li>
                     
                     <li><a href="#" class="nav-links" >New</a></li>
                     
-                    <li><a href="#" class="nav-links" onclick="switchTabs(this); return false;" >Completed</a></li>
+                    <li><a href="#" class="nav-links" >Completed</a></li>
                     
-                    <li><a href="#" class="nav-links" onclick="switchTabs(this); return false;" >Cancelled</a></li>
+                    <li><a href="#" class="nav-links" >Cancelled</a></li>
                 </ul>
             </nav>
         </div>
@@ -86,24 +86,38 @@
                 <h2 id="form-header">Add New Task</h2>
                 <button id="cancel" onclick="cancelButton(); return false;" >X</button>
                 <br>Name<br>
-                <input type="text" id="task-name" pattern=".{3,}" /><br>
+                <input type="text" id="task-name" placeholder="Task Name" required /><br>
                 <div class="same-line-input">
-                <span id="place">Place</span> <span id="department">Department</span><br>
-                <input type="text" id="task-place" required />
-                <select id="select">
-                    <option value=""></option>
-                    <option value="Cleanning">Cleaning</option>
-                    <option value="Kitchen">Kitchen</option>
-                    <option value="Receptionist">Receptionist</option>
-                    <option value="Beltboy">Bellboy</option>
-                    <option value="All">All</option>
-                </select><br>
+                    
+                    <div class="in-block-input-pl">
+                        <span id="place">Place</span><br>
+                        <input type="text" id="task-place"/>
+                    </div>
+                    
+                    <div class="in-block-input-dep">
+                        <span id="department">Department</span><br>
+                        <select id="select">
+                            <option value=""></option>
+                            <option value="Cleanning">Cleaning</option>
+                            <option value="Kitchen">Kitchen</option>
+                            <option value="Receptionist">Receptionist</option>
+                            <option value="Beltboy">Bellboy</option>
+                            <option value="All">All</option>
+                        </select>
+                    </div>
+                    
                 </div>
+                <div class="descp-form">
                 Description<br>
-                <textarea rows="10" cols="50" id="description"></textarea><br>
-                <input type="radio" name="urgent" value="other" id="urgent-btn"> Urgent<br>
+                <textarea rows="10" cols="50" id="description"></textarea>
+                </div>
+                <div class="urgent-form">
+                <input type="radio" name="urgent" value="other" id="urgent-btn"> Urgent
+                    </div>
+                <div class="attachment-form">
                 Attachment:<br><input type="file" name="fileToUpload" id="fileToUpload" accept=".jpg, .png, .jpeg" onchange="previewFile()" ;/>
-                <img id="output" src="#" alt="Image preview" height=70 width=60><br>
+                <img id="output" src="#" alt="Image preview" height=70 width=60>
+                    </div><br>
                 <input type="submit" id="form-submit" onclick="addTask (); return false;" />
             </form>
             
