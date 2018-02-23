@@ -40,12 +40,11 @@ public class Attachment implements Serializable {
     @Column(name = "id")
     private int id;
     
-    @NotNull
     @Column(name = "filePath")
     private String filePath;
     
     @JoinColumn(name = "task", referencedColumnName = "id")
-    @ManyToOne(optional = false)
+    @ManyToOne
     private Task task;
 
     public Attachment() {

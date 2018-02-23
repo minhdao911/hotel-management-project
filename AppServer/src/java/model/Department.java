@@ -36,18 +36,14 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Department.findByName", query = "SELECT d FROM Department d WHERE d.name = :name")})
 public class Department implements Serializable {
 
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 64)
-    @Column(name = "name")
-    private String name;
-
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private int id;
     
+    @Column(name = "name")
+    private String name;
     
     @OneToMany(mappedBy = "department")
     private Collection<Task> taskCollection;

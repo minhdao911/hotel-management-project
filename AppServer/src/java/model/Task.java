@@ -48,7 +48,6 @@ public class Task implements Serializable {
     @Column(name = "id")
     private int id;
     
-    @NotNull
     @Column(name = "name")
     private String name;
     
@@ -66,16 +65,14 @@ public class Task implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date completionTime;
     
-    @NotNull
     @Column(name = "isCancelled")
     private boolean isCancelled;
 
-    @NotNull
     @Column(name = "isUrgent")
     private boolean isUrgent;
     
     @JoinColumn(name = "department", referencedColumnName = "id")
-    @ManyToOne(optional = false)
+    @ManyToOne
     private Department department;
     
     @JoinColumn(name = "completionUser", referencedColumnName = "id")

@@ -40,33 +40,23 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Employee.findByPassword", query = "SELECT e FROM Employee e WHERE e.password = :password")})
 public class Employee implements Serializable {
 
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 64)
-    @Column(name = "userName")
-    private String userName;
-    @Basic(optional = false)    
-    @NotNull
-    @Size(min = 1, max = 64)
-    @Column(name = "firstName")
-    private String firstName;
-    @Basic(optional = false)    
-    @NotNull
-    @Size(min = 1, max = 64)
-    @Column(name = "lastName")
-    private String lastName;
-    @Basic(optional = false)    
-    @NotNull
-    @Size(min = 1, max = 64)
-    @Column(name = "password")
-    private String password;
-
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private int id;
     
+    @Column(name = "userName")
+    private String userName;
+
+    @Column(name = "firstName")
+    private String firstName;
+
+    @Column(name = "lastName")
+    private String lastName;
+
+    @Column(name = "password")
+    private String password;
     
     @OneToMany(mappedBy = "completionUser")
     private Collection<Task> taskCollection;

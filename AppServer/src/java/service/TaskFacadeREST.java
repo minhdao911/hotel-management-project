@@ -5,6 +5,7 @@
  */
 package service;
 
+import java.sql.Timestamp;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -15,15 +16,16 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import model.Department;
-import model.Task;
 import model.Task;
 
 /**
@@ -42,10 +44,34 @@ public class TaskFacadeREST extends AbstractFacade<Task> {
     }
 
     @POST
-    @Override
-    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public void create(Task entity) {
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Task create(@QueryParam("name") String name, @QueryParam("location") String loc,
+            @QueryParam("desc") String desc, @QueryParam("dep") int dep,
+            @QueryParam("urgent") String urgent) {
+        
+        Task entity = new Task();
+        
+        boolean isUrgent = false;
+        if(urgent.equals("true")) isUrgent = true;
+        
+        if(!desc.isEmpty()){
+//            entity.setDescription(" ");
+//        }else{
+            entity.setDescription(desc);
+        }
+        
+        Department d = em.getReference(Department.class, dep);
+        
+        entity.setName(name);
+        entity.setLocation(loc);
+//        entity.setDescription(desc);
+        entity.setDepartment(d);
+        entity.setIsUrgent(isUrgent);
+        entity.setCreationTime(new Timestamp(System.currentTimeMillis()));
+        
         super.create(entity);
+        return entity;
     }
 
     @PUT
@@ -116,7 +142,8 @@ public class TaskFacadeREST extends AbstractFacade<Task> {
             cb.and(
                 cb.equal(task.get("department"), new Department(id)),
                 cb.isNull(task.get("completionUser")),
-                cb.isFalse(task.get("isCancelled"))
+                cb.isFalse(task.get("isCancelled")),
+                cb.isFalse(task.get("isUrgent"))
             ) 
         );
         TypedQuery<Task> q = em.createQuery(cq);
@@ -174,6 +201,24 @@ public class TaskFacadeREST extends AbstractFacade<Task> {
             cb.and(
                 cb.equal(task.get("department"), new Department(id)),
                 cb.isTrue(task.get("isCancelled"))
+            ) 
+        );
+        TypedQuery<Task> q = em.createQuery(cq);
+        return q.getResultList();
+    }
+    
+    @GET
+    @Path("dep/{departmentid}/urgent")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public List<Task> getUrgentTaskOfDepartment(@PathParam("departmentid") int id){
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Task> cq = cb.createQuery(Task.class);
+        Root<Task> task = cq.from(Task.class);
+        cq.select(task);
+        cq.where(
+            cb.and(
+                cb.equal(task.get("department"), new Department(id)),
+                cb.isTrue(task.get("isUrgent"))
             ) 
         );
         TypedQuery<Task> q = em.createQuery(cq);
