@@ -1,0 +1,109 @@
+@charset"utf-8";
+
+html{height: 100%;}
+
+body{
+    height: 100% !important;
+    background-image: url("../image/background.png");
+    overflow: hidden;
+    max-width: 1600px;
+    margin: 0;
+    position: relative;
+    backface-visibility: hidden;
+}
+
+#body {
+    height: 95%;
+    width: 96%;
+    backface-visibility: visible;
+    background-color: #fff;
+    margin: auto;
+    margin-top: 1em;
+    position: relative;
+}
+
+#wrapper {
+    background-color: #009f45;
+    height: 87%;
+    width: 94%;
+    left: 3em;
+    top: 3em;
+    position: absolute;
+}
+
+#form-wrapper {
+    width: 30%;
+    height: auto;
+    margin: auto;
+    margin-top: 2em;
+    vertical-align:middle;
+    text-align:center;
+}
+
+#login-logo{
+    width: 13em;
+    height: 11em;
+    display: block;
+    margin: auto;
+}
+
+#login-form{
+   display: table;
+   width: 100%;
+}
+
+#form{
+    margin-top: -2em;
+    display: table-cell;
+    text-align: center;
+    vertical-align: middle;
+}
+
+#form > * {
+    margin-bottom: 1.5em;
+}
+
+#username {
+    height: 3.2em;
+    max-width: 20em;
+    width: 100%;
+    background-image: url(../image/user.svg);
+    background-size: 2.8em 2.8em;
+    background-repeat: no-repeat;
+    background-position: 1em 0.5em;
+    text-indent: 4em;
+    padding-left: 1em;
+}
+
+#password {
+    height: 3.2em;
+    max-width: 20em;
+    width: 100%;
+    background-image: url(../image/lock.svg);
+    background-size: 2.8em 2.8em;
+    background-repeat: no-repeat;
+    background-position: 1em 0.5em;
+    text-indent: 4em;
+    padding-left: 1em;
+}
+
+#notif {
+    visibility: hidden;
+    color: red;
+    font-size: 22px;
+    margin-bottom: -0.01em;
+}
+
+#login-btn {
+    height: 3.2em;
+    max-width: 21.3em;
+    width: 100%;
+    color: #fff;
+    background-color: #fe0084;
+    background: cover;
+}
+
+input, input::-webkit-input-placechoder {
+    font-size: 1em;
+    font-weight: 700;
+}
