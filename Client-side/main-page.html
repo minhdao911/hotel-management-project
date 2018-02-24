@@ -43,6 +43,11 @@
         </div>
         <div id="task-list"> <!-- Table that show tasks -->
             <ul id="list"> <!--Blank table that uses JavaScript to add tasks -->
+                <div id="waiting-task">
+                </div>
+                
+                <div id="finished-task">
+                </div>
             </ul>
             
             <input type="image" src="image/plus.svg" class="add-btn-hidden" onclick="addButton()" >
@@ -112,8 +117,8 @@
                 <textarea rows="10" cols="50" id="description"></textarea>
                 </div>
                 <div class="urgent-form">
-                <input type="radio" name="urgent" value="other" id="urgent-btn"> Urgent
-                    </div>
+                <input type="checkbox" name="urgent" checked="false" id="urgent-btn" /> Urgent
+                </div>
                 <div class="attachment-form">
                 Attachment:<br><input type="file" name="fileToUpload" id="fileToUpload" accept=".jpg, .png, .jpeg" onchange="previewFile()" ;/>
                 <img id="output" src="#" alt="Image preview" height=70 width=60>
