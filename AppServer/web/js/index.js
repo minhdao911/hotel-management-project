@@ -3,8 +3,8 @@ author @minhdao
  */
 
 document.addEventListener("DOMContentLoaded", function (event) {
-    let loginForm = document.querySelector("#loginForm");
-    let submitBtn = document.querySelector("#submitBtn");
+    let loginForm = document.querySelector("#form");
+    let submitBtn = document.querySelector("#login-btn");
     
     let userData = {};
     const getUrl = window.location;
@@ -21,7 +21,8 @@ document.addEventListener("DOMContentLoaded", function (event) {
         userData.password = password;
     });
     
-    submitBtn.addEventListener("click", function(){
+    loginForm.addEventListener("submit", function(e){
+        e.preventDefault();
         console.log(userData);
         console.log("click");
         const init = {

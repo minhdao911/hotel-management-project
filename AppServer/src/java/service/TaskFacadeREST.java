@@ -26,6 +26,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import model.Department;
+import model.Employee;
 import model.Task;
 
 /**
@@ -75,10 +76,35 @@ public class TaskFacadeREST extends AbstractFacade<Task> {
     }
 
     @PUT
+    @Path("{id}/{userName}")
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public void editCompletionUser(@PathParam("id") int id, 
+            @PathParam("userName") String completionUser) {
+        Task t = em.find(Task.class, id);
+        Employee e = (Employee)em.createNamedQuery("Employee.findByUserName")
+            .setParameter("userName", completionUser)
+            .getSingleResult();
+        t.setCompletionUser(e);
+        super.edit(t);
+    }
+    
+    @PUT
     @Path("{id}")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public void edit(@PathParam("id") Integer id, Task entity) {
-        super.edit(entity);
+    public void editCompletionTime(@PathParam("id") int id, 
+            @PathParam("completionTime") String completionTime) {
+        Task t = em.find(Task.class, id);
+        t.setCompletionTime(new Timestamp(System.currentTimeMillis()));
+        super.edit(t);
+    }
+    
+    @PUT
+    @Path("cancel/{id}")
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public void editCancel(@PathParam("id") int id) {
+        Task t = em.find(Task.class, id);
+        t.setIsCancelled(true);
+        super.edit(t);
     }
 
     @DELETE
@@ -126,6 +152,7 @@ public class TaskFacadeREST extends AbstractFacade<Task> {
         cq.where(
             cb.equal(task.get("department"), new Department(id))
         );
+        cq.orderBy(cb.desc(task.get("creationTime")));
         TypedQuery<Task> q = em.createQuery(cq);
         return q.getResultList();
     }
@@ -146,12 +173,13 @@ public class TaskFacadeREST extends AbstractFacade<Task> {
                 cb.isFalse(task.get("isUrgent"))
             ) 
         );
+        cq.orderBy(cb.desc(task.get("creationTime")));
         TypedQuery<Task> q = em.createQuery(cq);
         return q.getResultList();
     }
     
     @GET
-    @Path("dep/{departmentid}/inprocess")
+    @Path("dep/{departmentid}/process")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public List<Task> getInprocessTaskOfDepartment(@PathParam("departmentid") int id){
         CriteriaBuilder cb = em.getCriteriaBuilder();
@@ -163,9 +191,11 @@ public class TaskFacadeREST extends AbstractFacade<Task> {
                 cb.equal(task.get("department"), new Department(id)),
                 cb.isNotNull(task.get("completionUser")),
                 cb.isNull(task.get("completionTime")),
-                cb.isFalse(task.get("isCancelled"))
+                cb.isFalse(task.get("isCancelled")),
+                cb.isFalse(task.get("isUrgent"))
             ) 
         );
+        cq.orderBy(cb.desc(task.get("creationTime")));
         TypedQuery<Task> q = em.createQuery(cq);
         return q.getResultList();
     }
@@ -185,6 +215,7 @@ public class TaskFacadeREST extends AbstractFacade<Task> {
                 cb.isNotNull(task.get("completionTime"))
             ) 
         );
+        cq.orderBy(cb.desc(task.get("creationTime")));
         TypedQuery<Task> q = em.createQuery(cq);
         return q.getResultList();
     }
@@ -203,14 +234,15 @@ public class TaskFacadeREST extends AbstractFacade<Task> {
                 cb.isTrue(task.get("isCancelled"))
             ) 
         );
+        cq.orderBy(cb.desc(task.get("creationTime")));
         TypedQuery<Task> q = em.createQuery(cq);
         return q.getResultList();
     }
     
     @GET
-    @Path("dep/{departmentid}/urgent")
+    @Path("dep/{departmentid}/urgent/new")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<Task> getUrgentTaskOfDepartment(@PathParam("departmentid") int id){
+    public List<Task> getNewUrgentTaskOfDepartment(@PathParam("departmentid") int id){
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Task> cq = cb.createQuery(Task.class);
         Root<Task> task = cq.from(Task.class);
@@ -218,9 +250,34 @@ public class TaskFacadeREST extends AbstractFacade<Task> {
         cq.where(
             cb.and(
                 cb.equal(task.get("department"), new Department(id)),
+                cb.isNull(task.get("completionUser")),
+                cb.isFalse(task.get("isCancelled")),
                 cb.isTrue(task.get("isUrgent"))
             ) 
         );
+        cq.orderBy(cb.desc(task.get("creationTime")));
+        TypedQuery<Task> q = em.createQuery(cq);
+        return q.getResultList();
+    }
+    
+    @GET
+    @Path("dep/{departmentid}/urgent/process")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public List<Task> getProcessUrgentTaskOfDepartment(@PathParam("departmentid") int id){
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Task> cq = cb.createQuery(Task.class);
+        Root<Task> task = cq.from(Task.class);
+        cq.select(task);
+        cq.where(
+            cb.and(
+                cb.equal(task.get("department"), new Department(id)),
+                cb.isNotNull(task.get("completionUser")),
+                cb.isNull(task.get("completionTime")),
+                cb.isFalse(task.get("isCancelled")),
+                cb.isTrue(task.get("isUrgent"))
+            ) 
+        );
+        cq.orderBy(cb.desc(task.get("creationTime")));
         TypedQuery<Task> q = em.createQuery(cq);
         return q.getResultList();
     }
