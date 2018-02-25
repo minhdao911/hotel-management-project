@@ -100,12 +100,16 @@ function getDate() {
 
 function addButton (){
     document.getElementById("hidden-add-form").style.visibility = "visible";
+    document.getElementById('urgent-btn').checked = false;
 }; //The plus sign button that shows the form
 
 function cancelButton(){
     document.getElementById("hidden-add-form").style.visibility= "hidden";
     document.getElementById("my-form").reset();
+    
+    document.getElementById('urgent-btn').checked = false;
 }; // The X sign button that cancel add task in the form
+
 
  function previewFile(){
        var preview = document.querySelector('#output'); //selects the query named img
@@ -129,7 +133,7 @@ function addTask (){
     
     let ul = document.getElementById("list");
     let ulNew = document.getElementById("new-list");
-   
+    let urgent = document.getElementById("urgent-btn");
     let nameValue = document.querySelector("#task-name").value;
     let placeValue = document.querySelector("#task-place").value;
     let departmentValue = document.querySelector("#select").value;
@@ -141,7 +145,12 @@ function addTask (){
     
     
     let li = document.createElement("li");
-    li.setAttribute("class", "task-on-list");
+    
+    if(urgent.checked){
+        li.setAttribute("class", "urgent-task");
+    }else{
+        li.setAttribute("class", "task-on-list");
+    }
     li.classList.add("task-on-" + count);
     
     
@@ -156,6 +165,7 @@ function addTask (){
         taskHeader.append((document.createTextNode("Untitled")));
         li.appendChild(taskHeader);
     }
+    
     
     if(placeValue != ""){
     let placeHeader = document.createElement("p");
@@ -238,9 +248,10 @@ function addTask (){
     newCheckButton.onclick = takeTask;
     
     
-
-    ul.appendChild(li);
-    ulNew.appendChild(newLi);
+    let waitingTask = ul.querySelector("#waiting-task");
+    waitingTask.insertBefore(li, waitingTask.childNodes[0]);
+    
+    ulNew.insertBefore(newLi, ulNew.childNodes[0]);
     
     taskArray.push(li);
     
@@ -420,8 +431,11 @@ function doneTask (e) {
     let duplicate = e.target.parentElement.cloneNode(true);
     duplicate.setAttribute('class', 'task-done');
     
-    compList.appendChild(duplicate);
-    procList.appendChild(e.target.parentElement);
+    compList.insertBefore(duplicate, compList.childNodes[0]);
+    
+    let finishedTask = procList.querySelector("#finished-task");
+    
+    finishedTask.insertBefore(e.target.parentElement, finishedTask.childNodes[0]);
     
     e.target.parentElement.setAttribute("class", "task-done");
     

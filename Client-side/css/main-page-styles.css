@@ -151,6 +151,14 @@ a.nav-links:link {
     box-shadow: -0.063em 0.125em 1.188em 0.188em rgba(0,0,0,0.75);
 }
 
+#waiting-task {
+    z-index: 1;
+}
+
+#finished-task{
+    z-index: 0;
+}
+
 #new-tab-list, #cplt-tab-list, #cancel-tab-list{
     position: absolute;
     background-color: #fff;
@@ -183,6 +191,27 @@ a.nav-links:link {
     -moz-box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.75);
     box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.75);
 }
+
+.urgent-task{
+    position: relative;
+    margin: 1em;
+    padding: 0.625em;
+    list-style: none;
+    border: 1px solid red;
+    -webkit-box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.75);
+    -moz-box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.75);
+    box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.75);
+}
+
+.urgent-task > h3{
+    background-image: url(../image/warning-sign.svg);
+    background-repeat: no-repeat;
+    padding-left: 0;
+    background-size: 1.2em 1.2em;
+    background-position: 1em 0;
+    text-indent: 2.5em;
+}
+
 
 .task-list-btn-cross {
     position: absolute;
@@ -249,7 +278,6 @@ a.nav-links:link {
 .invisible {
     display: none;
 }
-
 
 #process-tab{
     height: 100%;
