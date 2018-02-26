@@ -25,7 +25,7 @@ import model.EmployeeType;
  * @author minhdao
  */
 @Stateless
-@Path("model.employeetype")
+@Path("employeetype")
 public class EmployeeTypeFacadeREST extends AbstractFacade<EmployeeType> {
 
     @PersistenceContext(unitName = "AppServerPU")

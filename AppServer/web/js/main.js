@@ -63,6 +63,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
     
     let displayTask = function(d, div){
         let desc = d.description ? d.description : "";
+        let loc = d.location ? d.location.replace(/\b\w/g, l => l.toUpperCase()) : "";
         let ct = d.completionTime ? convertTime(d.completionTime) : "";
         let cu = d.completionUser ? d.completionUser.firstName + " " + d.completionUser.lastName : "";
         let status = checkStatus(d);
@@ -72,7 +73,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
               <div class="label ${status.toLowerCase()}-label">
                 ${status}
               </div>
-              <p>Place: <span>${d.location.replace(/\b\w/g, l => l.toUpperCase())}</span></p>
+              <p>Place: <span>${loc}</span></p>
               <p>${convertTime(d.creationTime)}</p>
               <p>${ct}</p>
               <div class="down">
@@ -91,6 +92,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
     
     let displayNewTask = function(d, div){
         let desc = d.description ? d.description : "";
+        let loc = d.location ? d.location.replace(/\b\w/g, l => l.toUpperCase()) : "";
         div.innerHTML += `
             <div class="task" id="${d.id}">
               <p class="task-name">${d.name.toUpperCase()}</p>
@@ -98,7 +100,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
                 <i class="fa fa-check-circle"></i>
                 <i class="fa fa-times-circle"></i>
               </div>
-              <p>Place: <span>${d.location.replace(/\b\w/g, l => l.toUpperCase())}</span></p>
+              <p>Place: <span>${loc}</span></p>
               <p>${convertTime(d.creationTime)}</p>
               <div class="down">
                 <i class="fa fa-chevron-down"></i>
@@ -116,13 +118,14 @@ document.addEventListener("DOMContentLoaded", function (event) {
     
     let displayProcessTask = function(d, div){
         let desc = d.description ? d.description : "";
+        let loc = d.location ? d.location.replace(/\b\w/g, l => l.toUpperCase()) : "";
         div.innerHTML += `
             <div class="task" id="${d.id}">
               <p class="task-name">${d.name.toUpperCase()}</p>
               <div class="buttons">
                 <i class="fa fa-check-circle"></i>
               </div>
-              <p>Place: <span>${d.location.replace(/\b\w/g, l => l.toUpperCase())}</span></p>
+              <p>Place: <span>${loc}</span></p>
               <p>${convertTime(d.creationTime)}</p>
               <div class="down">
                 <i class="fa fa-chevron-down"></i>
@@ -183,23 +186,6 @@ document.addEventListener("DOMContentLoaded", function (event) {
         }
     };
     
-    let addTask = function(data, div){
-        console.log("add");
-        let d = data.task;
-        displayTask(d, div);
-    };
-    
-    let addNewTask = function(data, div){
-        console.log("add new");
-        let d = data.task;
-        displayNewTask(d, div);
-    };
-    
-    let addProcessTask = function(data, div){
-        let d = data.task;
-        displayProcessTask(d, div);
-    };
-    
     let convertTime = function(d){
         let DateArr = d.split("T");
         let TimeArr = DateArr[1].substring(0, DateArr[1].length-6).split(".");
@@ -224,37 +210,37 @@ document.addEventListener("DOMContentLoaded", function (event) {
         else taskData.urgent = false;
     });
     
-    addForm.addEventListener("submit", function(e){
-        e.preventDefault();
-        console.log(taskData);
-        let posturl = baseUrl + "/ws/task?name=" + taskData.name + "&location=" + taskData.loc +
-                "&desc=" + taskData.desc + "&dep=" + taskData.dep + "&urgent=" + taskData.urgent;
-                            
-        const init = {
-            method: "POST",
-            body: JSON.stringify(taskData),
-            headers: {
-                "Content-type": "application/json; charset=UTF-8"
-            }
-        };
-        fetch(posturl, init)
-            .then(response => fetch(url+"/new"))
-                .then(response => response.text())
-                .then(str => (new window.DOMParser()).parseFromString(str, "text/xml"))
-                .then(data => xmlToJson(data))
-                .then(json => showNewTaskData(json, newTaskDiv))
-            .then(result => fetch(url+"/urgent/new"))
-                .then(response => response.text())
-                .then(str => (new window.DOMParser()).parseFromString(str, "text/xml"))
-                .then(data => xmlToJson(data))
-                .then(json => showNewTaskData(json, urgentNewDiv))
-            .then(result => fetch(url))
-                .then(response => response.text())
-                .then(str => (new window.DOMParser()).parseFromString(str, "text/xml"))
-                .then(data => xmlToJson(data))
-                .then(json => showTaskData(json, allTaskDiv))
-                .catch(error => console.log(error));
-    });
+//    addForm.addEventListener("submit", function(e){
+//        e.preventDefault();
+//        console.log(taskData);
+//        let posturl = baseUrl + "/ws/task?name=" + taskData.name + "&location=" + taskData.loc +
+//                "&desc=" + taskData.desc + "&dep=" + taskData.dep + "&urgent=" + taskData.urgent;
+//                            
+//        const init = {
+//            method: "POST",
+//            body: JSON.stringify(taskData),
+//            headers: {
+//                "Content-type": "application/json; charset=UTF-8"
+//            }
+//        };
+//        fetch(posturl, init)
+//            .then(response => fetch(url+"/new"))
+//                .then(response => response.text())
+//                .then(str => (new window.DOMParser()).parseFromString(str, "text/xml"))
+//                .then(data => xmlToJson(data))
+//                .then(json => showNewTaskData(json, newTaskDiv))
+//            .then(result => fetch(url+"/urgent/new"))
+//                .then(response => response.text())
+//                .then(str => (new window.DOMParser()).parseFromString(str, "text/xml"))
+//                .then(data => xmlToJson(data))
+//                .then(json => showNewTaskData(json, urgentNewDiv))
+//            .then(result => fetch(url))
+//                .then(response => response.text())
+//                .then(str => (new window.DOMParser()).parseFromString(str, "text/xml"))
+//                .then(data => xmlToJson(data))
+//                .then(json => showTaskData(json, allTaskDiv))
+//                .catch(error => console.log(error));
+//    });
     
     document.querySelector("#main").addEventListener("click", function(e){
         if(e.target && e.target.className === "fa fa-check-circle"){

@@ -12,55 +12,6 @@ and open the template in the editor.
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <link rel="stylesheet" href="./css/main.css">
     <body>
-<!--        <h1>Task page</h1>
-        <button id="add">Add task</button>
-        <form id="addForm" style="display: none;">
-            name: <br>
-            <input type="text" name="name" required><br>
-            location: <br>
-            <input type="text" name="location"><br>
-            description: <br>
-            <textarea name="desc"></textarea><br>
-            department: <br>
-            <select name="dep">
-                <option value="2">SERVICE</option>
-                <option value="3">CATERING</option>
-                <option value="4">MAINTENANCE</option>
-            </select><br>
-            <input type="checkbox" name="urgent" id="checkBox"> urgent<br>
-            <button id="submitBtn">submit</button>
-        </form>
-        <div id="user">
-            
-        </div>
-        <div id="allTask">
-            <h3>All Tasks</h3>
-            <div class="content"></div>
-        </div>
-        
-        <div id="newTask">
-            <h3>New Tasks</h3>
-            <div class="urgent">
-                <h5>Urgent</h5>
-            </div>
-            <div class="content"></div>
-        </div>
-        <div id="inprocessTask">
-            <h3>In process Tasks</h3>
-            <div class="urgent">
-                <h5>Urgent</h5>
-            </div>
-            <div class="content"></div>
-        </div>
-        <div id="completedTask">
-            <h3>Completed Tasks</h3>
-            <div class="content"></div>
-        </div>
-        <div id="cancelledTask">
-            <h3>Canceled Tasks</h3>
-            <div class="content"></div>
-        </div>-->
-        
         <div class="container">
             <div class="nav">
               <ul>
@@ -210,7 +161,7 @@ and open the template in the editor.
             <div>
               <h3>ADD NEW TASK</h3>
               <i class="fa fa-times" id="close"></i>
-              <form id="addForm">
+              <form action="upload" method="post" enctype="multipart/form-data" id="addForm">
                 Name <br>
                 <input type="text" name="name" required><br>
                 Location <br>
@@ -224,6 +175,8 @@ and open the template in the editor.
                 Description <br>
                 <textarea rows="4" name="desc"></textarea><br>
                 <input type="checkbox" name="urgent" id="checkBox"> Urgent<br>
+                Attachment <br>
+                <input type="file" name="file">
                 <button id="submitBtn">SUBMIT</button>
               </form>
             </div>

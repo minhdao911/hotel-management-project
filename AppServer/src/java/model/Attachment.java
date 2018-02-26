@@ -40,8 +40,11 @@ public class Attachment implements Serializable {
     @Column(name = "id")
     private int id;
     
-    @Column(name = "filePath")
-    private String filePath;
+    @Column(name = "fileName")
+    private String fileName;
+    
+    @Column(name = "fileData")
+    private byte[] fileData;
     
     @JoinColumn(name = "task", referencedColumnName = "id")
     @ManyToOne
@@ -54,9 +57,10 @@ public class Attachment implements Serializable {
         this.id = id;
     }
 
-    public Attachment(int id, String filePath) {
+    public Attachment(int id, String fileName, byte[] fileData) {
         this.id = id;
-        this.filePath = filePath;
+        this.fileName = fileName;
+        this.fileData = fileData;
     }
 
     public int getId() {
@@ -67,14 +71,22 @@ public class Attachment implements Serializable {
         this.id = id;
     }
 
-    public String getFilePath() {
-        return filePath;
+    public String getFileName() {
+        return fileName;
     }
 
-    public void setFilePath(String filePath) {
-        this.filePath = filePath;
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
     }
 
+    public byte[] getFileData() {
+        return fileData;
+    }
+
+    public void setFileData(byte[] fileData) {
+        this.fileData = fileData;
+    }
+    
     public Task getTask() {
         return task;
     }
