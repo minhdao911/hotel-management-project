@@ -6,13 +6,18 @@
 package service;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Tuple;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Join;
+import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Root;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -25,9 +30,11 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
+import model.Attachment;
 import model.Department;
 import model.Employee;
 import model.Task;
+import model.TaskWithAttachment;
 
 /**
  *
@@ -38,7 +45,7 @@ import model.Task;
 public class TaskFacadeREST extends AbstractFacade<Task> {
 
     @PersistenceContext(unitName = "AppServerPU")
-    private EntityManager em;
+     EntityManager em;
 
     public TaskFacadeREST() {
         super(Task.class);
@@ -57,8 +64,6 @@ public class TaskFacadeREST extends AbstractFacade<Task> {
         if(urgent.equals("true")) isUrgent = true;
         
         if(!desc.isEmpty()){
-//            entity.setDescription(" ");
-//        }else{
             entity.setDescription(desc);
         }
         
@@ -66,7 +71,6 @@ public class TaskFacadeREST extends AbstractFacade<Task> {
         
         entity.setName(name);
         entity.setLocation(loc);
-//        entity.setDescription(desc);
         entity.setDepartment(d);
         entity.setIsUrgent(isUrgent);
         entity.setCreationTime(new Timestamp(System.currentTimeMillis()));
@@ -144,27 +148,42 @@ public class TaskFacadeREST extends AbstractFacade<Task> {
     @GET
     @Path("dep/{departmentid}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<Task> getTaskOfDepartment(@PathParam("departmentid") int id){
+    public List<TaskWithAttachment> getTaskOfDepartment(@PathParam("departmentid") int id){
         CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<Task> cq = cb.createQuery(Task.class);
+        CriteriaQuery<Tuple> cq = cb.createTupleQuery();
         Root<Task> task = cq.from(Task.class);
-        cq.select(task);
+        Join<Task, Attachment> a = task.join("attachments", JoinType.LEFT);
+        cq.multiselect(task, a.get("id"), a.get("fileName"));
         cq.where(
             cb.equal(task.get("department"), new Department(id))
         );
         cq.orderBy(cb.desc(task.get("creationTime")));
-        TypedQuery<Task> q = em.createQuery(cq);
-        return q.getResultList();
+        TypedQuery<Tuple> q = em.createQuery(cq);
+//        List<TaskWithAttachment> tasks = new ArrayList<TaskWithAttachment>();
+//        for(Tuple t : q.getResultList()){
+//            Task tk = t.get(0, Task.class);
+//            if(t.get(2) == null){
+//                tasks.add(new TaskWithAttachment(tk.getId(), tk.getName(), tk.getLocation(), tk.getDescription(),
+//                tk.getCreationTime(), tk.getCompletionTime(), tk.getIsCancelled(), tk.getIsUrgent(), tk.getCompletionUser().getUserName()));
+//            }else{
+//                tasks.add(new TaskWithAttachment(tk.getId(), tk.getName(), tk.getLocation(), tk.getDescription(),
+//                tk.getCreationTime(), tk.getCompletionTime(), tk.getIsCancelled(), 
+//                        tk.getIsUrgent(), (int)t.get(1), (String)t.get(2), tk.getCompletionUser().getUserName()));
+//            }
+//        }
+//        return tasks;
+        return getResults(q.getResultList());
     }
     
     @GET
     @Path("dep/{departmentid}/new")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<Task> getNewTaskOfDepartment(@PathParam("departmentid") int id){
+    public List<TaskWithAttachment> getNewTaskOfDepartment(@PathParam("departmentid") int id){
         CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<Task> cq = cb.createQuery(Task.class);
+        CriteriaQuery<Tuple> cq = cb.createTupleQuery();
         Root<Task> task = cq.from(Task.class);
-        cq.select(task);
+        Join<Task, Attachment> a = task.join("attachments", JoinType.LEFT);
+        cq.multiselect(task, a.get("id"), a.get("fileName"));
         cq.where(
             cb.and(
                 cb.equal(task.get("department"), new Department(id)),
@@ -174,18 +193,32 @@ public class TaskFacadeREST extends AbstractFacade<Task> {
             ) 
         );
         cq.orderBy(cb.desc(task.get("creationTime")));
-        TypedQuery<Task> q = em.createQuery(cq);
-        return q.getResultList();
+        TypedQuery<Tuple> q = em.createQuery(cq);
+        List<TaskWithAttachment> tasks = new ArrayList<TaskWithAttachment>();
+//        for(Tuple t : q.getResultList()){
+//            Task tk = t.get(0, Task.class);
+//            if(t.get(2) == null){
+//                tasks.add(new TaskWithAttachment(tk.getId(), tk.getName(), tk.getLocation(), tk.getDescription(),
+//                tk.getCreationTime(), tk.getCompletionTime(), tk.getIsCancelled(), tk.getIsUrgent(), tk.getCompletionUser().getUserName()));
+//            }else{
+//                tasks.add(new TaskWithAttachment(tk.getId(), tk.getName(), tk.getLocation(), tk.getDescription(),
+//                tk.getCreationTime(), tk.getCompletionTime(), tk.getIsCancelled(), 
+//                        tk.getIsUrgent(), (int)t.get(1), (String)t.get(2), tk.getCompletionUser().getUserName()));
+//            }
+//        }
+//        return tasks;
+        return getResults(q.getResultList());
     }
     
     @GET
     @Path("dep/{departmentid}/process")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<Task> getInprocessTaskOfDepartment(@PathParam("departmentid") int id){
+    public List<TaskWithAttachment> getInprocessTaskOfDepartment(@PathParam("departmentid") int id){
         CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<Task> cq = cb.createQuery(Task.class);
+        CriteriaQuery<Tuple> cq = cb.createTupleQuery();
         Root<Task> task = cq.from(Task.class);
-        cq.select(task);
+        Join<Task, Attachment> a = task.join("attachments", JoinType.LEFT);
+        cq.multiselect(task, a.get("id"), a.get("fileName"));
         cq.where(
             cb.and(
                 cb.equal(task.get("department"), new Department(id)),
@@ -196,18 +229,32 @@ public class TaskFacadeREST extends AbstractFacade<Task> {
             ) 
         );
         cq.orderBy(cb.desc(task.get("creationTime")));
-        TypedQuery<Task> q = em.createQuery(cq);
-        return q.getResultList();
+        TypedQuery<Tuple> q = em.createQuery(cq);
+//        List<TaskWithAttachment> tasks = new ArrayList<TaskWithAttachment>();
+//        for(Tuple t : q.getResultList()){
+//            Task tk = t.get(0, Task.class);
+//            if(t.get(2) == null){
+//                tasks.add(new TaskWithAttachment(tk.getId(), tk.getName(), tk.getLocation(), tk.getDescription(),
+//                tk.getCreationTime(), tk.getCompletionTime(), tk.getIsCancelled(), tk.getIsUrgent(), tk.getCompletionUser().getUserName()));
+//            }else{
+//                tasks.add(new TaskWithAttachment(tk.getId(), tk.getName(), tk.getLocation(), tk.getDescription(),
+//                tk.getCreationTime(), tk.getCompletionTime(), tk.getIsCancelled(), 
+//                        tk.getIsUrgent(), (int)t.get(1), (String)t.get(2), tk.getCompletionUser().getUserName()));
+//            }
+//        }
+//        return tasks;
+        return getResults(q.getResultList());
     }
     
     @GET
     @Path("dep/{departmentid}/completed")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<Task> getCompletedTaskOfDepartment(@PathParam("departmentid") int id){
+    public List<TaskWithAttachment> getCompletedTaskOfDepartment(@PathParam("departmentid") int id){
         CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<Task> cq = cb.createQuery(Task.class);
+        CriteriaQuery<Tuple> cq = cb.createTupleQuery();
         Root<Task> task = cq.from(Task.class);
-        cq.select(task);
+        Join<Task, Attachment> a = task.join("attachments", JoinType.LEFT);
+        cq.multiselect(task, a.get("id"), a.get("fileName"));
         cq.where(
             cb.and(
                 cb.equal(task.get("department"), new Department(id)),
@@ -216,18 +263,32 @@ public class TaskFacadeREST extends AbstractFacade<Task> {
             ) 
         );
         cq.orderBy(cb.desc(task.get("creationTime")));
-        TypedQuery<Task> q = em.createQuery(cq);
-        return q.getResultList();
+        TypedQuery<Tuple> q = em.createQuery(cq);
+//        List<TaskWithAttachment> tasks = new ArrayList<TaskWithAttachment>();
+//        for(Tuple t : q.getResultList()){
+//            Task tk = t.get(0, Task.class);
+//            if(t.get(2) == null){
+//                tasks.add(new TaskWithAttachment(tk.getId(), tk.getName(), tk.getLocation(), tk.getDescription(),
+//                tk.getCreationTime(), tk.getCompletionTime(), tk.getIsCancelled(), tk.getIsUrgent(), tk.getCompletionUser().getUserName()));
+//            }else{
+//                tasks.add(new TaskWithAttachment(tk.getId(), tk.getName(), tk.getLocation(), tk.getDescription(),
+//                tk.getCreationTime(), tk.getCompletionTime(), tk.getIsCancelled(), 
+//                        tk.getIsUrgent(), (int)t.get(1), (String)t.get(2), tk.getCompletionUser().getUserName()));
+//            }
+//        }
+//        return tasks;
+        return getResults(q.getResultList());
     }
     
     @GET
     @Path("dep/{departmentid}/cancelled")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<Task> getCancelledTaskOfDepartment(@PathParam("departmentid") int id){
+    public List<TaskWithAttachment> getCancelledTaskOfDepartment(@PathParam("departmentid") int id){
         CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<Task> cq = cb.createQuery(Task.class);
+        CriteriaQuery<Tuple> cq = cb.createTupleQuery();
         Root<Task> task = cq.from(Task.class);
-        cq.select(task);
+        Join<Task, Attachment> a = task.join("attachments", JoinType.LEFT);
+        cq.multiselect(task, a.get("id"), a.get("fileName"));
         cq.where(
             cb.and(
                 cb.equal(task.get("department"), new Department(id)),
@@ -235,18 +296,32 @@ public class TaskFacadeREST extends AbstractFacade<Task> {
             ) 
         );
         cq.orderBy(cb.desc(task.get("creationTime")));
-        TypedQuery<Task> q = em.createQuery(cq);
-        return q.getResultList();
+        TypedQuery<Tuple> q = em.createQuery(cq);
+//        List<TaskWithAttachment> tasks = new ArrayList<TaskWithAttachment>();
+//        for(Tuple t : q.getResultList()){
+//            Task tk = t.get(0, Task.class);
+//            if(t.get(2) == null){
+//                tasks.add(new TaskWithAttachment(tk.getId(), tk.getName(), tk.getLocation(), tk.getDescription(),
+//                tk.getCreationTime(), tk.getCompletionTime(), tk.getIsCancelled(), tk.getIsUrgent(), tk.getCompletionUser().getUserName()));
+//            }else{
+//                tasks.add(new TaskWithAttachment(tk.getId(), tk.getName(), tk.getLocation(), tk.getDescription(),
+//                tk.getCreationTime(), tk.getCompletionTime(), tk.getIsCancelled(), 
+//                        tk.getIsUrgent(), (int)t.get(1), (String)t.get(2), tk.getCompletionUser().getUserName()));
+//            }
+//        }
+//        return tasks;
+        return getResults(q.getResultList());
     }
     
     @GET
     @Path("dep/{departmentid}/urgent/new")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<Task> getNewUrgentTaskOfDepartment(@PathParam("departmentid") int id){
+    public List<TaskWithAttachment> getNewUrgentTaskOfDepartment(@PathParam("departmentid") int id){
         CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<Task> cq = cb.createQuery(Task.class);
+        CriteriaQuery<Tuple> cq = cb.createTupleQuery();
         Root<Task> task = cq.from(Task.class);
-        cq.select(task);
+        Join<Task, Attachment> a = task.join("attachments", JoinType.LEFT);
+        cq.multiselect(task, a.get("id"), a.get("fileName"));
         cq.where(
             cb.and(
                 cb.equal(task.get("department"), new Department(id)),
@@ -256,18 +331,32 @@ public class TaskFacadeREST extends AbstractFacade<Task> {
             ) 
         );
         cq.orderBy(cb.desc(task.get("creationTime")));
-        TypedQuery<Task> q = em.createQuery(cq);
-        return q.getResultList();
+        TypedQuery<Tuple> q = em.createQuery(cq);
+//        List<TaskWithAttachment> tasks = new ArrayList<TaskWithAttachment>();
+//        for(Tuple t : q.getResultList()){
+//            Task tk = t.get(0, Task.class);
+//            if(t.get(2) == null){
+//                tasks.add(new TaskWithAttachment(tk.getId(), tk.getName(), tk.getLocation(), tk.getDescription(),
+//                tk.getCreationTime(), tk.getCompletionTime(), tk.getIsCancelled(), tk.getIsUrgent(), tk.getCompletionUser().getUserName()));
+//            }else{
+//                tasks.add(new TaskWithAttachment(tk.getId(), tk.getName(), tk.getLocation(), tk.getDescription(),
+//                tk.getCreationTime(), tk.getCompletionTime(), tk.getIsCancelled(), 
+//                        tk.getIsUrgent(), (int)t.get(1), (String)t.get(2), tk.getCompletionUser().getUserName()));
+//            }
+//        }
+//        return tasks;
+        return getResults(q.getResultList());
     }
     
     @GET
     @Path("dep/{departmentid}/urgent/process")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public List<Task> getProcessUrgentTaskOfDepartment(@PathParam("departmentid") int id){
+    public List<TaskWithAttachment> getProcessUrgentTaskOfDepartment(@PathParam("departmentid") int id){
         CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<Task> cq = cb.createQuery(Task.class);
+        CriteriaQuery<Tuple> cq = cb.createTupleQuery();
         Root<Task> task = cq.from(Task.class);
-        cq.select(task);
+        Join<Task, Attachment> a = task.join("attachments", JoinType.LEFT);
+        cq.multiselect(task, a.get("id"), a.get("fileName"));
         cq.where(
             cb.and(
                 cb.equal(task.get("department"), new Department(id)),
@@ -278,8 +367,39 @@ public class TaskFacadeREST extends AbstractFacade<Task> {
             ) 
         );
         cq.orderBy(cb.desc(task.get("creationTime")));
-        TypedQuery<Task> q = em.createQuery(cq);
-        return q.getResultList();
+        TypedQuery<Tuple> q = em.createQuery(cq);
+//        List<TaskWithAttachment> tasks = new ArrayList<TaskWithAttachment>();
+//        for(Tuple t : q.getResultList()){
+//            Task tk = t.get(0, Task.class);
+//            if(t.get(2) == null){
+//                tasks.add(new TaskWithAttachment(tk.getId(), tk.getName(), tk.getLocation(), tk.getDescription(),
+//                tk.getCreationTime(), tk.getCompletionTime(), tk.getIsCancelled(), tk.getIsUrgent(), tk.getCompletionUser().getUserName()));
+//            }else{
+//                tasks.add(new TaskWithAttachment(tk.getId(), tk.getName(), tk.getLocation(), tk.getDescription(),
+//                tk.getCreationTime(), tk.getCompletionTime(), tk.getIsCancelled(), 
+//                        tk.getIsUrgent(), (int)t.get(1), (String)t.get(2), tk.getCompletionUser().getUserName()));
+//            }
+//        }
+//        return tasks;
+        return getResults(q.getResultList());
+    }
+    
+    public List<TaskWithAttachment> getResults(List<Tuple> results){
+        List<TaskWithAttachment> tasks = new ArrayList<TaskWithAttachment>();
+        for(Tuple t : results){
+            Task tk = t.get(0, Task.class);
+            String username = null;
+            if(tk.getCompletionUser() != null) username = tk.getCompletionUser().getUserName();
+            if(t.get(2) == null){
+                tasks.add(new TaskWithAttachment(tk.getId(), tk.getName(), tk.getLocation(), tk.getDescription(),
+                tk.getCreationTime(), tk.getCompletionTime(), tk.getIsCancelled(), tk.getIsUrgent(), username));
+            }else{
+                tasks.add(new TaskWithAttachment(tk.getId(), tk.getName(), tk.getLocation(), tk.getDescription(),
+                tk.getCreationTime(), tk.getCompletionTime(), tk.getIsCancelled(), 
+                        tk.getIsUrgent(), (int)t.get(1), (String)t.get(2), username));
+            }
+        }
+        return tasks;
     }
 
     @Override

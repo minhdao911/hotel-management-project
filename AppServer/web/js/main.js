@@ -34,13 +34,6 @@ document.addEventListener("DOMContentLoaded", function (event) {
         let name = user.employee.firstName + " " + user.employee.lastName;
         userNameLi.textContent = name;
         depNameLi.textContent = user.employee.department.name;
-//        userDiv.innerHTML = `
-//            <h3>Personal Information</h3>
-//            <p>id: ${user.employee.id}</p>
-//            <p>firstname: ${user.employee.firstName}</p>
-//            <p>lastname: ${user.employee.lastName}</p>
-//            <p>department: ${user.employee.department.name}</p>
-//        `;
     };
     
     let checkStatus = function(data){
@@ -52,7 +45,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
                 result = "PROCESS";
             }
         }else{
-            if(data.isCancelled === "true"){
+            if(data.isCancelled){
                 result = "CANCELED";
             }else{
                 result = "NEW";
@@ -63,24 +56,29 @@ document.addEventListener("DOMContentLoaded", function (event) {
     
     let displayTask = function(d, div){
         let desc = d.description ? d.description : "";
+        let loc = d.location ? d.location.replace(/\b\w/g, l => l.toUpperCase()) : "";
+        let crt = d.creationTime ? convertTime(d.creationTime) : "";
         let ct = d.completionTime ? convertTime(d.completionTime) : "";
-        let cu = d.completionUser ? d.completionUser.firstName + " " + d.completionUser.lastName : "";
+        let cu = d.completionUser ? d.completionUser : "";
+        let fl = d.fileLink ? "<a href="+ d.fileLink + ">" + d.fileName + "</a>" : "";
+        let name = d.name ? d.name.toUpperCase() : "";
+        console.log(name);
         let status = checkStatus(d);
         div.innerHTML += `
             <div class="task">
-              <p class="task-name">${d.name.toUpperCase()}</p>
+              <p class="task-name">${name}</p>
               <div class="label ${status.toLowerCase()}-label">
                 ${status}
               </div>
-              <p>Place: <span>${d.location.replace(/\b\w/g, l => l.toUpperCase())}</span></p>
-              <p>${convertTime(d.creationTime)}</p>
+              <p>Place: <span>${loc}</span></p>
+              <p>${crt}</p>
               <p>${ct}</p>
               <div class="down">
                 <i class="fa fa-chevron-down"></i>
               </div>
               <div class="additional-info hidden">
                 <p>Description: <span>${desc}</p>
-                <p>Attachment: <span></span></p>
+                <p>Attachment: <span>${fl}</span></p>
               </div>
               <div class="up hidden">
                 <i class="fa fa-chevron-up"></i>
@@ -91,21 +89,25 @@ document.addEventListener("DOMContentLoaded", function (event) {
     
     let displayNewTask = function(d, div){
         let desc = d.description ? d.description : "";
+        let loc = d.location ? d.location.replace(/\b\w/g, l => l.toUpperCase()) : "";
+        let crt = d.creationTime ? convertTime(d.creationTime) : "";
+        let name = d.name ? d.name.toUpperCase() : "";
+        let fl = d.fileLink ? "<a href="+ d.fileLink + ">" + d.fileName + "</a>" : "";
         div.innerHTML += `
             <div class="task" id="${d.id}">
-              <p class="task-name">${d.name.toUpperCase()}</p>
+              <p class="task-name">${name}</p>
               <div class="buttons">
                 <i class="fa fa-check-circle"></i>
                 <i class="fa fa-times-circle"></i>
               </div>
-              <p>Place: <span>${d.location.replace(/\b\w/g, l => l.toUpperCase())}</span></p>
-              <p>${convertTime(d.creationTime)}</p>
+              <p>Place: <span>${loc}</span></p>
+              <p>${crt}</p>
               <div class="down">
                 <i class="fa fa-chevron-down"></i>
               </div>
               <div class="additional-info hidden">
                 <p>Description: <span>${desc}</p>
-                <p>Attachment: <span></span></p>
+                <p>Attachment: <span>${fl}</span></p>
               </div>
               <div class="up hidden">
                 <i class="fa fa-chevron-up"></i>
@@ -116,20 +118,24 @@ document.addEventListener("DOMContentLoaded", function (event) {
     
     let displayProcessTask = function(d, div){
         let desc = d.description ? d.description : "";
+        let loc = d.location ? d.location.replace(/\b\w/g, l => l.toUpperCase()) : "";
+        let crt = d.creationTime ? convertTime(d.creationTime) : "";
+        let name = d.name ? d.name.toUpperCase() : "";
+        let fl = d.fileLink ? "<a href="+ d.fileLink + ">" + d.fileName + "</a>" : "";
         div.innerHTML += `
             <div class="task" id="${d.id}">
-              <p class="task-name">${d.name.toUpperCase()}</p>
+              <p class="task-name">${name}</p>
               <div class="buttons">
                 <i class="fa fa-check-circle"></i>
               </div>
-              <p>Place: <span>${d.location.replace(/\b\w/g, l => l.toUpperCase())}</span></p>
-              <p>${convertTime(d.creationTime)}</p>
+              <p>Place: <span>${loc}</span></p>
+              <p>${crt}</p>
               <div class="down">
                 <i class="fa fa-chevron-down"></i>
               </div>
               <div class="additional-info hidden">
                 <p>Description: <span>${desc}</p>
-                <p>Attachment: <span></span></p>
+                <p>Attachment: <span>${fl}</span></p>
               </div>
               <div class="up hidden">
                 <i class="fa fa-chevron-up"></i>
@@ -140,64 +146,38 @@ document.addEventListener("DOMContentLoaded", function (event) {
     
     let showTaskData = function(data, div){
         div.innerHTML = "";
-        if(data.tasks.task === undefined) return;
-        else{
-            if(data.tasks.task.length > 1){
-                for(let d of data.tasks.task){
-                    displayTask(d, div);
-                }
-            }else{
-                let d = data.tasks.task;
+        if(data.length > 1){
+            for(let d of data){
                 displayTask(d, div);
             }
+        }else if (data.length === 1){
+            let d = data[0];
+            displayTask(d, div);
         }
     };
     
     let showNewTaskData = function(data, div){
         div.innerHTML = "";
-        if(data.tasks.task === undefined) return;
-        else{
-            if(data.tasks.task.length > 0){
-                for(let d of data.tasks.task){
-                    displayNewTask(d, div);
-                }
-            }else{
-                let d = data.tasks.task;
+        if(data.length > 1){
+            for(let d of data){
                 displayNewTask(d, div);
             }
+        }else if (data.length === 1){
+            let d = data[0];
+            displayNewTask(d, div);
         }
     };
     
     let showProcessTaskData = function(data, div){
         div.innerHTML = "";
-        if(data.tasks.task === undefined) return;
-        else{
-            if(data.tasks.task.length > 0){
-                for(let d of data.tasks.task){
-                    displayProcessTask(d, div);
-                }
-            }else{
-                let d = data.tasks.task;
+        if(data.length > 1){
+            for(let d of data){
                 displayProcessTask(d, div);
             }
+        }else if (data.length === 1){
+            let d = data[0];
+            displayProcessTask(d, div);
         }
-    };
-    
-    let addTask = function(data, div){
-        console.log("add");
-        let d = data.task;
-        displayTask(d, div);
-    };
-    
-    let addNewTask = function(data, div){
-        console.log("add new");
-        let d = data.task;
-        displayNewTask(d, div);
-    };
-    
-    let addProcessTask = function(data, div){
-        let d = data.task;
-        displayProcessTask(d, div);
     };
     
     let convertTime = function(d){
@@ -224,37 +204,37 @@ document.addEventListener("DOMContentLoaded", function (event) {
         else taskData.urgent = false;
     });
     
-    addForm.addEventListener("submit", function(e){
-        e.preventDefault();
-        console.log(taskData);
-        let posturl = baseUrl + "/ws/task?name=" + taskData.name + "&location=" + taskData.loc +
-                "&desc=" + taskData.desc + "&dep=" + taskData.dep + "&urgent=" + taskData.urgent;
-                            
-        const init = {
-            method: "POST",
-            body: JSON.stringify(taskData),
-            headers: {
-                "Content-type": "application/json; charset=UTF-8"
-            }
-        };
-        fetch(posturl, init)
-            .then(response => fetch(url+"/new"))
-                .then(response => response.text())
-                .then(str => (new window.DOMParser()).parseFromString(str, "text/xml"))
-                .then(data => xmlToJson(data))
-                .then(json => showNewTaskData(json, newTaskDiv))
-            .then(result => fetch(url+"/urgent/new"))
-                .then(response => response.text())
-                .then(str => (new window.DOMParser()).parseFromString(str, "text/xml"))
-                .then(data => xmlToJson(data))
-                .then(json => showNewTaskData(json, urgentNewDiv))
-            .then(result => fetch(url))
-                .then(response => response.text())
-                .then(str => (new window.DOMParser()).parseFromString(str, "text/xml"))
-                .then(data => xmlToJson(data))
-                .then(json => showTaskData(json, allTaskDiv))
-                .catch(error => console.log(error));
-    });
+//    addForm.addEventListener("submit", function(e){
+//        e.preventDefault();
+//        console.log(taskData);
+//        let posturl = baseUrl + "/ws/task?name=" + taskData.name + "&location=" + taskData.loc +
+//                "&desc=" + taskData.desc + "&dep=" + taskData.dep + "&urgent=" + taskData.urgent;
+//                            
+//        const init = {
+//            method: "POST",
+//            body: JSON.stringify(taskData),
+//            headers: {
+//                "Content-type": "application/json; charset=UTF-8"
+//            }
+//        };
+//        fetch(posturl, init)
+//            .then(response => fetch(url+"/new"))
+//                .then(response => response.text())
+//                .then(str => (new window.DOMParser()).parseFromString(str, "text/xml"))
+//                .then(data => xmlToJson(data))
+//                .then(json => showNewTaskData(json, newTaskDiv))
+//            .then(result => fetch(url+"/urgent/new"))
+//                .then(response => response.text())
+//                .then(str => (new window.DOMParser()).parseFromString(str, "text/xml"))
+//                .then(data => xmlToJson(data))
+//                .then(json => showNewTaskData(json, urgentNewDiv))
+//            .then(result => fetch(url))
+//                .then(response => response.text())
+//                .then(str => (new window.DOMParser()).parseFromString(str, "text/xml"))
+//                .then(data => xmlToJson(data))
+//                .then(json => showTaskData(json, allTaskDiv))
+//                .catch(error => console.log(error));
+//    });
     
     document.querySelector("#main").addEventListener("click", function(e){
         if(e.target && e.target.className === "fa fa-check-circle"){
@@ -262,33 +242,14 @@ document.addEventListener("DOMContentLoaded", function (event) {
             let putUrl = baseUrl + "/ws/task/" + id + "/" + userObj.employee.userName;
             
             fetch(putUrl, {method: "PUT"})
-//                .then(response => response.text())
-//                .then(str => (new window.DOMParser()).parseFromString(str, "text/xml"))
-//                .then(data => xmlToJson(data))
-//                .then(json => {
-//                    console.log(json);
-//                    if(json.task.department.id === userObj.employee.department.id){
-//                        if(json.task.isUrgent === "true"){
-//                            addProcessTask(json, urgentProcessDiv);
-//                        }else{
-//                            addProcessTask(json, processTaskDiv);
-//                        }
-//                    }
-//                })
                 .then(response => fetch(url+"/process"))
-                    .then(response => response.text())
-                    .then(str => (new window.DOMParser()).parseFromString(str, "text/xml"))
-                    .then(data => xmlToJson(data))
+                    .then(response => response.json())
                     .then(json => showProcessTaskData(json, processTaskDiv))
                 .then(result => fetch(url+"/urgent/process"))
-                    .then(response => response.text())
-                    .then(str => (new window.DOMParser()).parseFromString(str, "text/xml"))
-                    .then(data => xmlToJson(data))
+                    .then(response => response.json())
                     .then(json => showProcessTaskData(json, urgentProcessDiv))
                 .then(result => fetch(url))
-                    .then(response => response.text())
-                    .then(str => (new window.DOMParser()).parseFromString(str, "text/xml"))
-                    .then(data => xmlToJson(data))
+                    .then(response => response.json())
                     .then(json => showTaskData(json, allTaskDiv))
                     .catch(error => console.log(error));
         }
@@ -301,14 +262,10 @@ document.addEventListener("DOMContentLoaded", function (event) {
             
             fetch(putUrl, {method: "PUT"})
                 .then(response => fetch(url+"/cancelled"))
-                    .then(response => response.text())
-                    .then(str => (new window.DOMParser()).parseFromString(str, "text/xml"))
-                    .then(data => xmlToJson(data))
+                    .then(response => response.json())
                     .then(json => showTaskData(json, canceledTaskDiv))
                 .then(result => fetch(url))
-                    .then(response => response.text())
-                    .then(str => (new window.DOMParser()).parseFromString(str, "text/xml"))
-                    .then(data => xmlToJson(data))
+                    .then(response => response.json())
                     .then(json => showTaskData(json, allTaskDiv))
                     .catch(error => console.log(error));
         }
@@ -321,80 +278,61 @@ document.addEventListener("DOMContentLoaded", function (event) {
             
             fetch(putUrl, {method: "PUT"})
                 .then(response => fetch(url+"/completed"))
-                    .then(response => response.text())
-                    .then(str => (new window.DOMParser()).parseFromString(str, "text/xml"))
-                    .then(data => xmlToJson(data))
+                    .then(response => response.json())
                     .then(json => showTaskData(json, completedTaskDiv))
                 .then(result => fetch(url))
-                    .then(response => response.text())
-                    .then(str => (new window.DOMParser()).parseFromString(str, "text/xml"))
-                    .then(data => xmlToJson(data))
+                    .then(response => response.json())
                     .then(json => showTaskData(json, allTaskDiv))
                     .catch(error => console.log(error));
         }
     });
     
     showUserData(userObj);
-    
+
     fetch(url)
-        .then(response => response.text())
-        .then(str => (new window.DOMParser()).parseFromString(str, "text/xml"))
-        .then(data => xmlToJson(data))
-        .then(json => showTaskData(json, allTaskDiv))
+        .then(response => response.json())
+        .then(json => {
+            console.log(json);
+            showTaskData(json, allTaskDiv);
+        })
 //        .then(json => console.log(json))
         .catch(error => console.log(error));
+
 
     fetch(url+"/new")
-        .then(response => response.text())
-        .then(str => (new window.DOMParser()).parseFromString(str, "text/xml"))
-        .then(data => xmlToJson(data))
-        .then(json => showNewTaskData(json, newTaskDiv))
+        .then(response => response.json())
+        .then(json => {
+            console.log(json);
+            showNewTaskData(json, newTaskDiv);})
 //        .then(json => console.log(json))
         .catch(error => console.log(error));
 
-    fetch(url+"/process")
-        .then(response => response.text())
-        .then(str => (new window.DOMParser()).parseFromString(str, "text/xml"))
-        .then(data => xmlToJson(data))
+        fetch(url+"/process")
+        .then(response => response.json())
         .then(json => showProcessTaskData(json, processTaskDiv))
 //        .then(json => console.log(json))
         .catch(error => console.log(error));
 
     fetch(url+"/completed")
-        .then(response => response.text())
-        .then(str => (new window.DOMParser()).parseFromString(str, "text/xml"))
-        .then(data => xmlToJson(data))
+        .then(response => response.json())
         .then(json => showTaskData(json, completedTaskDiv))
 //        .then(json => console.log(json))
         .catch(error => console.log(error));
 
     fetch(url+"/cancelled")
-        .then(response => response.text())
-        .then(str => (new window.DOMParser()).parseFromString(str, "text/xml"))
-        .then(data => xmlToJson(data))
+        .then(response => response.json())
         .then(json => showTaskData(json, canceledTaskDiv))
-//        .then(json => console.log(json))
         .catch(error => console.log(error));
 
     fetch(url+"/urgent/new")
-        .then(response => response.text())
-        .then(str => (new window.DOMParser()).parseFromString(str, "text/xml"))
-        .then(data => xmlToJson(data))
-        .then(json => {
-            console.log(json);
-            showNewTaskData(json, urgentNewDiv);
-        })
+        .then(response => response.json())
+        .then(json => showNewTaskData(json, urgentNewDiv))
 //        .then(json => console.log(json))
         .catch(error => console.log(error));
 
     fetch(url+"/urgent/process")
-        .then(response => response.text())
-        .then(str => (new window.DOMParser()).parseFromString(str, "text/xml"))
-        .then(data => xmlToJson(data))
-        .then(json => {
-            console.log(json);
-            showProcessTaskData(json, urgentProcessDiv);
-        })
+        .then(response => response.json())
+        .then(json => showProcessTaskData(json, urgentProcessDiv))
 //        .then(json => console.log(json))
         .catch(error => console.log(error));
     

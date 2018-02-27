@@ -25,7 +25,7 @@ import model.Attachment;
  * @author minhdao
  */
 @Stateless
-@Path("model.attachment")
+@Path("attachment")
 public class AttachmentFacadeREST extends AbstractFacade<Attachment> {
 
     @PersistenceContext(unitName = "AppServerPU")

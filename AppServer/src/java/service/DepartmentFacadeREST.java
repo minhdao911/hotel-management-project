@@ -25,7 +25,7 @@ import model.Department;
  * @author minhdao
  */
 @Stateless
-@Path("model.department")
+@Path("department")
 public class DepartmentFacadeREST extends AbstractFacade<Department> {
 
     @PersistenceContext(unitName = "AppServerPU")
