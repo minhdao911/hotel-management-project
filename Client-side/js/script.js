@@ -3,28 +3,42 @@ let taskArray = [];
 
 let count = 0;
 
-let activeNav = document.querySelector('.nav');
+let navUlList = document.querySelector('.nav');
+let navLiItem = document.querySelectorAll('.nav-links');
 
-let navLi = document.querySelectorAll('.nav-links');
+let navButton = document.querySelector('.nav-buttons');
+let navButtonListen = document.querySelectorAll('.btn-wrapper');
 
-for (let i = 0; i < navLi.length; i++){
-    navLi[i].addEventListener('click', function (e){
+
+for(let i = 0; i < navButtonListen.length; i++){
+    navButtonListen[i].addEventListener('click', function(e){
         e.preventDefault;
         
-        let allLi = activeNav.children;
+        let allButton = navButton.children;
+        
+        for(let j = 0; j < allButton.length; j++){
+            allButton[j].classList.contains('btn-wrapper-active');
+            allButton[j].classList.toggle('btn-wrapper-active');
+        }
+    })
+}
+
+for (let i = 0; i < navLiItem.length; i++){
+    navLiItem[i].addEventListener('click', function (e){
+        e.preventDefault;
+        
+        let allLi = navUlList.children;
         
         for (let t = 0; t < allLi.length; t++){
             allLi[t].classList.contains('activeNav');
             
-            let allLiCh = allLi[t].classList.contains('activeNav');
-        
             allLi[t].removeAttribute('class');
             
         }
         
         e.target.parentElement.setAttribute('class', 'activeNav');
         
-        switch (navLi[i].innerHTML){
+        switch (navLiItem[i].innerHTML){
             case 'All':
                 document.querySelector("#task-list").style.display = "";
                 document.querySelector("#task-list").style.visibility = "visible";
@@ -108,6 +122,11 @@ function cancelButton(){
     document.getElementById("my-form").reset();
     
     document.getElementById('urgent-btn').checked = false;
+    
+    let previewFile = document.querySelector("#output");
+    
+    previewFile.src = "";
+    previewFile.style.visibility = "hidden";
 }; // The X sign button that cancel add task in the form
 
 
@@ -253,7 +272,6 @@ function addTask (){
     
     ulNew.insertBefore(newLi, ulNew.childNodes[0]);
     
-    taskArray.push(li);
     
     count = count + 1;
     
@@ -279,7 +297,7 @@ function takeTask (e) {
         }
     }
     
-    let ulAll = document.getElementById("list");
+    let ulAll = document.getElementById("waiting-task");
     let checkAllList = ulAll.children;
     
     for (let b = 0; b < checkAllList.length; b++){
@@ -491,6 +509,8 @@ function doneTask (e) {
     taskTime1.setAttribute('class', 'task-time-done');
     e.target.parentElement.append(taskTime);
     duplicate.append(taskTime1);
+    
+    taskArray.push(e.target.parentElement);
     
     
     delDoneBtn ();
