@@ -36,6 +36,7 @@ hs_err_pid*
 
 #glassfish-resources
 /main/web/WEB-INF/glassfish-resources.xml
+/AppServer/web/WEB-INF/glassfish-resources.xml
 
 #general swap/backup files
 *.so
