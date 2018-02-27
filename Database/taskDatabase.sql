@@ -48,6 +48,8 @@ create table task (
   description text,
   location text,
   department int not null,
+  isUrgent boolean not null,
+  isCancelled boolean not null,
   creationTime timestamp null,
   completionTime timestamp null,
   completionUser int,
@@ -60,7 +62,8 @@ create table task (
 create table attachment (
   ID int auto_increment not null,
   task int not null,
-  filePath text not null,
+  fileName text not null,
+  fileData mediumblob not null,
 
   primary key (ID),
   foreign key (task) references task (ID)
@@ -80,8 +83,8 @@ insert into department (name) values
   ('Restaurant');
 
 insert into employee (userName, firstName, lastName, password, employeeType, department) values
-  ('manager', 'Hotel', 'Manager', 'mgrpassword', 1, null),
-  ('jdoe', 'Jane Doe', 'janespassword', 2, 1);
+  ('johnd', 'John', 'Doe', 'johnpassword', 1, null),
+  ('janed', 'Jane', 'Doe', 'janespassword', 2, 1);
 
-insert into task (name, description, location, department) values
-  ('Wash the carpet', 'There was an incident in the room, so it needs to be cleaned ASAP', 'A123', 2);
+insert into task (name, description, location, department, isUrgent, isCancelled) values
+  ('Wash the carpet', 'There was an incident in the room, so it needs to be cleaned ASAP', 'A123', 2, false, false);
