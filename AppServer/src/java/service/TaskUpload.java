@@ -69,7 +69,6 @@ public class TaskUpload extends HttpServlet {
 
         try {
             // connects to the database
-//            DriverManager.registerDriver(new com.mysql.jdbc.Driver());
             conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/taskdb?" +
                                    "user=minhdao&password=secret");
  
@@ -132,7 +131,6 @@ public class TaskUpload extends HttpServlet {
         if(filePart != null){
             try {
                 // connects to the database
-    //            DriverManager.registerDriver(new com.mysql.jdbc.Driver());
                 conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/taskdb?" +
                                        "user=minhdao&password=secret");
 
@@ -170,13 +168,7 @@ public class TaskUpload extends HttpServlet {
             }
         }
         
-        System.out.println("attId: " + attId);
-        
-        response.setContentType("text/html");
-        try(PrintWriter out = response.getWriter()){
-            out.println("<p>"+message+"</p>");
-            out.println("<a href='http://localhost:8080/AppServer/download?id="+attId+"'>Download "+fileName+"</a>");
-        }
+        response.sendRedirect("http://localhost:8080/AppServer/main.html");
     }
     
     private int getMaxAttachmentId(Connection conn, String table) throws SQLException {

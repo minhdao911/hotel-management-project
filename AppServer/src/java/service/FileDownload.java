@@ -49,7 +49,6 @@ public class FileDownload extends HttpServlet {
         
         try {
             // connects to the database
-//            DriverManager.registerDriver(new com.mysql.jdbc.Driver());
             conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/taskdb?" +
                                    "user=minhdao&password=secret");
  
@@ -69,7 +68,7 @@ public class FileDownload extends HttpServlet {
 //            String contentType = this.getServletContext().getMimeType(fileName);
 //            if (contentType == null) {        
                 // set to binary type if MIME mapping not found
-            String contentType = "application/octet-stream";
+            String contentType = "application/octet-stream"; //for downloading instead of generating data
 //            }
             System.out.println("Content Type: " + contentType);
 

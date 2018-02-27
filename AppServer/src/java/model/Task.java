@@ -6,8 +6,10 @@
 package model;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Date;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -18,12 +20,14 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -47,13 +51,13 @@ public class Task implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private int id;
-    
+
     @Column(name = "name")
     private String name;
-    
+
     @Column(name = "location")
     private String location;
-    
+
     @Column(name = "description")
     private String description;
     
@@ -64,7 +68,7 @@ public class Task implements Serializable {
     @Column(name = "completionTime")
     @Temporal(TemporalType.TIMESTAMP)
     private Date completionTime;
-    
+
     @Column(name = "isCancelled")
     private boolean isCancelled;
 
@@ -72,12 +76,15 @@ public class Task implements Serializable {
     private boolean isUrgent;
     
     @JoinColumn(name = "department", referencedColumnName = "id")
-    @ManyToOne
+    @ManyToOne(optional = false)
     private Department department;
     
     @JoinColumn(name = "completionUser", referencedColumnName = "id")
     @ManyToOne
     private Employee completionUser;
+    
+    @OneToMany(mappedBy = "task")
+    private Collection<Attachment> attachments;
 
     public Task() {
     }
@@ -171,6 +178,15 @@ public class Task implements Serializable {
 
     public void setCompletionUser(Employee completionUser) {
         this.completionUser = completionUser;
+    }
+
+    @XmlTransient
+    public Collection<Attachment> getAttachmentCollection() {
+        return attachments;
+    }
+
+    public void setAttachmentCollection(Collection<Attachment> attachmentCollection) {
+        this.attachments = attachmentCollection;
     }
 
     @Override

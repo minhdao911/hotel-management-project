@@ -79,13 +79,6 @@ public class Attachment implements Serializable {
         this.fileName = fileName;
     }
 
-    public byte[] getFileData() {
-        return fileData;
-    }
-
-    public void setFileData(byte[] fileData) {
-        this.fileData = fileData;
-    }
     
     public Task getTask() {
         return task;
@@ -118,6 +111,14 @@ public class Attachment implements Serializable {
     @Override
     public String toString() {
         return "model.Attachment[ id=" + id + " ]";
+    }
+
+    public byte[] getFileData() {
+        return fileData;
+    }
+
+    public void setFileData(byte[] fileData) {
+        this.fileData = fileData;
     }
     
 }
