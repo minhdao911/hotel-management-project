@@ -77,9 +77,10 @@ body{
     margin: 0 auto;
     text-align: left;
     padding-left: 0.625em;
+    cursor: pointer;
 }
 
-.btn-wrapper:hover, .btn-wrapper:active, #btn-wrapper-active {
+.btn-wrapper:hover, .btn-wrapper:active, .btn-wrapper-active {
     background-color: #fff;
     color: #009f45;
 }
