@@ -16,6 +16,11 @@ document.addEventListener("DOMContentLoaded", function (event) {
     const canceledTaskDiv = document.querySelector("#canceled .content");
     const processTaskDiv = document.querySelector("#process .content");
     const logoutBtn = document.querySelector("#logoutBtn");
+    let file = {
+        dom    : document.getElementById("file"),
+        binary : null
+      };
+    let reader = new FileReader();
     
 //    console.log(urgentNewDiv);
     
@@ -29,9 +34,11 @@ document.addEventListener("DOMContentLoaded", function (event) {
     socket.onmessage = onMessage;
     
     function onMessage(event) {
+        console.log("onMessage");
         var task = JSON.parse(event.data);
         console.log(task);
         if (task.action === "add") {
+            console.log("add action");
             if(task.isUrgent) addNewTask(task, urgentNewDiv);
             addNewTask(task, newTaskDiv);
         }
@@ -83,7 +90,9 @@ document.addEventListener("DOMContentLoaded", function (event) {
         let desc = d.description ? d.description : "";
         let loc = d.location ? d.location.replace(/\b\w/g, l => l.toUpperCase()) : "";
         let crt = d.creationTime ? convertTime(d.creationTime) : "";
+//        let crt = d.creationTime ? d.creationTime : "";
         let ct = d.completionTime ? convertTime(d.completionTime) : "";
+//        let ct = d.completionTime ? d.completionTime : "";
         let cu = d.completionUser ? d.completionUser : "";
         let fl = d.fileLink ? "<a href="+ d.fileLink + ">" + d.fileName + "</a>" : "";
         let name = d.name ? d.name.toUpperCase() : "";
@@ -117,6 +126,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
         let desc = d.description ? d.description : "";
         let loc = d.location ? d.location.replace(/\b\w/g, l => l.toUpperCase()) : "";
         let crt = d.creationTime ? convertTime(d.creationTime) : "";
+//        let crt = d.creationTime ? d.creationTime : "";
         let name = d.name ? d.name.toUpperCase() : "";
         let fl = d.fileLink ? "<a href="+ d.fileLink + ">" + d.fileName + "</a>" : "";
         let result = `
@@ -143,10 +153,11 @@ document.addEventListener("DOMContentLoaded", function (event) {
         return result;
     };
     
-    let displayProcessTask = function(d, div){
+    let displayProcessTask = function(d){
         let desc = d.description ? d.description : "";
         let loc = d.location ? d.location.replace(/\b\w/g, l => l.toUpperCase()) : "";
         let crt = d.creationTime ? convertTime(d.creationTime) : "";
+//        let crt = d.creationTime ? d.creationTime : "";
         let name = d.name ? d.name.toUpperCase() : "";
         let fl = d.fileLink ? "<a href="+ d.fileLink + ">" + d.fileName + "</a>" : "";
         let result = `
@@ -173,26 +184,27 @@ document.addEventListener("DOMContentLoaded", function (event) {
     };
     
     let addTask = function(data, div){
-        div = div + displayTask(data);
+        div.innerHTML = displayTask(data) + div.innerHTML;
     };
     
     let addNewTask = function(data, div){
-        div = div + displayNewTask(data);
+//        console.log(displayNewTask(data));
+        div.innerHTML = displayNewTask(data) + div.innerHTML;
     };
     
     let addProcessTask = function(data, div){
-        div = div + displayProcessTask(data);
+        div.innerHTML = div + displayProcessTask(data);
     };
     
     let showTaskData = function(data, div){
         div.innerHTML = "";
         if(data.length > 1){
             for(let d of data){
-                div.innerHTML += displayTask(d, div);
+                div.innerHTML += displayTask(d);
             }
         }else if (data.length === 1){
             let d = data[0];
-            div.innerHTML += displayTask(d, div);
+            div.innerHTML += displayTask(d);
         }
     };
     
@@ -200,11 +212,11 @@ document.addEventListener("DOMContentLoaded", function (event) {
         div.innerHTML = "";
         if(data.length > 1){
             for(let d of data){
-                div.innerHTML += displayNewTask(d, div);
+                div.innerHTML += displayNewTask(d);
             }
         }else if (data.length === 1){
             let d = data[0];
-            div.innerHTML += displayNewTask(d, div);
+            div.innerHTML += displayNewTask(d);
         }
     };
     
@@ -212,18 +224,22 @@ document.addEventListener("DOMContentLoaded", function (event) {
         div.innerHTML = "";
         if(data.length > 1){
             for(let d of data){
-                div.innerHTML += displayProcessTask(d, div);
+                div.innerHTML += displayProcessTask(d);
             }
         }else if (data.length === 1){
             let d = data[0];
-            div.innerHTML += displayProcessTask(d, div);
+            div.innerHTML += displayProcessTask(d);
         }
     };
     
     let convertTime = function(d){
-        let DateArr = d.split("T");
-        let TimeArr = DateArr[1].substring(0, DateArr[1].length-6).split(".");
-        return TimeArr[0] + " " + DateArr[0];
+//        let DateArr = d.split("T");
+//        let TimeArr = DateArr[1].substring(0, DateArr[1].length-6).split(".");
+//        return TimeArr[0] + " " + DateArr[0];
+//        let dateArr = d.split(" ");
+//        return `${dateArr[0]} ${dateArr[1]} ${dateArr[2]} ${dateArr[5]} ${dateArr[3]}`;
+        let dateArr = d.split(".");
+        return dateArr[0];
     };
     
     logoutBtn.addEventListener("click", function(){
@@ -231,9 +247,44 @@ document.addEventListener("DOMContentLoaded", function (event) {
         window.location.replace("../AppServer/index.html");
     });
     
+    // Because FileReader is asynchronous, store its
+    // result when it finishes to read the file
+    reader.addEventListener("load", function () {
+      file.binary = reader.result;
+    });
+    
+    // At page load, if a file is already selected, read it.
+    if(file.dom.files[0]) {
+      reader.readAsBinaryString(file.dom.files[0]);
+    }
+
+    // If not, read the file once the user selects it.
+    file.dom.addEventListener("change", function () {
+      if(reader.readyState === FileReader.LOADING) {
+        reader.abort();
+      }
+
+      reader.readAsBinaryString(file.dom.files[0]);
+    });
+    
+    function sendData() {
+        console.log(taskData);
+        const formData = new FormData();
+        for(let name in taskData){
+            formData.append(name, taskData[name]);
+        }
+        console.log(file.dom.files[0]);
+        formData.append("file", file.dom.files[0]);
+        
+        fetch(baseUrl+"/upload", {
+            method: "POST",
+            body: formData
+        }).then(response => console.log(response));
+    }
+    
     addForm.addEventListener("input", function(){
         taskData.name = addForm.querySelector("input[name='name']").value;
-        taskData.loc = addForm.querySelector("input[name='location']").value;
+        taskData.location = addForm.querySelector("input[name='location']").value;
         taskData.desc = addForm.querySelector("textarea[name='desc']").value;
         taskData.dep = addForm.querySelector("select[name='dep']").value;
         taskData.urgent = false;
@@ -244,8 +295,8 @@ document.addEventListener("DOMContentLoaded", function (event) {
         else taskData.urgent = false;
     });
     
-//    addForm.addEventListener("submit", function(e){
-//        e.preventDefault();
+    addForm.addEventListener("submit", function(e){
+        e.preventDefault();
 //        console.log(taskData);
 //        let posturl = baseUrl + "/ws/task?name=" + taskData.name + "&location=" + taskData.loc +
 //                "&desc=" + taskData.desc + "&dep=" + taskData.dep + "&urgent=" + taskData.urgent;
@@ -274,7 +325,9 @@ document.addEventListener("DOMContentLoaded", function (event) {
 //                .then(data => xmlToJson(data))
 //                .then(json => showTaskData(json, allTaskDiv))
 //                .catch(error => console.log(error));
-//    });
+        console.log(taskData);
+        sendData();
+    });
     
     document.querySelector("#main").addEventListener("click", function(e){
         if(e.target && e.target.className === "fa fa-check-circle"){

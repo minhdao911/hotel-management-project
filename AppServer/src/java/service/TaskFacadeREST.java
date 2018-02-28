@@ -6,6 +6,7 @@
 package service;
 
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -386,16 +387,19 @@ public class TaskFacadeREST extends AbstractFacade<Task> {
     
     public List<TaskWithAttachment> getResults(List<Tuple> results){
         List<TaskWithAttachment> tasks = new ArrayList<>();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
         for(Tuple t : results){
             Task tk = t.get(0, Task.class);
             String username = null;
+            String completionTime = null;
             if(tk.getCompletionUser() != null) username = tk.getCompletionUser().getUserName();
+            if(tk.getCompletionTime() != null) completionTime = dateFormat.format(tk.getCompletionTime());
             if(t.get(2) == null){
                 tasks.add(new TaskWithAttachment(tk.getId(), tk.getName(), tk.getLocation(), tk.getDescription(),
-                tk.getCreationTime().toString(), tk.getCompletionTime().toString(), tk.getIsCancelled(), tk.getIsUrgent(), username));
+                dateFormat.format(tk.getCreationTime()), completionTime, tk.getIsCancelled(), tk.getIsUrgent(), username));
             }else{
                 tasks.add(new TaskWithAttachment(tk.getId(), tk.getName(), tk.getLocation(), tk.getDescription(),
-                tk.getCreationTime().toString(), tk.getCompletionTime().toString(), tk.getIsCancelled(), 
+                dateFormat.format(tk.getCreationTime()), completionTime, tk.getIsCancelled(), 
                         tk.getIsUrgent(), (int)t.get(1), (String)t.get(2), username));
             }
         }

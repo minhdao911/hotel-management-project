@@ -57,8 +57,13 @@ public class TaskUpload extends HttpServlet {
         String location = request.getParameter("location");
         String dep = request.getParameter("dep");
         String desc = request.getParameter("desc");
-        boolean urgent = "on".equals(request.getParameter("urgent"));
+        boolean urgent = "true".equals(request.getParameter("urgent"));
         Timestamp creationTime = new Timestamp(System.currentTimeMillis());
+        
+        System.out.println("post");
+        System.out.println(taskName);
+        System.out.println(request.getParameter("urgent"));
+        System.out.println(urgent);
         
         t.setName(taskName);
         t.setDescription(desc);
@@ -69,6 +74,7 @@ public class TaskUpload extends HttpServlet {
         Connection conn = null; // connection to the database
         String message = "";
         int taskId = -1;
+        int attId = -1;
         Task newTask = null;
 
         try {
@@ -116,11 +122,13 @@ public class TaskUpload extends HttpServlet {
         }
         
         InputStream inputStream = null; // input stream of the upload file
-        String fileName = "";
+        String fileName = null;
          
         // obtains the upload file part in this multipart request
         Part filePart = request.getPart("file");
-        if (filePart != null) {
+        System.out.println("filePart");
+        System.out.println(filePart);
+        if (filePart.getSize() > 0) {
             // prints out some information for debugging
             System.out.println(filePart.getName());
             System.out.println(filePart.getSize());
@@ -129,12 +137,7 @@ public class TaskUpload extends HttpServlet {
             // obtains input stream of the upload file
             fileName = filePart.getSubmittedFileName();
             inputStream = filePart.getInputStream();
-        }
-         
-          // message will be sent back to client
-        int attId = -1;
         
-        if(filePart != null){
             try {
                 // connects to the database
                 conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/taskdb?" +
@@ -179,7 +182,10 @@ public class TaskUpload extends HttpServlet {
         }
         
         ObjectMapper mapper = new ObjectMapper();
-        WebSocketServer.getInstance().onMessage(mapper.writeValueAsString(t));
+//        System.out.println(mapper.writeValueAsString(t));
+//        WebSocketServer.getInstance().onMessage(mapper.writeValueAsString(t));
+
+        WebSocketServer.sendAll(mapper.writeValueAsString(t), "add");
         
 //        response.sendRedirect("http://localhost:8080/AppServer/main.html");
     }

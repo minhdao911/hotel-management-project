@@ -18,21 +18,23 @@ public class TaskWithAttachment {
     private String name;
     private String location;
     private String description;
-    private String completionUser = null;
+    private String completionUser = "";
     private String creationTime;
-    private String completionTime = null;
+    private String completionTime = "";
     private boolean isCancelled;
     private boolean isUrgent;
     private int fileId = 0;
-    private String fileName = null;
-    private String fileLink = null;
+    private String fileName = "";
+    private String fileLink = "";
+//    private String status;
     
     public TaskWithAttachment(){
         
     }
     
     public TaskWithAttachment(int id, String taskName, String location, String desc, String creationTime,
-             String completionTime, boolean isCancelled, boolean isUrgent, int fileId, String fileName, String completionUser){
+             String completionTime, boolean isCancelled, boolean isUrgent, int fileId, String fileName, 
+             String completionUser){
         this.id = id;
         this.name = taskName;
         this.location = location;
@@ -45,10 +47,12 @@ public class TaskWithAttachment {
         this.fileId = fileId;
         this.fileName = fileName;
         this.fileLink = "http://localhost:8080/AppServer/download?id="+fileId;
+//        this.status = status;
     }
     
-    public TaskWithAttachment(int id, String taskName, String location, String desc, String creationTime,
-             String completionTime, boolean isCancelled, boolean isUrgent, String completionUser){
+    public TaskWithAttachment(int id, String taskName, String location, String desc, 
+            String creationTime, String completionTime, boolean isCancelled, 
+            boolean isUrgent, String completionUser){
         this.id = id;
         this.name = taskName;
         this.location = location;
@@ -58,6 +62,7 @@ public class TaskWithAttachment {
         this.completionTime = completionTime;
         this.isCancelled = isCancelled;
         this.isUrgent = isUrgent;
+//        this.status = status;
     }
     
     public int getId() {
@@ -155,5 +160,13 @@ public class TaskWithAttachment {
     public void setFileLink(String fileLink){
         this.fileLink = fileLink;
     }
+    
+//    public String getStatus(){
+//        return status;
+//    }
+//    
+//    public void setStatus(String status){
+//        this.status = status;
+//    }
     
 }
