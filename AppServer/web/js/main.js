@@ -25,6 +25,31 @@ document.addEventListener("DOMContentLoaded", function (event) {
     let userObj = JSON.parse(userData);
     console.log(userObj);
     
+    var socket = new WebSocket("ws://localhost:8080/AppServer/actions/"+userObj.employee.department.id);
+    socket.onmessage = onMessage;
+    
+    function onMessage(event) {
+        var task = JSON.parse(event.data);
+        console.log(task);
+        if (task.action === "add") {
+            if(task.isUrgent) addNewTask(task, urgentNewDiv);
+            addNewTask(task, newTaskDiv);
+        }
+//        if (task.action === "remove") {
+//            document.getElementById(task.id).remove();
+//            //task.parentNode.removeChild(task);
+//        }
+//        if (task.action === "toggle") {
+//            var node = document.getElementById(task.id);
+//            var statusText = node.children[2];
+//            if (task.status === "On") {
+//                statusText.innerHTML = "Status: " + task.status + " (<a href=\"#\" OnClick=toggleDevice(" + task.id + ")>Turn off</a>)";
+//            } else if (task.status === "Off") {
+//                statusText.innerHTML = "Status: " + task.status + " (<a href=\"#\" OnClick=toggleDevice(" + task.id + ")>Turn on</a>)";
+//            }
+//        }
+    }
+    
     let taskData = {};
     const getUrl = window.location;
     const baseUrl = getUrl .protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1];
@@ -54,7 +79,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
         return result;
     };
     
-    let displayTask = function(d, div){
+    let displayTask = function(d){
         let desc = d.description ? d.description : "";
         let loc = d.location ? d.location.replace(/\b\w/g, l => l.toUpperCase()) : "";
         let crt = d.creationTime ? convertTime(d.creationTime) : "";
@@ -64,7 +89,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
         let name = d.name ? d.name.toUpperCase() : "";
         console.log(name);
         let status = checkStatus(d);
-        div.innerHTML += `
+        let result =  `
             <div class="task">
               <p class="task-name">${name}</p>
               <div class="label ${status.toLowerCase()}-label">
@@ -85,15 +110,16 @@ document.addEventListener("DOMContentLoaded", function (event) {
               </div>
             </div>
         `;
+        return result;
     };
     
-    let displayNewTask = function(d, div){
+    let displayNewTask = function(d){
         let desc = d.description ? d.description : "";
         let loc = d.location ? d.location.replace(/\b\w/g, l => l.toUpperCase()) : "";
         let crt = d.creationTime ? convertTime(d.creationTime) : "";
         let name = d.name ? d.name.toUpperCase() : "";
         let fl = d.fileLink ? "<a href="+ d.fileLink + ">" + d.fileName + "</a>" : "";
-        div.innerHTML += `
+        let result = `
             <div class="task" id="${d.id}">
               <p class="task-name">${name}</p>
               <div class="buttons">
@@ -114,6 +140,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
               </div>
             </div>
         `;
+        return result;
     };
     
     let displayProcessTask = function(d, div){
@@ -122,7 +149,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
         let crt = d.creationTime ? convertTime(d.creationTime) : "";
         let name = d.name ? d.name.toUpperCase() : "";
         let fl = d.fileLink ? "<a href="+ d.fileLink + ">" + d.fileName + "</a>" : "";
-        div.innerHTML += `
+        let result = `
             <div class="task" id="${d.id}">
               <p class="task-name">${name}</p>
               <div class="buttons">
@@ -142,17 +169,30 @@ document.addEventListener("DOMContentLoaded", function (event) {
               </div>
             </div>
         `;
+        return result;
+    };
+    
+    let addTask = function(data, div){
+        div = div + displayTask(data);
+    };
+    
+    let addNewTask = function(data, div){
+        div = div + displayNewTask(data);
+    };
+    
+    let addProcessTask = function(data, div){
+        div = div + displayProcessTask(data);
     };
     
     let showTaskData = function(data, div){
         div.innerHTML = "";
         if(data.length > 1){
             for(let d of data){
-                displayTask(d, div);
+                div.innerHTML += displayTask(d, div);
             }
         }else if (data.length === 1){
             let d = data[0];
-            displayTask(d, div);
+            div.innerHTML += displayTask(d, div);
         }
     };
     
@@ -160,11 +200,11 @@ document.addEventListener("DOMContentLoaded", function (event) {
         div.innerHTML = "";
         if(data.length > 1){
             for(let d of data){
-                displayNewTask(d, div);
+                div.innerHTML += displayNewTask(d, div);
             }
         }else if (data.length === 1){
             let d = data[0];
-            displayNewTask(d, div);
+            div.innerHTML += displayNewTask(d, div);
         }
     };
     
@@ -172,11 +212,11 @@ document.addEventListener("DOMContentLoaded", function (event) {
         div.innerHTML = "";
         if(data.length > 1){
             for(let d of data){
-                displayProcessTask(d, div);
+                div.innerHTML += displayProcessTask(d, div);
             }
         }else if (data.length === 1){
             let d = data[0];
-            displayProcessTask(d, div);
+            div.innerHTML += displayProcessTask(d, div);
         }
     };
     

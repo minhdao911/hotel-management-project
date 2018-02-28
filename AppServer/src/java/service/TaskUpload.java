@@ -22,6 +22,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 import model.Task;
+import model.TaskWithAttachment;
+import org.codehaus.jackson.map.ObjectMapper;
+import websocket.WebSocketServer;
 
 /**
  *
@@ -48,19 +51,20 @@ public class TaskUpload extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        System.out.println("post");
-        System.out.println(request.getRequestURI());
+        TaskWithAttachment t = new TaskWithAttachment();
         
         String taskName = request.getParameter("name");
         String location = request.getParameter("location");
         String dep = request.getParameter("dep");
         String desc = request.getParameter("desc");
         boolean urgent = "on".equals(request.getParameter("urgent"));
+        Timestamp creationTime = new Timestamp(System.currentTimeMillis());
         
-        System.out.println("name: " + taskName);
-        System.out.println("dep: " + dep);
-        System.out.println("location: " + location);
-        System.out.println("urgent: " + urgent);
+        t.setName(taskName);
+        t.setDescription(desc);
+        t.setLocation(location);
+        t.setIsCancelled(false);
+        t.setIsUrgent(urgent);
         
         Connection conn = null; // connection to the database
         String message = "";
@@ -82,7 +86,7 @@ public class TaskUpload extends HttpServlet {
             statement.setString(3, location);
             if(!desc.isEmpty()) statement.setString(4, desc);
             else statement.setString(4, null);
-            statement.setTimestamp(5, new Timestamp(System.currentTimeMillis()));
+            statement.setTimestamp(5, creationTime);
             statement.setInt(6, Integer.parseInt(dep));
             statement.setBoolean(7, false);
             statement.setBoolean(8, urgent);
@@ -93,6 +97,8 @@ public class TaskUpload extends HttpServlet {
             if (row > 0) {
                 message += "new task added";
                 newTask = (Task)statement.getResultSet();
+                t.setId(taskId);
+                t.setCreationTime(creationTime.toString());
             }
             
         } catch (SQLException ex) {
@@ -151,6 +157,10 @@ public class TaskUpload extends HttpServlet {
                 int row = statement.executeUpdate();
                 if (row > 0) {
                     message += ", file uploaded and saved into database";
+                    t.setfileId(attId);
+                    t.setFileName(fileName);
+                    String fileLink = "http://localhost:8080/AppServer/download?id="+attId;
+                    t.setFileLink(fileLink);
                 }
 
             } catch (SQLException ex) {
@@ -168,7 +178,10 @@ public class TaskUpload extends HttpServlet {
             }
         }
         
-        response.sendRedirect("http://localhost:8080/AppServer/main.html");
+        ObjectMapper mapper = new ObjectMapper();
+        WebSocketServer.getInstance().onMessage(mapper.writeValueAsString(t));
+        
+//        response.sendRedirect("http://localhost:8080/AppServer/main.html");
     }
     
     private int getMaxAttachmentId(Connection conn, String table) throws SQLException {

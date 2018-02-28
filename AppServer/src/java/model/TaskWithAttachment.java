@@ -18,17 +18,21 @@ public class TaskWithAttachment {
     private String name;
     private String location;
     private String description;
-    private String completionUser;
-    private Date creationTime;
-    private Date completionTime;
+    private String completionUser = null;
+    private String creationTime;
+    private String completionTime = null;
     private boolean isCancelled;
     private boolean isUrgent;
     private int fileId = 0;
     private String fileName = null;
     private String fileLink = null;
     
-    public TaskWithAttachment(int id, String taskName, String location, String desc, Date creationTime,
-             Date completionTime, boolean isCancelled, boolean isUrgent, int fileId, String fileName, String completionUser){
+    public TaskWithAttachment(){
+        
+    }
+    
+    public TaskWithAttachment(int id, String taskName, String location, String desc, String creationTime,
+             String completionTime, boolean isCancelled, boolean isUrgent, int fileId, String fileName, String completionUser){
         this.id = id;
         this.name = taskName;
         this.location = location;
@@ -43,8 +47,8 @@ public class TaskWithAttachment {
         this.fileLink = "http://localhost:8080/AppServer/download?id="+fileId;
     }
     
-    public TaskWithAttachment(int id, String taskName, String location, String desc, Date creationTime,
-             Date completionTime, boolean isCancelled, boolean isUrgent, String completionUser){
+    public TaskWithAttachment(int id, String taskName, String location, String desc, String creationTime,
+             String completionTime, boolean isCancelled, boolean isUrgent, String completionUser){
         this.id = id;
         this.name = taskName;
         this.location = location;
@@ -88,19 +92,19 @@ public class TaskWithAttachment {
         this.description = description;
     }
 
-    public Date getCreationTime() {
+    public String getCreationTime() {
         return creationTime;
     }
 
-    public void setCreationTime(Date creationTime) {
+    public void setCreationTime(String creationTime) {
         this.creationTime = creationTime;
     }
 
-    public Date getCompletionTime() {
+    public String getCompletionTime() {
         return completionTime;
     }
 
-    public void setCompletionTime(Date completionTime) {
+    public void setCompletionTime(String completionTime) {
         this.completionTime = completionTime;
     }
 
