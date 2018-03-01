@@ -128,7 +128,7 @@ public class TaskUpload extends HttpServlet {
         Part filePart = request.getPart("file");
         System.out.println("filePart");
         System.out.println(filePart);
-        if (filePart.getSize() > 0) {
+        if (filePart.getSize() > 0 && filePart.getSubmittedFileName() != null) {
             // prints out some information for debugging
             System.out.println(filePart.getName());
             System.out.println(filePart.getSize());

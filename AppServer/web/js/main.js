@@ -16,13 +16,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
     const canceledTaskDiv = document.querySelector("#canceled .content");
     const processTaskDiv = document.querySelector("#process .content");
     const logoutBtn = document.querySelector("#logoutBtn");
-    let file = {
-        dom    : document.getElementById("file"),
-        binary : null
-      };
-    let reader = new FileReader();
-    
-//    console.log(urgentNewDiv);
+    const file = document.getElementById("file");
     
     let userData = localStorage.getItem('userData');
 //    localStorage.removeItem('userData');
@@ -30,31 +24,49 @@ document.addEventListener("DOMContentLoaded", function (event) {
     let userObj = JSON.parse(userData);
     console.log(userObj);
     
-    var socket = new WebSocket("ws://209.250.247.110:8080/AppServer/actions/"+userObj.employee.department.id);
+    var socket = new WebSocket("ws://209.250.247.110:8080/AppServerTest/actions/"+userObj.employee.department.id);
     socket.onmessage = onMessage;
     
     function onMessage(event) {
-        console.log("onMessage");
         var task = JSON.parse(event.data);
         console.log(task);
         if (task.action === "add") {
             console.log("add action");
             if(task.isUrgent) addNewTask(task, urgentNewDiv);
-            addNewTask(task, newTaskDiv);
+            else addNewTask(task, newTaskDiv);
+            fetch(url)
+                .then(response => response.json())
+                .then(json => showTaskData(json, allTaskDiv))
+                .catch(error => console.log(error));
         }
-//        if (task.action === "remove") {
-//            document.getElementById(task.id).remove();
-//            //task.parentNode.removeChild(task);
-//        }
-//        if (task.action === "toggle") {
-//            var node = document.getElementById(task.id);
-//            var statusText = node.children[2];
-//            if (task.status === "On") {
-//                statusText.innerHTML = "Status: " + task.status + "§ (<a href=\"#\" OnClick=toggleDevice(" + task.id + ")>Turn off</a>)";
-//            } else if (task.status === "Off") {
-//                statusText.innerHTML = "Status: " + task.status + " (<a href=\"#\" OnClick=toggleDevice(" + task.id + ")>Turn on</a>)";
-//            }
-//        }
+        if (task.action === "cancel") {
+            console.log("cancel action");
+            document.getElementById(task.id).remove();
+            addTask(task, canceledTaskDiv);
+            fetch(url)
+                .then(response => response.json())
+                .then(json => showTaskData(json, allTaskDiv))
+                .catch(error => console.log(error));
+        }
+        if (task.action === "accept") {
+            console.log("accept action");
+            document.getElementById(task.id).remove();
+            if(task.isUrgent) addProcessTask(task, urgentProcessDiv);
+            else addProcessTask(task, processTaskDiv);
+            fetch(url)
+                .then(response => response.json())
+                .then(json => showTaskData(json, allTaskDiv))
+                .catch(error => console.log(error));
+        }
+        if (task.action === "complete") {
+            console.log("complete action");
+            document.getElementById(""+task.id).remove();
+            addTask(task, completedTaskDiv);
+            fetch(url)
+                .then(response => response.json())
+                .then(json => showTaskData(json, allTaskDiv))
+                .catch(error => console.log(error));
+        }
     }
     
     let taskData = {};
@@ -90,9 +102,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
         let desc = d.description ? d.description : "";
         let loc = d.location ? d.location.replace(/\b\w/g, l => l.toUpperCase()) : "";
         let crt = d.creationTime ? convertTime(d.creationTime) : "";
-//        let crt = d.creationTime ? d.creationTime : "";
         let ct = d.completionTime ? convertTime(d.completionTime) : "";
-//        let ct = d.completionTime ? d.completionTime : "";
         let cu = d.completionUser ? d.completionUser : "";
         let fl = d.fileLink ? "<a href="+ d.fileLink + ">" + d.fileName + "</a>" : "";
         let name = d.name ? d.name.toUpperCase() : "";
@@ -126,7 +136,6 @@ document.addEventListener("DOMContentLoaded", function (event) {
         let desc = d.description ? d.description : "";
         let loc = d.location ? d.location.replace(/\b\w/g, l => l.toUpperCase()) : "";
         let crt = d.creationTime ? convertTime(d.creationTime) : "";
-//        let crt = d.creationTime ? d.creationTime : "";
         let name = d.name ? d.name.toUpperCase() : "";
         let fl = d.fileLink ? "<a href="+ d.fileLink + ">" + d.fileName + "</a>" : "";
         let result = `
@@ -157,7 +166,6 @@ document.addEventListener("DOMContentLoaded", function (event) {
         let desc = d.description ? d.description : "";
         let loc = d.location ? d.location.replace(/\b\w/g, l => l.toUpperCase()) : "";
         let crt = d.creationTime ? convertTime(d.creationTime) : "";
-//        let crt = d.creationTime ? d.creationTime : "";
         let name = d.name ? d.name.toUpperCase() : "";
         let fl = d.fileLink ? "<a href="+ d.fileLink + ">" + d.fileName + "</a>" : "";
         let result = `
@@ -188,12 +196,11 @@ document.addEventListener("DOMContentLoaded", function (event) {
     };
     
     let addNewTask = function(data, div){
-//        console.log(displayNewTask(data));
         div.innerHTML = displayNewTask(data) + div.innerHTML;
     };
     
     let addProcessTask = function(data, div){
-        div.innerHTML = div + displayProcessTask(data);
+        div.innerHTML = displayProcessTask(data) + div.innerHTML;
     };
     
     let showTaskData = function(data, div){
@@ -233,11 +240,6 @@ document.addEventListener("DOMContentLoaded", function (event) {
     };
     
     let convertTime = function(d){
-//        let DateArr = d.split("T");
-//        let TimeArr = DateArr[1].substring(0, DateArr[1].length-6).split(".");
-//        return TimeArr[0] + " " + DateArr[0];
-//        let dateArr = d.split(" ");
-//        return `${dateArr[0]} ${dateArr[1]} ${dateArr[2]} ${dateArr[5]} ${dateArr[3]}`;
         let dateArr = d.split(".");
         return dateArr[0];
     };
@@ -247,34 +249,12 @@ document.addEventListener("DOMContentLoaded", function (event) {
         window.location.replace("../AppServer/index.html");
     });
     
-    // Because FileReader is asynchronous, store its
-    // result when it finishes to read the file
-    reader.addEventListener("load", function () {
-      file.binary = reader.result;
-    });
-    
-    // At page load, if a file is already selected, read it.
-    if(file.dom.files[0]) {
-      reader.readAsBinaryString(file.dom.files[0]);
-    }
-
-    // If not, read the file once the user selects it.
-    file.dom.addEventListener("change", function () {
-      if(reader.readyState === FileReader.LOADING) {
-        reader.abort();
-      }
-
-      reader.readAsBinaryString(file.dom.files[0]);
-    });
-    
     function sendData() {
-        console.log(taskData);
         const formData = new FormData();
         for(let name in taskData){
             formData.append(name, taskData[name]);
         }
-        console.log(file.dom.files[0]);
-        formData.append("file", file.dom.files[0]);
+        formData.append("file", file.files[0]);
         
         fetch(baseUrl+"/upload", {
             method: "POST",
@@ -297,35 +277,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
     
     addForm.addEventListener("submit", function(e){
         e.preventDefault();
-//        console.log(taskData);
-//        let posturl = baseUrl + "/ws/task?name=" + taskData.name + "&location=" + taskData.loc +
-//                "&desc=" + taskData.desc + "&dep=" + taskData.dep + "&urgent=" + taskData.urgent;
-//                            
-//        const init = {
-//            method: "POST",
-//            body: JSON.stringify(taskData),
-//            headers: {
-//                "Content-type": "application/json; charset=UTF-8"
-//            }
-//        };
-//        fetch(posturl, init)
-//            .then(response => fetch(url+"/new"))
-//                .then(response => response.text())
-//                .then(str => (new window.DOMParser()).parseFromString(str, "text/xml"))
-//                .then(data => xmlToJson(data))
-//                .then(json => showNewTaskData(json, newTaskDiv))
-//            .then(result => fetch(url+"/urgent/new"))
-//                .then(response => response.text())
-//                .then(str => (new window.DOMParser()).parseFromString(str, "text/xml"))
-//                .then(data => xmlToJson(data))
-//                .then(json => showNewTaskData(json, urgentNewDiv))
-//            .then(result => fetch(url))
-//                .then(response => response.text())
-//                .then(str => (new window.DOMParser()).parseFromString(str, "text/xml"))
-//                .then(data => xmlToJson(data))
-//                .then(json => showTaskData(json, allTaskDiv))
-//                .catch(error => console.log(error));
-        console.log(taskData);
+        addForm.reset();
         sendData();
     });
     
@@ -381,11 +333,15 @@ document.addEventListener("DOMContentLoaded", function (event) {
     });
     
     showUserData(userObj);
+    
+    fetch(baseUrl+"/ws/task/set")
+        .then(response => console.log(response))
+        .catch(error => console.log(error));
 
     fetch(url)
         .then(response => response.json())
         .then(json => {
-            console.log(json);
+//            console.log(json);
             showTaskData(json, allTaskDiv);
         })
 //        .then(json => console.log(json))
@@ -395,7 +351,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
     fetch(url+"/new")
         .then(response => response.json())
         .then(json => {
-            console.log(json);
+//            console.log(json);
             showNewTaskData(json, newTaskDiv);})
 //        .then(json => console.log(json))
         .catch(error => console.log(error));

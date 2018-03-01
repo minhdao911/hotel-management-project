@@ -5,6 +5,7 @@
  */
 package service;
 
+import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -36,6 +37,8 @@ import model.Department;
 import model.Employee;
 import model.Task;
 import model.TaskWithAttachment;
+import org.codehaus.jackson.map.ObjectMapper;
+import websocket.WebSocketServer;
 
 /**
  *
@@ -45,8 +48,10 @@ import model.TaskWithAttachment;
 @Path("task")
 public class TaskFacadeREST extends AbstractFacade<Task> {
 
-    @PersistenceContext(unitName = "AppServerPU")
+    @PersistenceContext(unitName = "AppServerTestPU")
      EntityManager em;
+    
+    ObjectMapper mapper = new ObjectMapper();
 
     public TaskFacadeREST() {
         super(Task.class);
@@ -84,32 +89,59 @@ public class TaskFacadeREST extends AbstractFacade<Task> {
     @Path("{id}/{userName}")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void editCompletionUser(@PathParam("id") int id, 
-            @PathParam("userName") String completionUser) {
+            @PathParam("userName") String completionUser){
         Task t = em.find(Task.class, id);
         Employee e = (Employee)em.createNamedQuery("Employee.findByUserName")
             .setParameter("userName", completionUser)
             .getSingleResult();
         t.setCompletionUser(e);
         super.edit(t);
+        TaskWithAttachment twa = new TaskWithAttachment();
+        twa.setId(t.getId());
+        twa.setCompletionUser(t.getCompletionUser().getUserName());
+        System.out.println("completionUser: " + t.getCompletionUser().getUserName());
+        try{
+            WebSocketServer.sendAll(mapper.writeValueAsString(twa), "accept");
+        }catch(Exception ex){
+            System.out.println(ex);
+        }
+        
     }
     
     @PUT
     @Path("{id}")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public void editCompletionTime(@PathParam("id") int id, 
-            @PathParam("completionTime") String completionTime) {
+            @PathParam("completionTime") String completionTime){
         Task t = em.find(Task.class, id);
         t.setCompletionTime(new Timestamp(System.currentTimeMillis()));
         super.edit(t);
+        TaskWithAttachment twa = new TaskWithAttachment();
+        twa.setId(t.getId());
+        twa.setCompletionTime(t.getCompletionTime().toString());
+        System.out.println("completionTime: " + t.getCompletionTime().toString());
+        try{
+            WebSocketServer.sendAll(mapper.writeValueAsString(twa), "complete");
+        }catch(Exception ex){
+            System.out.println(ex);
+        }
     }
     
     @PUT
     @Path("cancel/{id}")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public void editCancel(@PathParam("id") int id) {
+    public void editCancel(@PathParam("id") int id){
         Task t = em.find(Task.class, id);
         t.setIsCancelled(true);
         super.edit(t);
+        TaskWithAttachment twa = new TaskWithAttachment();
+        twa.setId(t.getId());
+        twa.setIsCancelled(true);
+        try{
+            WebSocketServer.sendAll(mapper.writeValueAsString(twa), "cancel");
+        }catch(Exception ex){
+            System.out.println(ex);
+        }
     }
 
     @DELETE
@@ -130,6 +162,19 @@ public class TaskFacadeREST extends AbstractFacade<Task> {
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public List<Task> findAll() {
         return super.findAll();
+    }
+    
+    @GET
+    @Path("set")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public void setTasks() {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Tuple> cq = cb.createTupleQuery();
+        Root<Task> task = cq.from(Task.class);
+        Join<Task, Attachment> a = task.join("attachments", JoinType.LEFT);
+        cq.multiselect(task, a.get("id"), a.get("fileName"));
+        TypedQuery<Tuple> q = em.createQuery(cq);
+        WebSocketServer.setTasks(getResults(q.getResultList()));
     }
 
     @GET
@@ -195,7 +240,7 @@ public class TaskFacadeREST extends AbstractFacade<Task> {
         );
         cq.orderBy(cb.desc(task.get("creationTime")));
         TypedQuery<Tuple> q = em.createQuery(cq);
-        List<TaskWithAttachment> tasks = new ArrayList<TaskWithAttachment>();
+//        List<TaskWithAttachment> tasks = new ArrayList<TaskWithAttachment>();
 //        for(Tuple t : q.getResultList()){
 //            Task tk = t.get(0, Task.class);
 //            if(t.get(2) == null){

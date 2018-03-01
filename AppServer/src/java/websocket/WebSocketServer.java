@@ -7,7 +7,9 @@ package websocket;
 
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -35,10 +37,7 @@ import model.TaskWithAttachment;
 public class WebSocketServer {
     
     private static final Set<Session> sessions = new HashSet<>();
-    private static Set<TaskWithAttachment> tasks = new HashSet<>();
-    
-//    @Inject
-//    private SessionHandler sessionHandler;
+    private static List<TaskWithAttachment> tasks = new ArrayList<>();
 
     @OnOpen
     public void onOpen(Session session) {
@@ -61,10 +60,10 @@ public class WebSocketServer {
         try (JsonReader reader = Json.createReader(new StringReader(message))) {
             JsonObject jsonMessage = reader.readObject();
             String returnMessage = "";
-            
+            TaskWithAttachment task;
             switch(action){
                 case "add":
-                    TaskWithAttachment task = new TaskWithAttachment();
+                    task = new TaskWithAttachment();
                     task.setId(jsonMessage.getInt("id"));
                     task.setName(jsonMessage.getString("name"));
                     task.setDescription(jsonMessage.getString("description"));
@@ -81,11 +80,21 @@ public class WebSocketServer {
                     break;
                 case "cancel":
                     int cancelId = (int) jsonMessage.getInt("id");
-                    returnMessage = cancelTask(cancelId);
+                    task = tasks.get(getTaskIndex(cancelId));
+                    task.setIsCancelled(jsonMessage.getBoolean("isCancelled"));
+                    returnMessage = cancelTask(task);
                     break;
                 case "accept":
                     int acceptId = (int) jsonMessage.getInt("id");
-                    returnMessage = cancelTask(acceptId);
+                    task = tasks.get(getTaskIndex(acceptId));
+                    task.setCompletionUser(jsonMessage.getString("completionUser"));
+                    returnMessage = acceptTask(task);
+                    break;
+                case "complete":
+                    int doneId = (int) jsonMessage.getInt("id");
+                    task = tasks.get(getTaskIndex(doneId));
+                    task.setCompletionTime(jsonMessage.getString("completionTime"));
+                    returnMessage = completeTask(task);
                     break;
             }
             synchronized (sessions) {
@@ -107,53 +116,70 @@ public class WebSocketServer {
         private static final WebSocketServer INSTANCE = new WebSocketServer();
     }
     
+    public static void setTasks(List<TaskWithAttachment> allTasks){
+        System.out.println("set tasks");
+        for(TaskWithAttachment t : allTasks){
+            tasks.add(t);
+        }
+    }
+    
     public static String addTask(TaskWithAttachment task) {
         System.out.println("add task");
         tasks.add(task);
-        JsonObject addMessage = createAddMessage(task);
+        JsonObject addMessage = createMessage(task, "add");
         return addMessage.toString();
     }
 
-    public static String cancelTask(int id) {
-        TaskWithAttachment task = getTaskById(id);
+    public static String cancelTask(TaskWithAttachment task) {
+        System.out.println("cancel task");
         if(task != null){
-            tasks.remove(task);
-            JsonProvider provider = JsonProvider.provider();
-            JsonObject removeMessage = provider.createObjectBuilder()
-                    .add("action", "cancel")
-                    .add("id", id)
-                    .build();
+            JsonObject removeMessage = createMessage(task, "cancel");
             return removeMessage.toString();
         }
         return null;
     }
 
-    public static String acceptTask(int id) {
-        TaskWithAttachment task = getTaskById(id);
+    public static String acceptTask(TaskWithAttachment task) {
+        System.out.println("accept task");
         if(task != null){
-            JsonProvider provider = JsonProvider.provider();
-            JsonObject updateMessage = provider.createObjectBuilder()
-                    .add("action", "accept")
-                    .add("id", id)
-                    .build();
+            JsonObject updateMessage = createMessage(task, "accept");
+            return updateMessage.toString();
+        }
+        return null;
+    }
+    
+    public static String completeTask(TaskWithAttachment task) {
+        System.out.println("complete task");
+        if(task != null){
+            JsonObject updateMessage = createMessage(task, "complete");
             return updateMessage.toString();
         }
         return null;
     }
 
-    private static TaskWithAttachment getTaskById(int id) {
-        for (TaskWithAttachment t : tasks) {
-            if (t.getId() == id) {
-                return t;
+//    private static TaskWithAttachment getTaskById(int id) {
+//        for (TaskWithAttachment t : tasks) {
+//            if (t.getId() == id) {
+//                return t;
+//            }
+//        }
+//        return null;
+//    }
+    
+    private static int getTaskIndex(int id){
+        int index = -1;
+        for(int i=0; i<tasks.size(); i++){
+            if(tasks.get(i).getId() == id){
+                index = i;
             }
         }
-        return null;
+        return index;
     }
 
-    private static JsonObject createAddMessage(TaskWithAttachment task) {
+    private static JsonObject createMessage(TaskWithAttachment task, String action) {
         JsonProvider provider = JsonProvider.provider();
         JsonObject addMessage = provider.createObjectBuilder()
-                .add("action", "add")
+                .add("action", action)
                 .add("id", task.getId())
                 .add("name", task.getName())
                 .add("location", task.getLocation())
