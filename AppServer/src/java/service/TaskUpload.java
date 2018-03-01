@@ -105,6 +105,7 @@ public class TaskUpload extends HttpServlet {
                 newTask = (Task)statement.getResultSet();
                 t.setId(taskId);
                 t.setCreationTime(creationTime.toString());
+                t.setDepartment(Integer.parseInt(dep));
             }
             
         } catch (SQLException ex) {
@@ -127,6 +128,7 @@ public class TaskUpload extends HttpServlet {
         // obtains the upload file part in this multipart request
         Part filePart = request.getPart("file");
         System.out.println("filePart");
+        System.out.println(filePart.getSubmittedFileName());
         System.out.println(filePart);
         if (filePart.getSize() > 0 && filePart.getSubmittedFileName() != null) {
             // prints out some information for debugging
@@ -181,8 +183,6 @@ public class TaskUpload extends HttpServlet {
         }
         
         ObjectMapper mapper = new ObjectMapper();
-//        System.out.println(mapper.writeValueAsString(t));
-//        WebSocketServer.getInstance().onMessage(mapper.writeValueAsString(t));
 
         WebSocketServer.sendAll(mapper.writeValueAsString(t), "add");
         

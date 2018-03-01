@@ -48,7 +48,7 @@ import websocket.WebSocketServer;
 @Path("task")
 public class TaskFacadeREST extends AbstractFacade<Task> {
 
-    @PersistenceContext(unitName = "AppServerTestPU")
+    @PersistenceContext(unitName = "AppServerPU")
      EntityManager em;
     
     ObjectMapper mapper = new ObjectMapper();
@@ -440,10 +440,10 @@ public class TaskFacadeREST extends AbstractFacade<Task> {
             if(tk.getCompletionUser() != null) username = tk.getCompletionUser().getUserName();
             if(tk.getCompletionTime() != null) completionTime = dateFormat.format(tk.getCompletionTime());
             if(t.get(2) == null){
-                tasks.add(new TaskWithAttachment(tk.getId(), tk.getName(), tk.getLocation(), tk.getDescription(),
+                tasks.add(new TaskWithAttachment(tk.getId(), tk.getName(), tk.getLocation(), tk.getDescription(), tk.getDepartment().getId(),
                 dateFormat.format(tk.getCreationTime()), completionTime, tk.getIsCancelled(), tk.getIsUrgent(), username));
             }else{
-                tasks.add(new TaskWithAttachment(tk.getId(), tk.getName(), tk.getLocation(), tk.getDescription(),
+                tasks.add(new TaskWithAttachment(tk.getId(), tk.getName(), tk.getLocation(), tk.getDescription(), tk.getDepartment().getId(),
                 dateFormat.format(tk.getCreationTime()), completionTime, tk.getIsCancelled(), 
                         tk.getIsUrgent(), (int)t.get(1), (String)t.get(2), username));
             }

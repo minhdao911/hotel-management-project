@@ -19,6 +19,7 @@ public class TaskWithAttachment {
     private String name;
     private String location;
     private String description;
+    private int department;
     private String completionUser = "";
     private String creationTime;
     private String completionTime = "";
@@ -33,7 +34,7 @@ public class TaskWithAttachment {
         
     }
     
-    public TaskWithAttachment(int id, String taskName, String location, String desc, String creationTime,
+    public TaskWithAttachment(int id, String taskName, String location, String desc, int dep, String creationTime,
              String completionTime, boolean isCancelled, boolean isUrgent, int fileId, String fileName, 
              String completionUser){
         this.id = id;
@@ -41,6 +42,7 @@ public class TaskWithAttachment {
         this.location = location;
         this.completionUser = completionUser;
         this.description = desc;
+        this.department = dep;
         this.creationTime = creationTime;
         this.completionTime = completionTime;
         this.isCancelled = isCancelled;
@@ -51,12 +53,13 @@ public class TaskWithAttachment {
 //        this.status = status;
     }
     
-    public TaskWithAttachment(int id, String taskName, String location, String desc, 
+    public TaskWithAttachment(int id, String taskName, String location, String desc, int dep,
             String creationTime, String completionTime, boolean isCancelled, 
             boolean isUrgent, String completionUser){
         this.id = id;
         this.name = taskName;
         this.location = location;
+        this.department = dep;
         this.completionUser = completionUser;
         this.description = desc;
         this.creationTime = creationTime;
@@ -96,6 +99,14 @@ public class TaskWithAttachment {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+    
+    public int getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(int department) {
+        this.department = department;
     }
 
     public String getCreationTime() {

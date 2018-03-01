@@ -61,6 +61,7 @@ public class WebSocketServer {
             JsonObject jsonMessage = reader.readObject();
             String returnMessage = "";
             TaskWithAttachment task;
+            int departmentId = 0;
             switch(action){
                 case "add":
                     task = new TaskWithAttachment();
@@ -68,6 +69,7 @@ public class WebSocketServer {
                     task.setName(jsonMessage.getString("name"));
                     task.setDescription(jsonMessage.getString("description"));
                     task.setLocation(jsonMessage.getString("location"));
+                    task.setDepartment(jsonMessage.getInt("department"));
                     task.setCompletionUser(jsonMessage.getString("completionUser"));
                     task.setCreationTime(jsonMessage.getString("creationTime"));
                     task.setCompletionTime(jsonMessage.getString("completionTime"));
@@ -77,30 +79,39 @@ public class WebSocketServer {
                     task.setFileName(jsonMessage.getString("fileName"));
                     task.setFileLink(jsonMessage.getString("fileLink"));
                     returnMessage = addTask(task);
+                    departmentId = task.getDepartment();
                     break;
                 case "cancel":
                     int cancelId = (int) jsonMessage.getInt("id");
                     task = tasks.get(getTaskIndex(cancelId));
                     task.setIsCancelled(jsonMessage.getBoolean("isCancelled"));
                     returnMessage = cancelTask(task);
+                    departmentId = task.getDepartment();
                     break;
                 case "accept":
                     int acceptId = (int) jsonMessage.getInt("id");
                     task = tasks.get(getTaskIndex(acceptId));
                     task.setCompletionUser(jsonMessage.getString("completionUser"));
                     returnMessage = acceptTask(task);
+                    departmentId = task.getDepartment();
                     break;
                 case "complete":
                     int doneId = (int) jsonMessage.getInt("id");
                     task = tasks.get(getTaskIndex(doneId));
                     task.setCompletionTime(jsonMessage.getString("completionTime"));
                     returnMessage = completeTask(task);
+                    departmentId = task.getDepartment();
                     break;
             }
             synchronized (sessions) {
                 for (Session session : sessions) {
                     if (session.isOpen()) {
-                        session.getAsyncRemote().sendText(returnMessage);
+//                        System.out.println(session.getRequestURI().toString());
+                        String uri = session.getRequestURI().toString();
+                        char depIdFromURI = uri.charAt(uri.length()-1);
+                        if(Character.getNumericValue(depIdFromURI) == departmentId){
+                            session.getAsyncRemote().sendText(returnMessage);
+                        }
                     }
                 }
             }

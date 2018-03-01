@@ -24,10 +24,16 @@ document.addEventListener("DOMContentLoaded", function (event) {
     let userObj = JSON.parse(userData);
     console.log(userObj);
     
-    var socket = new WebSocket("ws://209.250.247.110:8080/AppServerTest/actions/"+userObj.employee.department.id);
+    let taskData = {};
+    const getUrl = window.location;
+    const baseUrl = getUrl .protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1];
+    const url = baseUrl + "/ws/task/dep/" + userObj.employee.department.id;
+    
+    var socket = new WebSocket("ws://209.250.247.110:8080/AppServer/actions/"+userObj.employee.department.id);
     socket.onmessage = onMessage;
     
     function onMessage(event) {
+        console.log("onMessage");
         var task = JSON.parse(event.data);
         console.log(task);
         if (task.action === "add") {
@@ -69,11 +75,6 @@ document.addEventListener("DOMContentLoaded", function (event) {
         }
     }
     
-    let taskData = {};
-    const getUrl = window.location;
-    const baseUrl = getUrl .protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1];
-    const url = baseUrl + "/ws/task/dep/" + userObj.employee.department.id;
-    
     let showUserData = function(user){
         let name = user.employee.firstName + " " + user.employee.lastName;
         userNameLi.textContent = name;
@@ -106,7 +107,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
         let cu = d.completionUser ? d.completionUser : "";
         let fl = d.fileLink ? "<a href="+ d.fileLink + ">" + d.fileName + "</a>" : "";
         let name = d.name ? d.name.toUpperCase() : "";
-        console.log(name);
+//        console.log(name);
         let status = checkStatus(d);
         let result =  `
             <div class="task">
