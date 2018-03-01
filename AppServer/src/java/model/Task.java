@@ -79,6 +79,10 @@ public class Task implements Serializable {
     @ManyToOne(optional = false)
     private Department department;
     
+    @JoinColumn(name = "creationUser", referencedColumnName = "id")
+    @ManyToOne
+    private Employee creationUser;
+    
     @JoinColumn(name = "completionUser", referencedColumnName = "id")
     @ManyToOne
     private Employee completionUser;
@@ -170,6 +174,14 @@ public class Task implements Serializable {
 
     public void setDepartment(Department department) {
         this.department = department;
+    }
+    
+    public Employee getCreationUser() {
+        return creationUser;
+    }
+
+    public void setCreationUser(Employee creationUser) {
+        this.creationUser = creationUser;
     }
 
     public Employee getCompletionUser() {

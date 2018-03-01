@@ -20,26 +20,32 @@ public class TaskWithAttachment {
     private String location;
     private String description;
     private int department;
-    private String completionUser = "";
+    private String creationUser;
+    private String completionUser;
     private String creationTime;
-    private String completionTime = "";
+    private String completionTime;
     private boolean isCancelled;
     private boolean isUrgent;
-    private int fileId = 0;
-    private String fileName = "";
-    private String fileLink = "";
-//    private String status;
+    private int fileId;
+    private String fileName;
+    private String fileLink;
     
     public TaskWithAttachment(){
-        
+        this.description = "";
+        this.completionUser = "";
+        this.completionTime = "";
+        this.fileId = 0;
+        this.fileName = "";
+        this.fileLink = "";
     }
     
     public TaskWithAttachment(int id, String taskName, String location, String desc, int dep, String creationTime,
              String completionTime, boolean isCancelled, boolean isUrgent, int fileId, String fileName, 
-             String completionUser){
+             String creationUser, String completionUser){
         this.id = id;
         this.name = taskName;
         this.location = location;
+        this.creationUser = creationUser;
         this.completionUser = completionUser;
         this.description = desc;
         this.department = dep;
@@ -50,16 +56,16 @@ public class TaskWithAttachment {
         this.fileId = fileId;
         this.fileName = fileName;
         this.fileLink = "http://" + ProjectSettings.HOSTNAME + "/AppServer/download?id="+fileId;
-//        this.status = status;
     }
     
     public TaskWithAttachment(int id, String taskName, String location, String desc, int dep,
             String creationTime, String completionTime, boolean isCancelled, 
-            boolean isUrgent, String completionUser){
+            boolean isUrgent, String creationUser, String completionUser){
         this.id = id;
         this.name = taskName;
         this.location = location;
         this.department = dep;
+        this.creationUser = creationUser;
         this.completionUser = completionUser;
         this.description = desc;
         this.creationTime = creationTime;
@@ -89,18 +95,26 @@ public class TaskWithAttachment {
         return description;
     }
     
+    public void setDescription(String description){
+        this.description = description;
+    }
+
+    public String getCreationUser() {
+        return creationUser;
+    }
+
+    public void setCreationUser(String creationUser) {
+        this.creationUser = creationUser;
+    }
+    
+    public String getCompletionUser() {
+        return completionUser;
+    }
+    
     public void setCompletionUser(String user) {
         this.completionUser = user;
     }
 
-    public String getCompletionUser() {
-        return completionUser;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-    
     public int getDepartment() {
         return department;
     }
@@ -172,13 +186,4 @@ public class TaskWithAttachment {
     public void setFileLink(String fileLink){
         this.fileLink = fileLink;
     }
-    
-//    public String getStatus(){
-//        return status;
-//    }
-//    
-//    public void setStatus(String status){
-//        this.status = status;
-//    }
-    
 }

@@ -99,7 +99,6 @@ public class TaskFacadeREST extends AbstractFacade<Task> {
         TaskWithAttachment twa = new TaskWithAttachment();
         twa.setId(t.getId());
         twa.setCompletionUser(t.getCompletionUser().getUserName());
-        System.out.println("completionUser: " + t.getCompletionUser().getUserName());
         try{
             WebSocketServer.sendAll(mapper.writeValueAsString(twa), "accept");
         }catch(Exception ex){
@@ -119,7 +118,6 @@ public class TaskFacadeREST extends AbstractFacade<Task> {
         TaskWithAttachment twa = new TaskWithAttachment();
         twa.setId(t.getId());
         twa.setCompletionTime(t.getCompletionTime().toString());
-        System.out.println("completionTime: " + t.getCompletionTime().toString());
         try{
             WebSocketServer.sendAll(mapper.writeValueAsString(twa), "complete");
         }catch(Exception ex){
@@ -205,19 +203,6 @@ public class TaskFacadeREST extends AbstractFacade<Task> {
         );
         cq.orderBy(cb.desc(task.get("creationTime")));
         TypedQuery<Tuple> q = em.createQuery(cq);
-//        List<TaskWithAttachment> tasks = new ArrayList<TaskWithAttachment>();
-//        for(Tuple t : q.getResultList()){
-//            Task tk = t.get(0, Task.class);
-//            if(t.get(2) == null){
-//                tasks.add(new TaskWithAttachment(tk.getId(), tk.getName(), tk.getLocation(), tk.getDescription(),
-//                tk.getCreationTime(), tk.getCompletionTime(), tk.getIsCancelled(), tk.getIsUrgent(), tk.getCompletionUser().getUserName()));
-//            }else{
-//                tasks.add(new TaskWithAttachment(tk.getId(), tk.getName(), tk.getLocation(), tk.getDescription(),
-//                tk.getCreationTime(), tk.getCompletionTime(), tk.getIsCancelled(), 
-//                        tk.getIsUrgent(), (int)t.get(1), (String)t.get(2), tk.getCompletionUser().getUserName()));
-//            }
-//        }
-//        return tasks;
         return getResults(q.getResultList());
     }
     
@@ -240,19 +225,6 @@ public class TaskFacadeREST extends AbstractFacade<Task> {
         );
         cq.orderBy(cb.desc(task.get("creationTime")));
         TypedQuery<Tuple> q = em.createQuery(cq);
-//        List<TaskWithAttachment> tasks = new ArrayList<TaskWithAttachment>();
-//        for(Tuple t : q.getResultList()){
-//            Task tk = t.get(0, Task.class);
-//            if(t.get(2) == null){
-//                tasks.add(new TaskWithAttachment(tk.getId(), tk.getName(), tk.getLocation(), tk.getDescription(),
-//                tk.getCreationTime(), tk.getCompletionTime(), tk.getIsCancelled(), tk.getIsUrgent(), tk.getCompletionUser().getUserName()));
-//            }else{
-//                tasks.add(new TaskWithAttachment(tk.getId(), tk.getName(), tk.getLocation(), tk.getDescription(),
-//                tk.getCreationTime(), tk.getCompletionTime(), tk.getIsCancelled(), 
-//                        tk.getIsUrgent(), (int)t.get(1), (String)t.get(2), tk.getCompletionUser().getUserName()));
-//            }
-//        }
-//        return tasks;
         return getResults(q.getResultList());
     }
     
@@ -276,19 +248,6 @@ public class TaskFacadeREST extends AbstractFacade<Task> {
         );
         cq.orderBy(cb.desc(task.get("creationTime")));
         TypedQuery<Tuple> q = em.createQuery(cq);
-//        List<TaskWithAttachment> tasks = new ArrayList<TaskWithAttachment>();
-//        for(Tuple t : q.getResultList()){
-//            Task tk = t.get(0, Task.class);
-//            if(t.get(2) == null){
-//                tasks.add(new TaskWithAttachment(tk.getId(), tk.getName(), tk.getLocation(), tk.getDescription(),
-//                tk.getCreationTime(), tk.getCompletionTime(), tk.getIsCancelled(), tk.getIsUrgent(), tk.getCompletionUser().getUserName()));
-//            }else{
-//                tasks.add(new TaskWithAttachment(tk.getId(), tk.getName(), tk.getLocation(), tk.getDescription(),
-//                tk.getCreationTime(), tk.getCompletionTime(), tk.getIsCancelled(), 
-//                        tk.getIsUrgent(), (int)t.get(1), (String)t.get(2), tk.getCompletionUser().getUserName()));
-//            }
-//        }
-//        return tasks;
         return getResults(q.getResultList());
     }
     
@@ -310,19 +269,6 @@ public class TaskFacadeREST extends AbstractFacade<Task> {
         );
         cq.orderBy(cb.desc(task.get("creationTime")));
         TypedQuery<Tuple> q = em.createQuery(cq);
-//        List<TaskWithAttachment> tasks = new ArrayList<TaskWithAttachment>();
-//        for(Tuple t : q.getResultList()){
-//            Task tk = t.get(0, Task.class);
-//            if(t.get(2) == null){
-//                tasks.add(new TaskWithAttachment(tk.getId(), tk.getName(), tk.getLocation(), tk.getDescription(),
-//                tk.getCreationTime(), tk.getCompletionTime(), tk.getIsCancelled(), tk.getIsUrgent(), tk.getCompletionUser().getUserName()));
-//            }else{
-//                tasks.add(new TaskWithAttachment(tk.getId(), tk.getName(), tk.getLocation(), tk.getDescription(),
-//                tk.getCreationTime(), tk.getCompletionTime(), tk.getIsCancelled(), 
-//                        tk.getIsUrgent(), (int)t.get(1), (String)t.get(2), tk.getCompletionUser().getUserName()));
-//            }
-//        }
-//        return tasks;
         return getResults(q.getResultList());
     }
     
@@ -343,19 +289,6 @@ public class TaskFacadeREST extends AbstractFacade<Task> {
         );
         cq.orderBy(cb.desc(task.get("creationTime")));
         TypedQuery<Tuple> q = em.createQuery(cq);
-//        List<TaskWithAttachment> tasks = new ArrayList<TaskWithAttachment>();
-//        for(Tuple t : q.getResultList()){
-//            Task tk = t.get(0, Task.class);
-//            if(t.get(2) == null){
-//                tasks.add(new TaskWithAttachment(tk.getId(), tk.getName(), tk.getLocation(), tk.getDescription(),
-//                tk.getCreationTime(), tk.getCompletionTime(), tk.getIsCancelled(), tk.getIsUrgent(), tk.getCompletionUser().getUserName()));
-//            }else{
-//                tasks.add(new TaskWithAttachment(tk.getId(), tk.getName(), tk.getLocation(), tk.getDescription(),
-//                tk.getCreationTime(), tk.getCompletionTime(), tk.getIsCancelled(), 
-//                        tk.getIsUrgent(), (int)t.get(1), (String)t.get(2), tk.getCompletionUser().getUserName()));
-//            }
-//        }
-//        return tasks;
         return getResults(q.getResultList());
     }
     
@@ -378,19 +311,6 @@ public class TaskFacadeREST extends AbstractFacade<Task> {
         );
         cq.orderBy(cb.desc(task.get("creationTime")));
         TypedQuery<Tuple> q = em.createQuery(cq);
-//        List<TaskWithAttachment> tasks = new ArrayList<TaskWithAttachment>();
-//        for(Tuple t : q.getResultList()){
-//            Task tk = t.get(0, Task.class);
-//            if(t.get(2) == null){
-//                tasks.add(new TaskWithAttachment(tk.getId(), tk.getName(), tk.getLocation(), tk.getDescription(),
-//                tk.getCreationTime(), tk.getCompletionTime(), tk.getIsCancelled(), tk.getIsUrgent(), tk.getCompletionUser().getUserName()));
-//            }else{
-//                tasks.add(new TaskWithAttachment(tk.getId(), tk.getName(), tk.getLocation(), tk.getDescription(),
-//                tk.getCreationTime(), tk.getCompletionTime(), tk.getIsCancelled(), 
-//                        tk.getIsUrgent(), (int)t.get(1), (String)t.get(2), tk.getCompletionUser().getUserName()));
-//            }
-//        }
-//        return tasks;
         return getResults(q.getResultList());
     }
     
@@ -414,19 +334,6 @@ public class TaskFacadeREST extends AbstractFacade<Task> {
         );
         cq.orderBy(cb.desc(task.get("creationTime")));
         TypedQuery<Tuple> q = em.createQuery(cq);
-//        List<TaskWithAttachment> tasks = new ArrayList<TaskWithAttachment>();
-//        for(Tuple t : q.getResultList()){
-//            Task tk = t.get(0, Task.class);
-//            if(t.get(2) == null){
-//                tasks.add(new TaskWithAttachment(tk.getId(), tk.getName(), tk.getLocation(), tk.getDescription(),
-//                tk.getCreationTime(), tk.getCompletionTime(), tk.getIsCancelled(), tk.getIsUrgent(), tk.getCompletionUser().getUserName()));
-//            }else{
-//                tasks.add(new TaskWithAttachment(tk.getId(), tk.getName(), tk.getLocation(), tk.getDescription(),
-//                tk.getCreationTime(), tk.getCompletionTime(), tk.getIsCancelled(), 
-//                        tk.getIsUrgent(), (int)t.get(1), (String)t.get(2), tk.getCompletionUser().getUserName()));
-//            }
-//        }
-//        return tasks;
         return getResults(q.getResultList());
     }
     
@@ -435,17 +342,18 @@ public class TaskFacadeREST extends AbstractFacade<Task> {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
         for(Tuple t : results){
             Task tk = t.get(0, Task.class);
-            String username = null;
+            String completionUser = null;
             String completionTime = null;
-            if(tk.getCompletionUser() != null) username = tk.getCompletionUser().getUserName();
+            if(tk.getCompletionUser() != null) completionUser = tk.getCompletionUser().getUserName();
             if(tk.getCompletionTime() != null) completionTime = dateFormat.format(tk.getCompletionTime());
             if(t.get(2) == null){
-                tasks.add(new TaskWithAttachment(tk.getId(), tk.getName(), tk.getLocation(), tk.getDescription(), tk.getDepartment().getId(),
-                dateFormat.format(tk.getCreationTime()), completionTime, tk.getIsCancelled(), tk.getIsUrgent(), username));
+                tasks.add(new TaskWithAttachment(tk.getId(), tk.getName(), tk.getLocation(), tk.getDescription(), 
+                        tk.getDepartment().getId(), dateFormat.format(tk.getCreationTime()), completionTime, 
+                        tk.getIsCancelled(), tk.getIsUrgent(), tk.getCreationUser().getUserName(), completionUser));
             }else{
-                tasks.add(new TaskWithAttachment(tk.getId(), tk.getName(), tk.getLocation(), tk.getDescription(), tk.getDepartment().getId(),
-                dateFormat.format(tk.getCreationTime()), completionTime, tk.getIsCancelled(), 
-                        tk.getIsUrgent(), (int)t.get(1), (String)t.get(2), username));
+                tasks.add(new TaskWithAttachment(tk.getId(), tk.getName(), tk.getLocation(), tk.getDescription(), 
+                        tk.getDepartment().getId(), dateFormat.format(tk.getCreationTime()), completionTime, tk.getIsCancelled(), 
+                        tk.getIsUrgent(), (int)t.get(1), (String)t.get(2), tk.getCreationUser().getUserName(), completionUser));
             }
         }
         return tasks;

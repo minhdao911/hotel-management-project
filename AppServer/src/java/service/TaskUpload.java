@@ -58,13 +58,10 @@ public class TaskUpload extends HttpServlet {
         String location = request.getParameter("location");
         String dep = request.getParameter("dep");
         String desc = request.getParameter("desc");
+        String userId = request.getParameter("userId");
+        String userName = request.getParameter("userName");
         boolean urgent = "true".equals(request.getParameter("urgent"));
         Timestamp creationTime = new Timestamp(System.currentTimeMillis());
-        
-        System.out.println("post");
-        System.out.println(taskName);
-        System.out.println(request.getParameter("urgent"));
-        System.out.println(urgent);
         
         t.setName(taskName);
         t.setDescription(desc);
@@ -84,7 +81,7 @@ public class TaskUpload extends HttpServlet {
  
             // constructs SQL statement
             String sql = "INSERT INTO task (id, name, location, description, creationTime, "
-                    + "department, isCancelled, isUrgent) values (?, ?, ?, ?, ?, ?, ?, ?)";
+                    + "department, isCancelled, isUrgent, creationUser) values (?, ?, ?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement statement = conn.prepareStatement(sql);
             taskId = getMaxAttachmentId(conn, "task")+1;
             statement.setInt(1, taskId);
@@ -96,6 +93,7 @@ public class TaskUpload extends HttpServlet {
             statement.setInt(6, Integer.parseInt(dep));
             statement.setBoolean(7, false);
             statement.setBoolean(8, urgent);
+            statement.setInt(9, Integer.parseInt(userId));
             
             System.out.println("taskId: " + taskId);
             
@@ -106,6 +104,7 @@ public class TaskUpload extends HttpServlet {
                 t.setId(taskId);
                 t.setCreationTime(creationTime.toString());
                 t.setDepartment(Integer.parseInt(dep));
+                t.setCreationUser(userName);
             }
             
         } catch (SQLException ex) {

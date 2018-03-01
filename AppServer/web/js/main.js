@@ -24,11 +24,6 @@ document.addEventListener("DOMContentLoaded", function (event) {
     let userObj = JSON.parse(userData);
     console.log(userObj);
     
-    let taskData = {};
-    const getUrl = window.location;
-    const baseUrl = getUrl .protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1];
-    const url = baseUrl + "/ws/task/dep/" + userObj.employee.department.id;
-    
     var socket = new WebSocket("ws://209.250.247.110:8080/AppServer/actions/"+userObj.employee.department.id);
     socket.onmessage = onMessage;
     
@@ -75,6 +70,14 @@ document.addEventListener("DOMContentLoaded", function (event) {
         }
     }
     
+    let taskData = {
+        userId: userObj.employee.id,
+        userName: userObj.employee.userName
+    };
+    const getUrl = window.location;
+    const baseUrl = getUrl .protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1];
+    const url = baseUrl + "/ws/task/dep/" + userObj.employee.department.id;
+    
     let showUserData = function(user){
         let name = user.employee.firstName + " " + user.employee.lastName;
         userNameLi.textContent = name;
@@ -83,15 +86,15 @@ document.addEventListener("DOMContentLoaded", function (event) {
     
     let checkStatus = function(data){
         let result = "";
-        if(data.completionUser){
-            if(data.completionTime){
-                result = "DONE";
-            }else{
-                result = "PROCESS";
-            }
+        if(data.isCancelled){
+            result = "CANCELED";
         }else{
-            if(data.isCancelled){
-                result = "CANCELED";
+            if(data.completionUser){
+                if(data.completionTime){
+                    result = "DONE";
+                }else{
+                    result = "PROCESS";
+                }
             }else{
                 result = "NEW";
             }
@@ -107,7 +110,6 @@ document.addEventListener("DOMContentLoaded", function (event) {
         let cu = d.completionUser ? d.completionUser : "";
         let fl = d.fileLink ? "<a href="+ d.fileLink + ">" + d.fileName + "</a>" : "";
         let name = d.name ? d.name.toUpperCase() : "";
-//        console.log(name);
         let status = checkStatus(d);
         let result =  `
             <div class="task">
@@ -139,11 +141,12 @@ document.addEventListener("DOMContentLoaded", function (event) {
         let crt = d.creationTime ? convertTime(d.creationTime) : "";
         let name = d.name ? d.name.toUpperCase() : "";
         let fl = d.fileLink ? "<a href="+ d.fileLink + ">" + d.fileName + "</a>" : "";
+        let display = d.creationUser === userObj.employee.userName ? "none" : "inline-block";
         let result = `
             <div class="task" id="${d.id}">
               <p class="task-name">${name}</p>
               <div class="buttons">
-                <i class="fa fa-check-circle"></i>
+                <i class="fa fa-check-circle" style="display: ${display};"></i>
                 <i class="fa fa-times-circle"></i>
               </div>
               <p>Place: <span>${loc}</span></p>
@@ -169,11 +172,13 @@ document.addEventListener("DOMContentLoaded", function (event) {
         let crt = d.creationTime ? convertTime(d.creationTime) : "";
         let name = d.name ? d.name.toUpperCase() : "";
         let fl = d.fileLink ? "<a href="+ d.fileLink + ">" + d.fileName + "</a>" : "";
+        let visibility = d.completionUser === userObj.employee.userName ? "visible" : "hidden";
         let result = `
             <div class="task" id="${d.id}">
               <p class="task-name">${name}</p>
-              <div class="buttons">
+              <div class="buttons" style="visibility: ${visibility};">
                 <i class="fa fa-check-circle"></i>
+                <i class="fa fa-times-circle"></i>
               </div>
               <p>Place: <span>${loc}</span></p>
               <p>${crt}</p>
@@ -333,6 +338,22 @@ document.addEventListener("DOMContentLoaded", function (event) {
         }
     });
     
+    document.querySelector("#process").addEventListener("click", function(e){
+        if(e.target && e.target.className === "fa fa-times-circle"){
+            let id = e.target.parentNode.parentNode.id;
+            let putUrl = baseUrl + "/ws/task/cancel/" + id;
+            
+            fetch(putUrl, {method: "PUT"})
+                .then(response => fetch(url+"/cancelled"))
+                    .then(response => response.json())
+                    .then(json => showTaskData(json, canceledTaskDiv))
+                .then(result => fetch(url))
+                    .then(response => response.json())
+                    .then(json => showTaskData(json, allTaskDiv))
+                    .catch(error => console.log(error));
+        }
+    });
+    
     showUserData(userObj);
     
     fetch(baseUrl+"/ws/task/set")
@@ -341,32 +362,23 @@ document.addEventListener("DOMContentLoaded", function (event) {
 
     fetch(url)
         .then(response => response.json())
-        .then(json => {
-//            console.log(json);
-            showTaskData(json, allTaskDiv);
-        })
-//        .then(json => console.log(json))
+        .then(json => showTaskData(json, allTaskDiv))
         .catch(error => console.log(error));
 
 
     fetch(url+"/new")
         .then(response => response.json())
-        .then(json => {
-//            console.log(json);
-            showNewTaskData(json, newTaskDiv);})
-//        .then(json => console.log(json))
+        .then(json => showNewTaskData(json, newTaskDiv))
         .catch(error => console.log(error));
 
         fetch(url+"/process")
         .then(response => response.json())
         .then(json => showProcessTaskData(json, processTaskDiv))
-//        .then(json => console.log(json))
         .catch(error => console.log(error));
 
     fetch(url+"/completed")
         .then(response => response.json())
         .then(json => showTaskData(json, completedTaskDiv))
-//        .then(json => console.log(json))
         .catch(error => console.log(error));
 
     fetch(url+"/cancelled")
@@ -377,13 +389,10 @@ document.addEventListener("DOMContentLoaded", function (event) {
     fetch(url+"/urgent/new")
         .then(response => response.json())
         .then(json => showNewTaskData(json, urgentNewDiv))
-//        .then(json => console.log(json))
         .catch(error => console.log(error));
 
     fetch(url+"/urgent/process")
         .then(response => response.json())
         .then(json => showProcessTaskData(json, urgentProcessDiv))
-//        .then(json => console.log(json))
         .catch(error => console.log(error));
-    
 });

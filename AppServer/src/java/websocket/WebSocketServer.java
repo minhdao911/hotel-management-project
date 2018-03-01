@@ -70,6 +70,7 @@ public class WebSocketServer {
                     task.setDescription(jsonMessage.getString("description"));
                     task.setLocation(jsonMessage.getString("location"));
                     task.setDepartment(jsonMessage.getInt("department"));
+                    task.setCreationUser(jsonMessage.getString("creationUser"));
                     task.setCompletionUser(jsonMessage.getString("completionUser"));
                     task.setCreationTime(jsonMessage.getString("creationTime"));
                     task.setCompletionTime(jsonMessage.getString("completionTime"));
@@ -167,15 +168,6 @@ public class WebSocketServer {
         }
         return null;
     }
-
-//    private static TaskWithAttachment getTaskById(int id) {
-//        for (TaskWithAttachment t : tasks) {
-//            if (t.getId() == id) {
-//                return t;
-//            }
-//        }
-//        return null;
-//    }
     
     private static int getTaskIndex(int id){
         int index = -1;
@@ -184,6 +176,7 @@ public class WebSocketServer {
                 index = i;
             }
         }
+        System.out.println("index: " + index);
         return index;
     }
 
@@ -194,8 +187,9 @@ public class WebSocketServer {
                 .add("id", task.getId())
                 .add("name", task.getName())
                 .add("location", task.getLocation())
-                .add("description", task.getDescription())
+                .add("creationUser", task.getCreationUser())
                 .add("completionUser", task.getCompletionUser())
+                .add("description", task.getDescription())
                 .add("creationTime", task.getCreationTime())
                 .add("completionTime", task.getCompletionTime())
                 .add("isCancelled", task.getIsCancelled())
