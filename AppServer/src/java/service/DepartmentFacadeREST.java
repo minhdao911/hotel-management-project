@@ -28,7 +28,7 @@ import model.Department;
 @Path("department")
 public class DepartmentFacadeREST extends AbstractFacade<Department> {
 
-    @PersistenceContext(unitName = "AppServerPU2")
+    @PersistenceContext(unitName = "AppServerPU")
     private EntityManager em;
 
     public DepartmentFacadeREST() {
