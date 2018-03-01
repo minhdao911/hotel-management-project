@@ -50,7 +50,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
 //            var node = document.getElementById(task.id);
 //            var statusText = node.children[2];
 //            if (task.status === "On") {
-//                statusText.innerHTML = "Status: " + task.status + " (<a href=\"#\" OnClick=toggleDevice(" + task.id + ")>Turn off</a>)";
+//                statusText.innerHTML = "Status: " + task.status + "§ (<a href=\"#\" OnClick=toggleDevice(" + task.id + ")>Turn off</a>)";
 //            } else if (task.status === "Off") {
 //                statusText.innerHTML = "Status: " + task.status + " (<a href=\"#\" OnClick=toggleDevice(" + task.id + ")>Turn on</a>)";
 //            }
