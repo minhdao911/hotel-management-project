@@ -52,3 +52,4 @@ hs_err_pid*
 /AppServer/nbproject/private/
 /AppServer/build/
 /AppServer/dist/
+/AppServer/src/java/settings/ProjectSettings.java
