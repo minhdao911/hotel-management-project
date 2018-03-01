@@ -45,7 +45,7 @@ import model.TaskWithAttachment;
 @Path("task")
 public class TaskFacadeREST extends AbstractFacade<Task> {
 
-    @PersistenceContext(unitName = "AppServerPU")
+    @PersistenceContext(unitName = "AppServerPU2")
      EntityManager em;
 
     public TaskFacadeREST() {

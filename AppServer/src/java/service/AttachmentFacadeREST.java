@@ -28,7 +28,7 @@ import model.Attachment;
 @Path("attachment")
 public class AttachmentFacadeREST extends AbstractFacade<Attachment> {
 
-    @PersistenceContext(unitName = "AppServerPU")
+    @PersistenceContext(unitName = "AppServerPU2")
     private EntityManager em;
 
     public AttachmentFacadeREST() {

@@ -28,7 +28,7 @@ import model.EmployeeType;
 @Path("employeetype")
 public class EmployeeTypeFacadeREST extends AbstractFacade<EmployeeType> {
 
-    @PersistenceContext(unitName = "AppServerPU")
+    @PersistenceContext(unitName = "AppServerPU2")
     private EntityManager em;
 
     public EmployeeTypeFacadeREST() {

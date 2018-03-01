@@ -49,7 +49,7 @@ public class Task implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column(name = "ID")
     private int id;
 
     @Column(name = "name")
