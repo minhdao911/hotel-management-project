@@ -24,6 +24,7 @@ import javax.servlet.http.Part;
 import model.Task;
 import model.TaskWithAttachment;
 import org.codehaus.jackson.map.ObjectMapper;
+import settings.ProjectSettings;
 import websocket.WebSocketServer;
 
 /**
@@ -79,8 +80,7 @@ public class TaskUpload extends HttpServlet {
 
         try {
             // connects to the database
-            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/taskdb?" +
-                                   "user=minhdao&password=secret");
+            conn = DriverManager.getConnection(ProjectSettings.DATABASEURL);
  
             // constructs SQL statement
             String sql = "INSERT INTO task (id, name, location, description, creationTime, "
@@ -140,8 +140,7 @@ public class TaskUpload extends HttpServlet {
         
             try {
                 // connects to the database
-                conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/taskdb?" +
-                                       "user=minhdao&password=secret");
+                conn = DriverManager.getConnection(ProjectSettings.DATABASEURL);
 
                 // constructs SQL statement
                 String sql = "INSERT INTO attachment (id, task, fileName, fileData) values (?, ?, ?, ?)";
@@ -162,7 +161,7 @@ public class TaskUpload extends HttpServlet {
                     message += ", file uploaded and saved into database";
                     t.setfileId(attId);
                     t.setFileName(fileName);
-                    String fileLink = "http://localhost:8080/AppServer/download?id="+attId;
+                    String fileLink = "http://" + ProjectSettings.HOSTNAME + "/AppServer/download?id="+attId;
                     t.setFileLink(fileLink);
                 }
 
@@ -187,7 +186,7 @@ public class TaskUpload extends HttpServlet {
 
         WebSocketServer.sendAll(mapper.writeValueAsString(t), "add");
         
-//        response.sendRedirect("http://localhost:8080/AppServer/main.html");
+//        response.sendRedirect("http://" + ProjectSettings.HOSTNAME + "/AppServer/main.html");
     }
     
     private int getMaxAttachmentId(Connection conn, String table) throws SQLException {

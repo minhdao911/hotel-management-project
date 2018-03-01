@@ -30,7 +30,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
     let userObj = JSON.parse(userData);
     console.log(userObj);
     
-    var socket = new WebSocket("ws://localhost:8080/AppServer/actions/"+userObj.employee.department.id);
+    var socket = new WebSocket("ws://209.250.247.110:8080/AppServer/actions/"+userObj.employee.department.id);
     socket.onmessage = onMessage;
     
     function onMessage(event) {

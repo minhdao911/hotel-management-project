@@ -7,6 +7,7 @@ package model;
 
 import java.sql.Timestamp;
 import java.util.Date;
+import settings.ProjectSettings;
 
 /**
  *
@@ -46,7 +47,7 @@ public class TaskWithAttachment {
         this.isUrgent = isUrgent;
         this.fileId = fileId;
         this.fileName = fileName;
-        this.fileLink = "http://localhost:8080/AppServer/download?id="+fileId;
+        this.fileLink = "http://" + ProjectSettings.HOSTNAME + "/AppServer/download?id="+fileId;
 //        this.status = status;
     }
     
