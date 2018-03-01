@@ -21,6 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.sql.rowset.serial.SerialBlob;
 import model.Attachment;
+import settings.ProjectSettings;
 
 /**
  *
@@ -49,8 +50,7 @@ public class FileDownload extends HttpServlet {
         
         try {
             // connects to the database
-            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/taskdb?" +
-                                   "user=minhdao&password=secret");
+            conn = DriverManager.getConnection(ProjectSettings.DATABASEURL);
  
             Attachment a = getAttachmentFromDB(conn, id);
             
