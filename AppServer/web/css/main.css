@@ -65,7 +65,7 @@ img {
   margin: 5px;
 }
 
-.nav li:nth-child(3), .nav li:nth-child(4){
+.nav li:nth-child(3), .nav li:nth-child(4), .nav li:nth-child(5){
   color: black;
   font-weight: 700;
 }
@@ -78,19 +78,19 @@ img {
   margin-bottom: 0;
 }
 
-.nav li:nth-child(5), .nav li:nth-child(6), .nav li:nth-child(7) {
+.nav li:nth-child(6), .nav li:nth-child(7), .nav li:nth-child(8) {
   padding: 8px;
   text-align: left;
   border-radius: 2px;
 }
 
-.nav li:nth-child(5):hover, .nav li:nth-child(6):hover, .nav li:nth-child(7):hover {
+.nav li:nth-child(6):hover, .nav li:nth-child(7):hover, .nav li:nth-child(8):hover {
   background-color: white;
   color: #009f45;
   cursor: pointer;
 }
 
-#depName{
+#depName, #userTitle{
     text-transform: uppercase;
 }
 
@@ -278,25 +278,29 @@ img {
   color: #fe0084;
 }
 
-#addForm input, #addForm textarea{
+input, textarea{
   width: 100%;
   margin-bottom: 10px;
   margin-top: 2px;
   padding-left: 5px;
 }
 
-#addForm input{
+input{
   height: 25px;
 }
 
-#addForm #checkBox{
+#checkBox{
   width: auto;
   height: auto;
 }
 
-#addForm select{
+select{
   margin-bottom: 10px;
   margin-left: 5px;
+}
+
+input:focus, textarea:focus, select:focus, option:focus {
+  outline: none;
 }
 
 #submitBtn {

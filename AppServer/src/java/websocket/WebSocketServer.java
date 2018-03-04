@@ -110,7 +110,8 @@ public class WebSocketServer {
 //                        System.out.println(session.getRequestURI().toString());
                         String uri = session.getRequestURI().toString();
                         char depIdFromURI = uri.charAt(uri.length()-1);
-                        if(Character.getNumericValue(depIdFromURI) == departmentId){
+                        if(Character.getNumericValue(depIdFromURI) == departmentId || 
+                                Character.getNumericValue(depIdFromURI) == 1){
                             session.getAsyncRemote().sendText(returnMessage);
                         }
                     }
@@ -188,15 +189,15 @@ public class WebSocketServer {
                 .add("name", task.getName())
                 .add("location", task.getLocation())
                 .add("creationUser", task.getCreationUser())
-                .add("completionUser", task.getCompletionUser())
-                .add("description", task.getDescription())
+                .add("completionUser", task.getCompletionUser() != null ? task.getCompletionUser() : "")
+                .add("description", task.getDescription() != null ? task.getDescription() : "")
                 .add("creationTime", task.getCreationTime())
-                .add("completionTime", task.getCompletionTime())
+                .add("completionTime", task.getCompletionTime() != null ? task.getCreationTime() : "")
                 .add("isCancelled", task.getIsCancelled())
                 .add("isUrgent", task.getIsUrgent())
                 .add("fileId", task.getfileId())
-                .add("fileName", task.getFileName())
-                .add("fileLink", task.getFileLink())
+                .add("fileName", task.getFileName() != null ? task.getFileName() : "")
+                .add("fileLink", task.getFileLink() != null ? task.getFileName() : "")
                 .build();
         return addMessage;
     }

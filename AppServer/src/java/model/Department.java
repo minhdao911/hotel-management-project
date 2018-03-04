@@ -22,6 +22,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import org.codehaus.jackson.annotate.JsonIgnore;
 
 /**
  *
@@ -50,6 +51,9 @@ public class Department implements Serializable {
     
     @OneToMany(mappedBy = "department")
     private Collection<Employee> employeeCollection;
+    
+    @OneToMany(mappedBy = "department")
+    private Collection<EmployeeTitle> employeeTitleCollection;
 
     public Department() {
     }
@@ -88,6 +92,16 @@ public class Department implements Serializable {
 
     public void setEmployeeCollection(Collection<Employee> employeeCollection) {
         this.employeeCollection = employeeCollection;
+    }
+    
+    @XmlTransient
+    @JsonIgnore
+    public Collection<EmployeeTitle> getEmployeeTitleCollection() {
+        return employeeTitleCollection;
+    }
+
+    public void setEmployeeTitleCollection(Collection<EmployeeTitle> employeeTitleCollection) {
+        this.employeeTitleCollection = employeeTitleCollection;
     }
 
     @Override

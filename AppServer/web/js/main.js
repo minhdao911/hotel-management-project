@@ -2,10 +2,19 @@
 author @minhdao
  */
 //import xmlToJson from 'xml2json';
+
+let userData = localStorage.getItem('userData');
+
+if(userData === null){
+    alert("Something went wrong, please login again!");
+    window.location.replace("../AppServer/index.html");
+}
+
 document.addEventListener("DOMContentLoaded", function (event) {
     
     const userNameLi = document.querySelector("#userName");
     const depNameLi = document.querySelector("#depName");
+    const userTitleLi = document.querySelector("#userTitle");
     const urgentNewDiv = document.querySelector("#new .urgent");
     const urgentProcessDiv = document.querySelector("#process .urgent");
     const addForm = document.querySelector("#addForm");
@@ -17,9 +26,6 @@ document.addEventListener("DOMContentLoaded", function (event) {
     const processTaskDiv = document.querySelector("#process .content");
     const logoutBtn = document.querySelector("#logoutBtn");
     const file = document.getElementById("file");
-    
-    let userData = localStorage.getItem('userData');
-//    localStorage.removeItem('userData');
 
     let userObj = JSON.parse(userData);
     console.log(userObj);
@@ -82,6 +88,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
         let name = user.employee.firstName + " " + user.employee.lastName;
         userNameLi.textContent = name;
         depNameLi.textContent = user.employee.department.name;
+        userTitleLi.textContent = user.employee.employeeTitle.name;
     };
     
     let checkStatus = function(data){
@@ -283,8 +290,8 @@ document.addEventListener("DOMContentLoaded", function (event) {
     
     addForm.addEventListener("submit", function(e){
         e.preventDefault();
-        addForm.reset();
         sendData();
+        addForm.reset();
     });
     
     document.querySelector("#main").addEventListener("click", function(e){

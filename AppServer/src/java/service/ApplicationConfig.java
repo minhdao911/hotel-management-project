@@ -32,7 +32,7 @@ public class ApplicationConfig extends Application {
         resources.add(service.AttachmentFacadeREST.class);
         resources.add(service.DepartmentFacadeREST.class);
         resources.add(service.EmployeeFacadeREST.class);
-        resources.add(service.EmployeeTypeFacadeREST.class);
+        resources.add(service.EmployeeTitleFacadeREST.class);
         resources.add(service.TaskFacadeREST.class);
     }
     

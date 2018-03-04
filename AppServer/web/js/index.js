@@ -45,8 +45,17 @@ document.addEventListener("DOMContentLoaded", function (event) {
                 })
                 .then(str => (new window.DOMParser()).parseFromString(str, "text/xml"))
                 .then(data => xmlToJson(data))
-                .then(json => storeData(JSON.stringify(json)))
-                .then(res => window.location.replace("../AppServer/main.html"))
+                .then(json => {
+                    storeData(JSON.stringify(json));
+                    return json;
+                })
+                .then(res => {
+                    if(res.employee.department.id == 1){
+                        window.location.replace("../AppServer/manager.html");
+                    }else{
+                        window.location.replace("../AppServer/main.html");
+                    }     
+                })
                 .catch(error => alert(error));
     });  
 });

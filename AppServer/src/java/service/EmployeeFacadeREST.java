@@ -5,6 +5,7 @@
  */
 package service;
 
+import Utilities.UPGenerator;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -22,7 +23,9 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import model.Department;
 import model.Employee;
+import model.EmployeeTitle;
 
 /**
  *
@@ -61,6 +64,24 @@ public class EmployeeFacadeREST extends AbstractFacade<Employee> {
             return null;
         }
         return q.getSingleResult();
+    }
+    
+    @POST
+    @Path("{firstName}/{lastName}/{dep}/{title}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void createUser(@PathParam("firstName") String fn, @PathParam("lastName") String ln,
+            @PathParam("dep") int dep, @PathParam("title") int title){
+        Employee e = new Employee();
+        UPGenerator up = new UPGenerator();
+        e.setFirstName(fn);
+        e.setLastName(ln);
+        e.setUserName(up.generateUsername(fn, ln));
+        e.setPassword(up.generatePassword(fn, ln));
+        Department d = em.getReference(Department.class, dep);
+        EmployeeTitle et = em.getReference(EmployeeTitle.class, title);
+        e.setDepartment(d);
+        e.setEmployeeTitle(et);
+        super.create(e);
     }
 
     @PUT

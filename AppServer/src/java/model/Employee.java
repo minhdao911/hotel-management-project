@@ -65,9 +65,9 @@ public class Employee implements Serializable {
     @ManyToOne
     private Department department;
     
-    @JoinColumn(name = "employeeType", referencedColumnName = "id")
+    @JoinColumn(name = "employeeTitle", referencedColumnName = "id")
     @ManyToOne
-    private EmployeeType employeeType;
+    private EmployeeTitle employeeTitle;
 
     public Employee() {
     }
@@ -110,12 +110,12 @@ public class Employee implements Serializable {
         this.department = department;
     }
 
-    public EmployeeType getEmployeeType() {
-        return employeeType;
+    public EmployeeTitle getEmployeeTitle() {
+        return employeeTitle;
     }
 
-    public void setEmployeeType(EmployeeType employeeType) {
-        this.employeeType = employeeType;
+    public void setEmployeeTitle(EmployeeTitle employeeTitle) {
+        this.employeeTitle = employeeTitle;
     }
 
     @Override

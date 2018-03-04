@@ -31,6 +31,7 @@ public class TaskWithAttachment {
     private String fileLink;
     
     public TaskWithAttachment(){
+        this.location = "";
         this.description = "";
         this.completionUser = "";
         this.completionTime = "";
