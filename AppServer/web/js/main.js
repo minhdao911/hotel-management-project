@@ -84,7 +84,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
         userName: userObj.employee.userName
     };
     const getUrl = window.location;
-    const baseUrl = getUrl .protocol + "//" + getUrl.host;
+    const baseUrl = getUrl.protocol + "//" + getUrl.host;
     const url = baseUrl + "/ws/task/dep/" + userObj.employee.department.id;
     
     let showUserData = function(user){

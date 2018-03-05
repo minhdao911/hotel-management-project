@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
     
     let userData = {};
     const getUrl = window.location;
-    const baseUrl = getUrl .protocol + "//" + getUrl.host;
+    const baseUrl = getUrl.protocol + "//" + getUrl.host;
     
     let storeData = function(data){
         localStorage.setItem('userData', data);
