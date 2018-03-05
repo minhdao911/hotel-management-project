@@ -1,44 +1,111 @@
+if (document.documentElement.clientWidth <= 1000) {
+    document.getElementById('process-tab').classList.add("disabled");
+    document.getElementById('main-tab').classList.remove("disabled");
+}
+if (document.documentElement.clientWidth <= 700) {
+    document.getElementById('nav-tab').classList.add("disabled");
+}
+
+var onresize = function () {
+    //note i need to pass the event as an argument to the function
+    var width = document.documentElement.clientWidth;
+    console.log(width);
+    if (width <= 700) {
+        document.getElementById('nav-tab').classList.add("disabled");
+    }
+    else {
+        document.getElementById('nav-tab').classList.remove("disabled");
+    }
+    if (width > 1000) {
+        document.getElementById('process-tab').classList.add("disabled");
+        document.getElementById('main-tab').classList.remove("disabled");
+        document.getElementById('process-tab').classList.remove("disabled");
+        document.getElementById('btn-wrapper-2').classList.remove("btn-wrapper-active");
+        document.getElementById('btn-wrapper-1').classList.add("btn-wrapper-active");
+    } else if (width <= 1000) {
+        document.getElementById('process-tab').classList.add("disabled");
+        document.getElementById('main-tab').classList.remove("disabled");
+    }
+}
+window.addEventListener("resize", onresize);
 
 let taskArray = [];
 
 let count = 0;
 
-let navUlList = document.querySelector('.nav');
-let navLiItem = document.querySelectorAll('.nav-links');
+let activeNav = document.querySelector('.nav');
 
-let navButton = document.querySelector('.nav-buttons');
-let navButtonListen = document.querySelectorAll('.btn-wrapper');
+let navLi = document.querySelectorAll('.nav-links');
 
-
-for(let i = 0; i < navButtonListen.length; i++){
-    navButtonListen[i].addEventListener('click', function(e){
-        e.preventDefault;
-        
-        let allButton = navButton.children;
-        
-        for(let j = 0; j < allButton.length; j++){
-            allButton[j].classList.contains('btn-wrapper-active');
-            allButton[j].classList.toggle('btn-wrapper-active');
-        }
-    })
+function mainTabToggle(){
+    document.getElementById('btn-wrapper-2').classList.remove("btn-wrapper-active");
+    document.getElementById('btn-wrapper-1').classList.add("btn-wrapper-active");
+    document.getElementById('process-tab').classList.add("disabled");
+    document.getElementById('main-tab').classList.remove("disabled");
+    console.log("huhuhu");
 }
 
-for (let i = 0; i < navLiItem.length; i++){
-    navLiItem[i].addEventListener('click', function (e){
+function processTabToggle(){
+    document.getElementById('btn-wrapper-1').classList.remove("btn-wrapper-active");
+    document.getElementById('btn-wrapper-2').classList.add("btn-wrapper-active");
+    document.getElementById('main-tab').classList.add("disabled");
+    document.getElementById('process-tab').classList.remove("disabled");
+    console.log("hahaha");
+}
+
+function messageTabToggle(){
+
+}
+
+function showNavBar(){
+    var navTab = document.getElementById('nav-tab');
+    if (navTab.classList.contains("disabled")) {
+        navTab.classList.remove("disabled");
+    }
+}
+
+function hideNavBar(){
+    var width = document.documentElement.clientWidth;
+    var navTab = document.getElementById('nav-tab');
+    if (width <= 700 && !navTab.classList.contains("disabled")){
+        navTab.classList.add("disabled");
+    }
+}
+
+function mainTabHiddenToggle() {
+    document.getElementById('btn-wrapper-2h').classList.remove("btn-wrapper-active");
+    document.getElementById('btn-wrapper-1h').classList.add("btn-wrapper-active");
+    document.getElementById('process-tab').classList.add("disabled");
+    document.getElementById('main-tab').classList.remove("disabled");
+    console.log("huhuhu");
+}
+
+function processTabHiddenToggle() {
+    document.getElementById('btn-wrapper-1h').classList.remove("btn-wrapper-active");
+    document.getElementById('btn-wrapper-2h').classList.add("btn-wrapper-active");
+    document.getElementById('main-tab').classList.add("disabled");
+    document.getElementById('process-tab').classList.remove("disabled");
+    console.log("hahaha");
+}
+ 
+for (let i = 0; i < navLi.length; i++){
+    navLi[i].addEventListener('click', function (e){
         e.preventDefault;
         
-        let allLi = navUlList.children;
+        let allLi = activeNav.children;
         
         for (let t = 0; t < allLi.length; t++){
             allLi[t].classList.contains('activeNav');
             
+            let allLiCh = allLi[t].classList.contains('activeNav');
+        
             allLi[t].removeAttribute('class');
             
         }
         
         e.target.parentElement.setAttribute('class', 'activeNav');
         
-        switch (navLiItem[i].innerHTML){
+        switch (navLi[i].innerHTML){
             case 'All':
                 document.querySelector("#task-list").style.display = "";
                 document.querySelector("#task-list").style.visibility = "visible";
@@ -122,11 +189,6 @@ function cancelButton(){
     document.getElementById("my-form").reset();
     
     document.getElementById('urgent-btn').checked = false;
-    
-    let previewFile = document.querySelector("#output");
-    
-    previewFile.src = "";
-    previewFile.style.visibility = "hidden";
 }; // The X sign button that cancel add task in the form
 
 
@@ -272,6 +334,7 @@ function addTask (){
     
     ulNew.insertBefore(newLi, ulNew.childNodes[0]);
     
+    taskArray.push(li);
     
     count = count + 1;
     
@@ -297,7 +360,7 @@ function takeTask (e) {
         }
     }
     
-    let ulAll = document.getElementById("waiting-task");
+    let ulAll = document.getElementById("list");
     let checkAllList = ulAll.children;
     
     for (let b = 0; b < checkAllList.length; b++){
@@ -509,8 +572,6 @@ function doneTask (e) {
     taskTime1.setAttribute('class', 'task-time-done');
     e.target.parentElement.append(taskTime);
     duplicate.append(taskTime1);
-    
-    taskArray.push(e.target.parentElement);
     
     
     delDoneBtn ();

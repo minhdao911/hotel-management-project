@@ -4,7 +4,7 @@ body{
     height: 49.813em;
     background-image: url("../image/background.png");
     overflow: hidden;
-    max-width: 1600px;
+    max-width: 100%;
     margin: 0;
     position: relative;
     backface-visibility: hidden;
@@ -16,25 +16,38 @@ body{
     padding-bottom: 0.938em;
     background-color: #fff;
     backface-visibility: visible;
-    height: 39.750em;
+    height: 100%;
     width: 95%;
 }
 
 #wrapper{
     padding: 1.875em;
-    height: 37.625em;
-    margin: 4.125em 3.125em;
+    height: 95%;
+    margin: 4.125em 0.125em;
     display: grid;
-    grid-template-columns: 14.375em 35.625em 35.625em;
+    grid-template-columns: 15em 42% 42%;
     grid-gap: 0.625em;
     grid-auto-rows: minmax(6.250em, auto);  
 }
 
 #nav-tab{
+    position: relative;
     background-color: #009f45;
     text-align: center;
-    width: 14.375em;
+    width: 100%;
     height: 100%;
+}
+
+#show-nav-tab-hidden{
+    float: right;
+    width: 10%;
+    height: 5%;
+    display: none;
+}
+
+#show-nav-tab-hidden-btn{
+    width: 3em;
+    height: 3em;
 }
 
 #prof-card{
@@ -55,8 +68,8 @@ body{
 
 #hotel-icon{
     position: absolute;
-    top: 60%;
-    left: 10.9em;
+    top: 75%;
+    left: 25%;
 }
 
 
@@ -69,7 +82,7 @@ body{
     color: #fff;
 }
 
-.btn-wrapper{
+/* .btn-wrapper{
     background-color: #009f45;
     color: #fff;
     width: 9em;
@@ -77,16 +90,42 @@ body{
     margin: 0 auto;
     text-align: left;
     padding-left: 0.625em;
-    cursor: pointer;
+} */
+
+[id*="btn-wrapper-"]{
+    background-color: #009f45;
+    color: #fff;
+    width: 9em;
+    height: 2em;
+    margin: 0 auto;
+    text-align: left;
+    padding-left: 0.625em;
 }
 
-.btn-wrapper:hover, .btn-wrapper:active, .btn-wrapper-active {
+#btn-wrapper-1{
+    display: none;
+}
+
+#btn-wrapper-2{
+    display: none;
+}
+
+#btn-wrapper-1h{
+    display: none;
+}
+
+#btn-wrapper-2h{
+    display: none;
+}
+
+[id*="btn-wrapper-"]:hover, #btn-wrapper:active, .btn-wrapper-active {
     background-color: #fff;
     color: #009f45;
 }
 
 .button {
     padding-top: 0.5em;
+    cursor: pointer;
 }
 
 #main-tab{
@@ -115,7 +154,7 @@ body{
     text-align: center;
     padding: 0.625em 0;
     float: left;
-    width: 24%;
+    width: 25.7%;
     height: 1.250em;
     border: 0.063em solid black;
     border-top:none;
@@ -124,7 +163,7 @@ body{
 }
 
 .nav li:last-child{
-    width: 9.789em;
+    width: 22.1%;
     border-right: none !important;
 }
 
@@ -146,7 +185,7 @@ a.nav-links:link {
 
 #task-list {
     position: relative;
-    height: 34.488em;
+    height: 93%;
     -webkit-box-shadow: -0.063em 0.125em 1.188em 0.188em rgba(0,0,0,0.75);
     -moz-box-shadow: -0.063em 0.125em 1.188em 0.188em rgba(0,0,0,0.75);
     box-shadow: -0.063em 0.125em 1.188em 0.188em rgba(0,0,0,0.75);
@@ -281,6 +320,7 @@ a.nav-links:link {
 }
 
 #process-tab{
+    position: relative;
     height: 100%;
     width: 100%;
     -webkit-box-shadow: -0.063em 0.125em 1.188em 0.188em rgba(0,0,0,0.75);
@@ -322,15 +362,26 @@ a.nav-links:link {
     box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.75);
 }
 
-
 .add-btn{
-    height: 3.125em;
-    width: 3.125em; 
+    height: 5em;
+    width: 5em; 
 }
 .add-btn-form{
     position: absolute;
-    top: 73%;
-    right: 6%;
+    top: 85%;
+    right: 2%;
+}
+
+.add-btn-hidden{
+    height: 5em;
+    width: 5em;
+}
+
+.add-btn-form-hidden{
+    position: absolute;
+    top: 85%;
+    right: 2%;
+    display: none;
 }
 
 #hidden-add-form{
@@ -408,21 +459,15 @@ a.nav-links:link {
     width: 10em;
 }
 
-.add-btn-hidden{
-    height: 3.125em;
-    width: 3.125em; 
-    visibility: hidden;
-}
-
-.add-btn-form-hidden{
-    position: absolute;
-    bottom: 2.5em;
-    right: 6.5em;
-}
-
 .task-image {
     height: 12em;
     width: 10em;
 }
 
+.disabled{
+    display: none;
+}
 
+#small-screen-logo{
+    display: none;
+}
