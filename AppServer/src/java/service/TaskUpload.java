@@ -162,7 +162,7 @@ public class TaskUpload extends HttpServlet {
                     message += ", file uploaded and saved into database";
                     t.setfileId(attId);
                     t.setFileName(fileName);
-                    String fileLink = "http://" + ProjectSettings.HOSTNAME + "/AppServer/download?id="+attId;
+                    String fileLink = "http://" + ProjectSettings.HOSTNAME + "/download?id="+attId;
                     t.setFileLink(fileLink);
                 }
 

@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
     
     let userData = {};
     const getUrl = window.location;
-    const baseUrl = getUrl .protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1];
+    const baseUrl = getUrl .protocol + "//" + getUrl.host;
     
     let storeData = function(data){
         localStorage.setItem('userData', data);
@@ -51,9 +51,9 @@ document.addEventListener("DOMContentLoaded", function (event) {
                 })
                 .then(res => {
                     if(res.employee.department.id == 1){
-                        window.location.replace("../AppServer/manager.html");
+                        window.location.replace("../manager.html");
                     }else{
-                        window.location.replace("../AppServer/main.html");
+                        window.location.replace("../main.html");
                     }     
                 })
                 .catch(error => alert(error));
