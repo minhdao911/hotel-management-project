@@ -29,6 +29,7 @@ public class TaskWithAttachment {
     private int fileId;
     private String fileName;
     private String fileLink;
+    private String fileData;
     
     public TaskWithAttachment(){
         this.location = "";
@@ -38,11 +39,12 @@ public class TaskWithAttachment {
         this.fileId = 0;
         this.fileName = "";
         this.fileLink = "";
+        this.fileData = "";
     }
     
     public TaskWithAttachment(int id, String taskName, String location, String desc, int dep, String creationTime,
              String completionTime, boolean isCancelled, boolean isUrgent, int fileId, String fileName, 
-             String creationUser, String completionUser){
+             String fileData, String creationUser, String completionUser){
         this.id = id;
         this.name = taskName;
         this.location = location;
@@ -57,6 +59,7 @@ public class TaskWithAttachment {
         this.fileId = fileId;
         this.fileName = fileName;
         this.fileLink = "http://" + ProjectSettings.HOSTNAME + "/AppServer/download?id="+fileId;
+        this.fileData = fileData;
     }
     
     public TaskWithAttachment(int id, String taskName, String location, String desc, int dep,
@@ -73,7 +76,6 @@ public class TaskWithAttachment {
         this.completionTime = completionTime;
         this.isCancelled = isCancelled;
         this.isUrgent = isUrgent;
-//        this.status = status;
     }
     
     public int getId() {
@@ -187,4 +189,13 @@ public class TaskWithAttachment {
     public void setFileLink(String fileLink){
         this.fileLink = fileLink;
     }
+
+    public String getFileData() {
+        return fileData;
+    }
+
+    public void setFileData(String fileData) {
+        this.fileData = fileData;
+    }
+    
 }

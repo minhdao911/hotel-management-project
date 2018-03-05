@@ -117,6 +117,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
         let cu = d.completionUser ? d.completionUser : "";
         let fl = d.fileLink ? "<a href="+ d.fileLink + ">" + d.fileName + "</a>" : "";
         let name = d.name ? d.name.toUpperCase() : "";
+        let img = d.fileData ? `<img src="data:image/png;base64,${d.fileData}">`: "";
         let status = checkStatus(d);
         let result =  `
             <div class="task">
@@ -133,6 +134,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
               <div class="additional-info hidden">
                 <p>Description: <span>${desc}</p>
                 <p>Attachment: <span>${fl}</span></p>
+                ${img}
               </div>
               <div class="up hidden">
                 <i class="fa fa-chevron-up"></i>
@@ -148,6 +150,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
         let crt = d.creationTime ? convertTime(d.creationTime) : "";
         let name = d.name ? d.name.toUpperCase() : "";
         let fl = d.fileLink ? "<a href="+ d.fileLink + ">" + d.fileName + "</a>" : "";
+        let img = d.fileData ? `<img src="data:image/png;base64,${d.fileData}">`: "";
         let display = d.creationUser === userObj.employee.userName ? "none" : "inline-block";
         let result = `
             <div class="task" id="${d.id}">
@@ -164,6 +167,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
               <div class="additional-info hidden">
                 <p>Description: <span>${desc}</p>
                 <p>Attachment: <span>${fl}</span></p>
+                ${img}
               </div>
               <div class="up hidden">
                 <i class="fa fa-chevron-up"></i>
@@ -179,6 +183,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
         let crt = d.creationTime ? convertTime(d.creationTime) : "";
         let name = d.name ? d.name.toUpperCase() : "";
         let fl = d.fileLink ? "<a href="+ d.fileLink + ">" + d.fileName + "</a>" : "";
+        let img = d.fileData ? `<img src="data:image/png;base64,${d.fileData}">`: "";
         let visibility = d.completionUser === userObj.employee.userName ? "visible" : "hidden";
         let result = `
             <div class="task" id="${d.id}">
@@ -195,6 +200,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
               <div class="additional-info hidden">
                 <p>Description: <span>${desc}</p>
                 <p>Attachment: <span>${fl}</span></p>
+                ${img}
               </div>
               <div class="up hidden">
                 <i class="fa fa-chevron-up"></i>
