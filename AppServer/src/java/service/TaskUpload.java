@@ -5,6 +5,7 @@
  */
 package service;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
@@ -14,6 +15,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.Base64;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
@@ -23,6 +25,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 import model.Task;
 import model.TaskWithAttachment;
+import org.apache.commons.io.IOUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import settings.ProjectSettings;
 import websocket.WebSocketServer;
@@ -70,10 +73,8 @@ public class TaskUpload extends HttpServlet {
         t.setIsUrgent(urgent);
         
         Connection conn = null; // connection to the database
-        String message = "";
         int taskId = -1;
         int attId = -1;
-        Task newTask = null;
 
         try {
             // connects to the database
@@ -99,8 +100,6 @@ public class TaskUpload extends HttpServlet {
             
             int row = statement.executeUpdate();
             if (row > 0) {
-                message += "new task added";
-                newTask = (Task)statement.getResultSet();
                 t.setId(taskId);
                 t.setCreationTime(creationTime.toString());
                 t.setDepartment(Integer.parseInt(dep));
@@ -108,7 +107,6 @@ public class TaskUpload extends HttpServlet {
             }
             
         } catch (SQLException ex) {
-            message = "ERROR: " + ex.getMessage();
             ex.printStackTrace();
         } finally {
             if (conn != null) {
@@ -123,6 +121,7 @@ public class TaskUpload extends HttpServlet {
         
         InputStream inputStream = null; // input stream of the upload file
         String fileName = null;
+        String fileData = "";
          
         // obtains the upload file part in this multipart request
         Part filePart = request.getPart("file");
@@ -153,21 +152,25 @@ public class TaskUpload extends HttpServlet {
 
                 if (inputStream != null) {
                     // fetches input stream of the upload file for the blob column
-                    statement.setBlob(4, inputStream);
+                    byte[] byteData = IOUtils.toByteArray(inputStream);
+//                    statement.setBlob(4, inputStream);
+                    statement.setBytes(4, byteData);
+                    if("image/png".equals(filePart.getContentType()) || "image/jpeg".equals(filePart.getContentType())){
+                        fileData = Base64.getEncoder().encodeToString(byteData);
+                    }
                 }
 
                 // sends the statement to the database server
                 int row = statement.executeUpdate();
                 if (row > 0) {
-                    message += ", file uploaded and saved into database";
                     t.setfileId(attId);
                     t.setFileName(fileName);
                     String fileLink = "http://" + ProjectSettings.HOSTNAME + "/download?id="+attId;
                     t.setFileLink(fileLink);
+                    t.setFileData(fileData);
                 }
 
             } catch (SQLException ex) {
-                message = "ERROR: " + ex.getMessage();
                 ex.printStackTrace();
             } finally {
                 if (conn != null) {

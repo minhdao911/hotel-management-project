@@ -79,6 +79,7 @@ public class WebSocketServer {
                     task.setfileId(jsonMessage.getInt("fileId"));
                     task.setFileName(jsonMessage.getString("fileName"));
                     task.setFileLink(jsonMessage.getString("fileLink"));
+                    task.setFileData(jsonMessage.getString("fileData"));
                     returnMessage = addTask(task);
                     departmentId = task.getDepartment();
                     break;
@@ -197,7 +198,8 @@ public class WebSocketServer {
                 .add("isUrgent", task.getIsUrgent())
                 .add("fileId", task.getfileId())
                 .add("fileName", task.getFileName() != null ? task.getFileName() : "")
-                .add("fileLink", task.getFileLink() != null ? task.getFileName() : "")
+                .add("fileLink", task.getFileLink() != null ? task.getFileLink() : "")
+                .add("fileData", task.getFileData() != null ? task.getFileData() : "")
                 .build();
         return addMessage;
     }

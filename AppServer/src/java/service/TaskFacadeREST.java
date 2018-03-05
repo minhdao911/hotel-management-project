@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -170,7 +171,7 @@ public class TaskFacadeREST extends AbstractFacade<Task> {
         CriteriaQuery<Tuple> cq = cb.createTupleQuery();
         Root<Task> task = cq.from(Task.class);
         Join<Task, Attachment> a = task.join("attachments", JoinType.LEFT);
-        cq.multiselect(task, a.get("id"), a.get("fileName"));
+        cq.multiselect(task, a);
         TypedQuery<Tuple> q = em.createQuery(cq);
         WebSocketServer.setTasks(getResults(q.getResultList()));
     }
@@ -197,7 +198,7 @@ public class TaskFacadeREST extends AbstractFacade<Task> {
         CriteriaQuery<Tuple> cq = cb.createTupleQuery();
         Root<Task> task = cq.from(Task.class);
         Join<Task, Attachment> a = task.join("attachments", JoinType.LEFT);
-        cq.multiselect(task, a.get("id"), a.get("fileName"));
+        cq.multiselect(task, a);
         cq.where(
             cb.equal(task.get("department"), new Department(id))
         );
@@ -214,7 +215,7 @@ public class TaskFacadeREST extends AbstractFacade<Task> {
         CriteriaQuery<Tuple> cq = cb.createTupleQuery();
         Root<Task> task = cq.from(Task.class);
         Join<Task, Attachment> a = task.join("attachments", JoinType.LEFT);
-        cq.multiselect(task, a.get("id"), a.get("fileName"));
+        cq.multiselect(task, a);
         cq.where(
             cb.and(
                 cb.equal(task.get("department"), new Department(id)),
@@ -236,7 +237,7 @@ public class TaskFacadeREST extends AbstractFacade<Task> {
         CriteriaQuery<Tuple> cq = cb.createTupleQuery();
         Root<Task> task = cq.from(Task.class);
         Join<Task, Attachment> a = task.join("attachments", JoinType.LEFT);
-        cq.multiselect(task, a.get("id"), a.get("fileName"));
+        cq.multiselect(task, a);
         cq.where(
             cb.and(
                 cb.equal(task.get("department"), new Department(id)),
@@ -259,7 +260,7 @@ public class TaskFacadeREST extends AbstractFacade<Task> {
         CriteriaQuery<Tuple> cq = cb.createTupleQuery();
         Root<Task> task = cq.from(Task.class);
         Join<Task, Attachment> a = task.join("attachments", JoinType.LEFT);
-        cq.multiselect(task, a.get("id"), a.get("fileName"));
+        cq.multiselect(task, a);
         cq.where(
             cb.and(
                 cb.equal(task.get("department"), new Department(id)),
@@ -280,7 +281,7 @@ public class TaskFacadeREST extends AbstractFacade<Task> {
         CriteriaQuery<Tuple> cq = cb.createTupleQuery();
         Root<Task> task = cq.from(Task.class);
         Join<Task, Attachment> a = task.join("attachments", JoinType.LEFT);
-        cq.multiselect(task, a.get("id"), a.get("fileName"));
+        cq.multiselect(task, a);
         cq.where(
             cb.and(
                 cb.equal(task.get("department"), new Department(id)),
@@ -300,7 +301,7 @@ public class TaskFacadeREST extends AbstractFacade<Task> {
         CriteriaQuery<Tuple> cq = cb.createTupleQuery();
         Root<Task> task = cq.from(Task.class);
         Join<Task, Attachment> a = task.join("attachments", JoinType.LEFT);
-        cq.multiselect(task, a.get("id"), a.get("fileName"));
+        cq.multiselect(task, a);
         cq.where(
             cb.and(
                 cb.equal(task.get("department"), new Department(id)),
@@ -322,7 +323,7 @@ public class TaskFacadeREST extends AbstractFacade<Task> {
         CriteriaQuery<Tuple> cq = cb.createTupleQuery();
         Root<Task> task = cq.from(Task.class);
         Join<Task, Attachment> a = task.join("attachments", JoinType.LEFT);
-        cq.multiselect(task, a.get("id"), a.get("fileName"));
+        cq.multiselect(task, a);
         cq.where(
             cb.and(
                 cb.equal(task.get("department"), new Department(id)),
@@ -342,18 +343,24 @@ public class TaskFacadeREST extends AbstractFacade<Task> {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
         for(Tuple t : results){
             Task tk = t.get(0, Task.class);
+            Attachment a = t.get(1, Attachment.class);
             String completionUser = null;
             String completionTime = null;
             if(tk.getCompletionUser() != null) completionUser = tk.getCompletionUser().getUserName();
             if(tk.getCompletionTime() != null) completionTime = dateFormat.format(tk.getCompletionTime());
-            if(t.get(2) == null){
+            if(a == null){
                 tasks.add(new TaskWithAttachment(tk.getId(), tk.getName(), tk.getLocation(), tk.getDescription(), 
                         tk.getDepartment().getId(), dateFormat.format(tk.getCreationTime()), completionTime, 
                         tk.getIsCancelled(), tk.getIsUrgent(), tk.getCreationUser().getUserName(), completionUser));
             }else{
+                String fileData = null;
+                String fileType = a.getFileName().substring(a.getFileName().length()-3);
+                if(fileType.equals("png") || fileType.equals("jpg")){
+                    fileData = Base64.getEncoder().encodeToString(a.getFileData());
+                }
                 tasks.add(new TaskWithAttachment(tk.getId(), tk.getName(), tk.getLocation(), tk.getDescription(), 
                         tk.getDepartment().getId(), dateFormat.format(tk.getCreationTime()), completionTime, tk.getIsCancelled(), 
-                        tk.getIsUrgent(), (int)t.get(1), (String)t.get(2), tk.getCreationUser().getUserName(), completionUser));
+                        tk.getIsUrgent(), a.getId(), a.getFileName(), fileData, tk.getCreationUser().getUserName(), completionUser));
             }
         }
         return tasks;
