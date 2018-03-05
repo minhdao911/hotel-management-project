@@ -1,0 +1,94 @@
+@media (max-width: 1000px) {    
+    #btn-wrapper-1a {
+        display: none !important;
+    }
+
+    #btn-wrapper-1 {
+        display: block !important;
+    }
+    
+    #btn-wrapper-2 {
+        display: block !important;
+    }
+
+    .add-btn-form-hidden{
+        display: block !important;
+    }
+
+    #wrapper {
+        grid-template-columns: 15em 72%;
+    }
+
+    /* #main-tab {
+        width: 169%;
+    } */
+}
+
+/* @media (min-width: 1001px) {
+    #process-tab{
+        display: none;
+    }
+
+    #main-tab{
+        display: block;
+    }
+
+    #process-tab{
+        display: block;
+    }
+} */
+
+@media (max-width: 700px) {
+    #wrapper{
+        margin: 4.125em 0em;
+        padding: 0.5em 1.875em;
+        grid-template-columns: 37.625em;
+        grid-template-rows: auto auto;
+    }
+
+    #show-nav-tab-hidden{
+        display: block;
+    }
+
+    #show-nav-tab-hidden-btn{
+        background-color: white;
+    }
+
+    #nav-tab{
+        position: absolute;
+        padding: 0em 0em;
+        width: 34%;
+        height: 96%;
+        z-index: 1;
+    }
+
+    #hotel-icon {
+        left: 3em;
+        top: 72%;
+    }
+
+    #btn-wrapper-1h {
+        display: block !important;
+    }
+    
+    #btn-wrapper-2h {
+        display: block !important;
+    }
+
+    #task-list {
+        height: 92%;
+    }
+
+    #process-tab {
+        height: 100%;
+    }
+
+    #small-screen-logo{
+        position: absolute;
+        width: 25%;
+        height: 7%;
+        display: block;
+        right: 5%;
+        top: 3%;
+    }
+}
