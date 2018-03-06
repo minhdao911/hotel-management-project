@@ -23,6 +23,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
     const taskFormS = document.querySelector("#form-task-smallscreen");
     const userFormS = document.querySelector("#form-user-smallscreen");
     const checkBox = document.querySelectorAll(".checkBox");
+    const loader = document.querySelector(".loader");
 
     let userObj = JSON.parse(userData);
     console.log(userObj);
@@ -77,7 +78,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
     
     let convertTime = function(d){
         let DateArr = d.split("T");
-        let TimeArr = DateArr[1].substring(0, DateArr[1].length-6).split(".");
+        let TimeArr = DateArr[1].split("Z");
         return TimeArr[0] + " " + DateArr[0];
     };
     
@@ -298,7 +299,10 @@ document.addEventListener("DOMContentLoaded", function (event) {
                     }
                     console.log(taskData);
                 })
-                .then(res => showTaskData(taskData, allTaskDiv))
+                .then(res => {
+                    loader.style.display = "none";
+                    showTaskData(taskData, allTaskDiv)
+                })
             .catch(error => console.log(error));
     }
     

@@ -318,4 +318,32 @@ input:focus, textarea:focus, select:focus, option:focus {
   border: 2px solid red;
 }
 
+@keyframes pulse {
+  0%   { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+.loader {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-items: center;
+  margin: auto;
+  width: 3em;
+  height: 3em;
+  padding: 10px;
+}
+
+.ldr-blk {
+  height: 35%;
+  width: 35%;
+  animation: pulse 0.75s ease-in infinite alternate;
+  background-color: #009f45;
+}
+
+.an_delay {
+  background-color: #fe0084;
+  animation-delay: 0.75s;
+}
 

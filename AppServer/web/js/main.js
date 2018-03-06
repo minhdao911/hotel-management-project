@@ -26,6 +26,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
     const processTaskDiv = document.querySelector("#process .content");
     const logoutBtn = document.querySelector("#logoutBtn");
     const file = document.getElementById("file");
+    const loader = document.querySelectorAll(".loader");
 
     let userObj = JSON.parse(userData);
     console.log(userObj);
@@ -44,18 +45,26 @@ document.addEventListener("DOMContentLoaded", function (event) {
             console.log("add action");
             if(task.isUrgent) addNewTask(task, urgentNewDiv);
             else addNewTask(task, newTaskDiv);
+            loader[0].style.display = "flex";
             fetch(url)
                 .then(response => response.json())
-                .then(json => showTaskData(json, allTaskDiv))
+                .then(json => {
+                    loader[0].style.display = "none";
+                    showTaskData(json, allTaskDiv);
+                })
                 .catch(error => console.log(error));
         }
         if (task.action === "cancel") {
             console.log("cancel action");
             document.getElementById(task.id).remove();
             addTask(task, canceledTaskDiv);
+            loader[0].style.display = "flex";
             fetch(url)
                 .then(response => response.json())
-                .then(json => showTaskData(json, allTaskDiv))
+                .then(json => {
+                    loader[0].style.display = "none";
+                    showTaskData(json, allTaskDiv);
+                })
                 .catch(error => console.log(error));
         }
         if (task.action === "accept") {
@@ -63,18 +72,26 @@ document.addEventListener("DOMContentLoaded", function (event) {
             document.getElementById(task.id).remove();
             if(task.isUrgent) addProcessTask(task, urgentProcessDiv);
             else addProcessTask(task, processTaskDiv);
+            loader[0].style.display = "flex";
             fetch(url)
                 .then(response => response.json())
-                .then(json => showTaskData(json, allTaskDiv))
+                .then(json => {
+                    loader[0].style.display = "none";
+                    showTaskData(json, allTaskDiv);
+                })
                 .catch(error => console.log(error));
         }
         if (task.action === "complete") {
             console.log("complete action");
             document.getElementById(""+task.id).remove();
             addTask(task, completedTaskDiv);
+            loader[0].style.display = "flex";
             fetch(url)
                 .then(response => response.json())
-                .then(json => showTaskData(json, allTaskDiv))
+                .then(json => {
+                    loader[0].style.display = "none";
+                    showTaskData(json, allTaskDiv);
+                })
                 .catch(error => console.log(error));
         }
     }
@@ -308,16 +325,27 @@ document.addEventListener("DOMContentLoaded", function (event) {
             let id = e.target.parentNode.parentNode.id;
             let putUrl = baseUrl + "/ws/task/" + id + "/" + userObj.employee.userName;
             
+            loader[0].style.display = "flex";
+            loader[4].style.display = "flex";
+            
             fetch(putUrl, {method: "PUT"})
                 .then(response => fetch(url+"/process"))
                     .then(response => response.json())
-                    .then(json => showProcessTaskData(json, processTaskDiv))
+                    .then(json => {
+                        showProcessTaskData(json, processTaskDiv);
+                    })
                 .then(result => fetch(url+"/urgent/process"))
                     .then(response => response.json())
-                    .then(json => showProcessTaskData(json, urgentProcessDiv))
+                    .then(json => {
+                        loader[4].style.display = "none";
+                        showProcessTaskData(json, urgentProcessDiv);
+                    })
                 .then(result => fetch(url))
                     .then(response => response.json())
-                    .then(json => showTaskData(json, allTaskDiv))
+                    .then(json => {
+                        loader[0].style.display = "none";
+                        showTaskData(json, allTaskDiv);
+                    })
                     .catch(error => console.log(error));
         }
     });
@@ -327,13 +355,22 @@ document.addEventListener("DOMContentLoaded", function (event) {
             let id = e.target.parentNode.parentNode.id;
             let putUrl = baseUrl + "/ws/task/cancel/" + id;
             
+            loader[0].style.display = "flex";
+            loader[3].style.display = "flex";
+            
             fetch(putUrl, {method: "PUT"})
                 .then(response => fetch(url+"/cancelled"))
                     .then(response => response.json())
-                    .then(json => showTaskData(json, canceledTaskDiv))
+                    .then(json => {
+                        loader[3].style.display = "none";
+                        showTaskData(json, canceledTaskDiv);
+                    })
                 .then(result => fetch(url))
                     .then(response => response.json())
-                    .then(json => showTaskData(json, allTaskDiv))
+                    .then(json => {
+                        loader[0].style.display = "none";
+                        showTaskData(json, allTaskDiv);
+                    })
                     .catch(error => console.log(error));
         }
     });
@@ -343,13 +380,22 @@ document.addEventListener("DOMContentLoaded", function (event) {
             let id = e.target.parentNode.parentNode.id;
             let putUrl = baseUrl + "/ws/task/" + id;
             
+            loader[0].style.display = "flex";
+            loader[2].style.display = "flex";
+            
             fetch(putUrl, {method: "PUT"})
                 .then(response => fetch(url+"/completed"))
                     .then(response => response.json())
-                    .then(json => showTaskData(json, completedTaskDiv))
+                    .then(json => {
+                        loader[2].style.display = "none";
+                        showTaskData(json, completedTaskDiv);
+                    })
                 .then(result => fetch(url))
                     .then(response => response.json())
-                    .then(json => showTaskData(json, allTaskDiv))
+                    .then(json => {
+                        loader[0].style.display = "none";
+                        showTaskData(json, allTaskDiv);
+                    })
                     .catch(error => console.log(error));
         }
     });
@@ -359,13 +405,22 @@ document.addEventListener("DOMContentLoaded", function (event) {
             let id = e.target.parentNode.parentNode.id;
             let putUrl = baseUrl + "/ws/task/cancel/" + id;
             
+            loader[0].style.display = "flex";
+            loader[3].style.display = "flex";
+            
             fetch(putUrl, {method: "PUT"})
                 .then(response => fetch(url+"/cancelled"))
                     .then(response => response.json())
-                    .then(json => showTaskData(json, canceledTaskDiv))
+                    .then(json => {
+                        loader[3].style.display = "none";
+                        showTaskData(json, canceledTaskDiv);
+                    })
                 .then(result => fetch(url))
                     .then(response => response.json())
-                    .then(json => showTaskData(json, allTaskDiv))
+                    .then(json => {
+                        loader[0].style.display = "none";
+                        showTaskData(json, allTaskDiv);
+                    })
                     .catch(error => console.log(error));
         }
     });
@@ -378,37 +433,56 @@ document.addEventListener("DOMContentLoaded", function (event) {
 
     fetch(url)
         .then(response => response.json())
-        .then(json => showTaskData(json, allTaskDiv))
+        .then(json => {
+            loader[0].style.display = "none";
+            showTaskData(json, allTaskDiv);
+        })
         .catch(error => console.log(error));
 
 
     fetch(url+"/new")
         .then(response => response.json())
-        .then(json => showNewTaskData(json, newTaskDiv))
+        .then(json => {
+            showNewTaskData(json, newTaskDiv);
+        })
         .catch(error => console.log(error));
 
         fetch(url+"/process")
         .then(response => response.json())
-        .then(json => showProcessTaskData(json, processTaskDiv))
+        .then(json => {
+            showProcessTaskData(json, processTaskDiv);
+        })
         .catch(error => console.log(error));
 
     fetch(url+"/completed")
         .then(response => response.json())
-        .then(json => showTaskData(json, completedTaskDiv))
+        .then(json => {
+            loader[2].style.display = "none";
+            showTaskData(json, completedTaskDiv);
+        })
         .catch(error => console.log(error));
 
     fetch(url+"/cancelled")
         .then(response => response.json())
-        .then(json => showTaskData(json, canceledTaskDiv))
+        .then(json => {
+            loader[3].style.display = "none";
+            showTaskData(json, canceledTaskDiv);
+        })
         .catch(error => console.log(error));
 
     fetch(url+"/urgent/new")
         .then(response => response.json())
-        .then(json => showNewTaskData(json, urgentNewDiv))
+        .then(json => {
+            loader[1].style.display = "none";
+            showNewTaskData(json, urgentNewDiv);
+        })
         .catch(error => console.log(error));
 
     fetch(url+"/urgent/process")
         .then(response => response.json())
-        .then(json => showProcessTaskData(json, urgentProcessDiv))
+        .then(json => {
+            loader[4].style.display = "none";
+            showProcessTaskData(json, urgentProcessDiv);
+        })
         .catch(error => console.log(error));
 });
