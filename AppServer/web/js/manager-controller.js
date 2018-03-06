@@ -23,6 +23,8 @@ document.addEventListener("DOMContentLoaded", function (event) {
     const titleSelection = document.querySelector("#title");
     const depSelectionS = document.querySelector("#userDepS");
     const titleSelectionS = document.querySelector("#titleS");
+    const bar = document.querySelector(".fa-bars");
+    const nav = document.querySelector(".nav");
 
     document.querySelector("#main").addEventListener("click", function(e){
         if(e.target && e.target.className === "fa fa-chevron-down"){
@@ -138,4 +140,16 @@ document.addEventListener("DOMContentLoaded", function (event) {
             break;
         }
     }
+    
+    bar.addEventListener("mouseover", function(){
+        nav.style.left = "0px";
+    });
+
+    nav.addEventListener("mouseover", function(){
+        nav.style.left = "0px";
+    });
+
+    nav.addEventListener("mouseout", function(){
+        nav.style.left = "-180px";
+    });
 });

@@ -1,0 +1,321 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Mar 6, 2018, 10:40:00 AM
+    Author     : minhdao
+*/
+
+
+@import url('https://fonts.googleapis.com/css?family=Nanum+Gothic:400,700');
+
+body {
+  margin: 0;
+  padding: 15px;
+  background-image: url("https://78.media.tumblr.com/95883a12753d02eb173bd48bfff35d69/tumblr_p4lprp6Mbs1sdrgn9o1_1280.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  font-family: 'Nanum Gothic', sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+i:hover {
+  cursor: pointer;
+}
+
+div {
+  background-color: white;
+}
+
+.container {
+  height: 95vh;
+  display: grid;
+  grid-gap: 10px;
+  grid-template-columns: 180px repeat(2, 1fr);
+  padding: 10px;
+}
+
+h1 {
+  flex-grow: 3;
+  display: inline-block;
+}
+
+ul {
+  padding: 0;
+  margin: 0;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+}
+
+li {
+  list-style-type: none;
+}
+
+img {
+  width: 100%;
+}
+
+.nav-smallscreen {
+  grid-column: 1/-1;
+  display: none;
+  height: 60px;
+}
+
+.nav-smallscreen img{
+  max-width: 150px;
+  float: right;
+}
+
+.fa-bars {
+  font-size: 1.5em;
+  margin-top: 15px;
+  margin-left: 15px;
+}
+
+ .nav {
+  padding: 15px;
+  background-color: #009f45;
+  color: white;
+}
+
+.nav li {
+  width: 100%;
+  text-align: center;
+  margin: 5px;
+}
+
+.nav li:nth-child(3), .nav li:nth-child(4), .nav li:nth-child(5){
+  color: black;
+  font-weight: 700;
+}
+
+.nav li:nth-child(4) {
+  margin-top: 0;
+}
+
+.nav li:nth-child(3){
+  margin-bottom: 0;
+}
+
+.nav li:nth-child(6), .nav li:nth-child(7), .nav li:nth-child(8), .nav li:nth-child(9) {
+  padding: 8px;
+  text-align: left;
+  border-radius: 2px;
+}
+
+.nav li:nth-child(6):hover, .nav li:nth-child(7):hover, .nav li:nth-child(8):hover, .nav li:nth-child(9):hover {
+  background-color: white;
+  color: #009f45;
+  cursor: pointer;
+}
+
+#depName, #userTitle{
+    text-transform: uppercase;
+}
+
+#main {
+  box-shadow: 0px 2px 5px 0px rgba(153,153,153,1);
+}
+
+#main ul{
+  flex-direction: row;
+  border-bottom: 1px solid rgba(153,153,153,0.4);
+}
+
+#main li{
+  width: 25%;
+  text-align: center;
+  padding-top: 8px;
+  padding-bottom: 5px;
+}
+
+#main li:hover {
+  background-color: #fe0084;
+  color: white;
+  cursor: pointer;
+}
+
+.current {
+  background: white;
+  color: #009f45;
+}
+
+.chosen {
+  background: #fe0084;
+  color: white;
+}
+
+.hidden {
+  display: none;
+}
+
+.main-container {
+  height: 88vh;
+  padding: 15px;
+  overflow: scroll;
+}
+
+.task{
+  display: grid;
+  grid-gap: 5px;
+  grid-template-columns: 2fr 1fr;
+  padding: 10px;
+  box-shadow: 0px 2px 5px 0px rgba(153,153,153,1);
+  margin-bottom: 15px;
+}
+
+.task p{
+  font-weight: 700;
+  margin: 0;
+}
+
+.task p:nth-child(4){
+  text-align: right;
+}
+
+.task p:nth-child(5){
+  grid-column: 2;
+  text-align: right;
+}
+
+.task .task-name{
+  font-size: 1.2em;
+}
+
+.task .down, .task .up{
+  grid-column: 1/-1;
+  text-align: center;
+}
+
+.task .additional-info{
+  grid-column: 1/-1;
+}
+
+.task .additional-info p{
+  margin-bottom: 5px;
+}
+
+.task span{
+  font-weight: normal;
+}
+
+.task .buttons{
+  text-align: right;
+  font-size: 1.5em;
+}
+
+.fa-check-circle{
+  color: #009f45;
+}
+
+.fa-times-circle{
+  color: #fe0084;
+}
+
+.label{
+  text-align: right;
+  font-weight: 700;
+}
+
+.new-label{
+  color: #0061ff;
+}
+
+.process-label{
+  color: #ffc700;
+}
+
+.done-label{
+  color: #009f45;
+}
+
+.canceled-label{
+  color: #fe0084;
+}
+
+#add {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  background: none;
+}
+
+#add .fa-plus-circle {
+  font-size: 2.5em;
+  color: #fe0084;
+}
+
+#add .fa-plus-circle:hover, .fa-times-circle:hover{
+  color: #c90068;
+}
+
+.fa-check-circle:hover{
+  color: #00873a;
+}
+
+#overlay{
+  position: fixed;
+  height: 100vh;
+  width: 100%;
+  top: 0;
+  left: 0;
+  background-color: rgba(0,0,0,0.5);
+}
+
+#overlay div {
+  width: 400px;
+  margin: auto;
+  padding: 20px;
+  padding-top: 1px;
+  margin-top: 40px;
+  position: relative;
+}
+
+#overlay h3{
+  display: inline-block;
+}
+
+#overlay .fa-times{
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  font-size: 1.2em;
+}
+
+#overlay .fa-times:hover {
+  color: #fe0084;
+}
+
+input, textarea{
+  width: 100%;
+  margin-bottom: 10px;
+  margin-top: 2px;
+  padding-left: 5px;
+}
+
+input{
+  height: 25px;
+}
+
+select{
+  margin-bottom: 10px;
+  margin-left: 5px;
+}
+
+input:focus, textarea:focus, select:focus, option:focus {
+  outline: none;
+}
+
+.urgent .task{
+  border: 2px solid red;
+}
+
+

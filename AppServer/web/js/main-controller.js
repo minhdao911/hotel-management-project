@@ -19,6 +19,14 @@ document.addEventListener("DOMContentLoaded", function (event) {
     const processTaskDiv = document.querySelector("#process");
     const taskLis = document.querySelectorAll("#main-nav li");
     const submitBtn = document.querySelector("#submitBtn");
+    const bar = document.querySelector(".fa-bars");
+    const nav = document.querySelector(".nav");
+    const taskBtn = document.querySelector(".nav li:nth-child(6)");
+    const processBtn = document.querySelector(".nav li:nth-child(7)");
+    const taskDiv = document.querySelector("#main");
+    
+    console.log(taskBtn);
+    console.log(processBtn);
     
     document.querySelector("#main").addEventListener("click", function(e){
         if(e.target && e.target.className === "fa fa-chevron-down"){
@@ -77,23 +85,6 @@ document.addEventListener("DOMContentLoaded", function (event) {
         }
     });
 
-//    for(let i=0; i<downBtn.length; i++){
-//      downBtn[i].addEventListener("click", function(){
-//          console.log("down");
-//        this.classList.toggle("hidden");
-//        this.nextElementSibling.classList.toggle("hidden");
-//        this.nextElementSibling.nextElementSibling.classList.toggle("hidden");
-//      });
-//    }
-
-//    for(let i=0; i<upBtn.length; i++){
-//      upBtn[i].addEventListener("click", function(){
-//        this.classList.toggle("hidden");
-//        this.previousElementSibling.classList.toggle("hidden");
-//        this.previousElementSibling.previousElementSibling.classList.toggle("hidden");
-//      });
-//    }
-
     for(let i=0; i<checkNewBtn.length; i++){
       checkNewBtn[i].addEventListener("click", function(){
         let elem = this.parentNode.parentNode;
@@ -147,5 +138,48 @@ document.addEventListener("DOMContentLoaded", function (event) {
             }
         });
     }
+    
+    bar.addEventListener("mouseover", function(){
+        nav.style.left = "0px";
+    });
+
+    nav.addEventListener("mouseover", function(){
+        nav.style.left = "0px";
+    });
+
+    nav.addEventListener("mouseout", function(){
+        nav.style.left = "-180px";
+    });
+
+    taskBtn.addEventListener("click", function(){
+        taskDiv.classList.remove("hidden");
+        processTaskDiv.classList.add("hidden");
+        taskBtn.classList.add("current");
+        processBtn.classList.remove("current");
+    });
+
+    processBtn.addEventListener("click", function(){
+        taskDiv.classList.add("hidden");
+        processTaskDiv.classList.remove("hidden");
+        taskBtn.classList.remove("current");
+        processBtn.classList.add("current");
+    });
+
+    window.addEventListener("resize", function(){
+        if (document.documentElement.clientWidth > 1000) {
+            taskDiv.classList.remove("hidden");
+            processTaskDiv.classList.remove("hidden");
+            taskBtn.classList.add("current");
+            processBtn.classList.remove("current");
+        } else {
+            if(taskBtn.className === "current"){
+                taskDiv.classList.remove("hidden");
+                processTaskDiv.classList.add("hidden");
+            }else{
+                taskDiv.classList.add("hidden");
+                processTaskDiv.classList.remove("hidden");
+            }
+        }
+    });
 });
 
