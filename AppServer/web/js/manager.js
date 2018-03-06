@@ -48,6 +48,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
     function onMessage(event) {
         console.log("onMessage");
         var task = JSON.parse(event.data);
+        loader.style.display = "flex";
         getTasks();
     }
     
@@ -301,7 +302,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
                 })
                 .then(res => {
                     loader.style.display = "none";
-                    showTaskData(taskData, allTaskDiv)
+                    showTaskData(taskData, allTaskDiv);
                 })
             .catch(error => console.log(error));
     }
