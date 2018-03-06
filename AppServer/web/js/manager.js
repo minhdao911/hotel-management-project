@@ -88,6 +88,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
         let ct = d.completionTime ? convertTime(d.completionTime) : "";
         let cu = d.completionUser ? d.completionUser : "";
         let fl = d.fileName ? "<a href=http://teampower.fun/download?id="+ d.fileId + ">" + d.fileName + "</a>" : "";
+        let img = d.fileData ? `<img src="data:image/png;base64,${d.fileData}">`: "";
         let name = d.name ? d.name.toUpperCase() : "";
         let status = checkStatus(d);
         let result =  `
@@ -105,6 +106,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
               <div class="additional-info hidden">
                 <p>Description: <span>${desc}</p>
                 <p>Attachment: <span>${fl}</span></p>
+                ${img}
               </div>
               <div class="up hidden">
                 <i class="fa fa-chevron-up"></i>
@@ -287,10 +289,12 @@ document.addEventListener("DOMContentLoaded", function (event) {
                         for(let a of attachments){
                             taskData.tasks.task[a.task.id-1].fileName = a.fileName;
                             taskData.tasks.task[a.task.id-1].fileId = a.id;
+                            taskData.tasks.task[a.task.id-1].fileData = a.fileData;
                         }
                     }else{
                         taskData.tasks.task[attachments.task.id-1].fileName = attachments.fileName;
                         taskData.tasks.task[attachments.task.id-1].fileId = attachments.id;
+                        taskData.tasks.task[a.task.id-1].fileData = a.fileData;
                     }
                     console.log(taskData);
                 })
