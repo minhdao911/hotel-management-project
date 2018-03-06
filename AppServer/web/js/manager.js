@@ -8,7 +8,7 @@ let userData = localStorage.getItem('userData');
 
 if(userData === null){
     alert("Something went wrong, please login again!");
-    window.location.replace("../AppServer/index.html");
+    window.location.replace("../index.html");
 }
 
 document.addEventListener("DOMContentLoaded", function (event) {
@@ -37,10 +37,11 @@ document.addEventListener("DOMContentLoaded", function (event) {
     let taskData = {};
     
     const getUrl = window.location;
-    const baseUrl = getUrl .protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1];
+    const baseUrl = getUrl.protocol + "//" + getUrl.host;
     const url = baseUrl + "/ws/task";
+    const wsUrl = "ws://" + getUrl.host + "/AppServer/actions/" + userObj.employee.department.id;
     
-    var socket = new WebSocket("ws://209.250.247.110:8080/AppServer/actions/"+userObj.employee.department.id);
+    var socket = new WebSocket(wsUrl);
     socket.onmessage = onMessage;
     
     function onMessage(event) {
@@ -86,7 +87,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
         let crt = d.creationTime ? convertTime(d.creationTime) : "";
         let ct = d.completionTime ? convertTime(d.completionTime) : "";
         let cu = d.completionUser ? d.completionUser : "";
-        let fl = d.fileName ? "<a href=http://209.250.247.110:8080/AppServer/download?id="+ d.fileId + ">" + d.fileName + "</a>" : "";
+        let fl = d.fileName ? "<a href=http://teampower.fun/download?id="+ d.fileId + ">" + d.fileName + "</a>" : "";
         let name = d.name ? d.name.toUpperCase() : "";
         let status = checkStatus(d);
         let result =  `
@@ -160,7 +161,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
     
     logoutBtn.addEventListener("click", function(){
         localStorage.removeItem('userData');
-        window.location.replace("../AppServer/index.html");
+        window.location.replace("../index.html");
     });
     
     for(let i=0; i<checkBox.length; i++){
