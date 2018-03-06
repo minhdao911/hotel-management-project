@@ -58,7 +58,7 @@ public class TaskWithAttachment {
         this.isUrgent = isUrgent;
         this.fileId = fileId;
         this.fileName = fileName;
-        this.fileLink = "http://" + ProjectSettings.HOSTNAME + "/AppServer/download?id="+fileId;
+        this.fileLink = "http://" + ProjectSettings.HOSTNAME + "/download?id=" + fileId;
         this.fileData = fileData;
     }
     

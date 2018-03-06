@@ -7,7 +7,7 @@ let userData = localStorage.getItem('userData');
 
 if(userData === null){
     alert("Something went wrong, please login again!");
-    window.location.replace("../AppServer/index.html");
+    window.location.replace("../index.html");
 }
 
 document.addEventListener("DOMContentLoaded", function (event) {
@@ -30,7 +30,10 @@ document.addEventListener("DOMContentLoaded", function (event) {
     let userObj = JSON.parse(userData);
     console.log(userObj);
     
-    var socket = new WebSocket("ws://209.250.247.110:8080/AppServer/actions/"+userObj.employee.department.id);
+    const currentUrl = window.location;
+    const wsUrl = "ws://" + currentUrl.hostname + "/AppServer/actions/" + userObj.employee.department.id;
+    
+    var socket = new WebSocket(wsUrl);
     socket.onmessage = onMessage;
     
     function onMessage(event) {
@@ -81,7 +84,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
         userName: userObj.employee.userName
     };
     const getUrl = window.location;
-    const baseUrl = getUrl .protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1];
+    const baseUrl = getUrl.protocol + "//" + getUrl.host;
     const url = baseUrl + "/ws/task/dep/" + userObj.employee.department.id;
     
     let showUserData = function(user){
@@ -265,7 +268,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
     
     logoutBtn.addEventListener("click", function(){
         localStorage.removeItem('userData');
-        window.location.replace("../AppServer/index.html");
+        window.location.replace("../index.html");
     });
     
     function sendData() {
