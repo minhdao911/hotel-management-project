@@ -98,7 +98,8 @@ document.addEventListener("DOMContentLoaded", function (event) {
     
     let taskData = {
         userId: userObj.employee.id,
-        userName: userObj.employee.userName
+        userName: userObj.employee.userName,
+        urgent: false
     };
     const getUrl = window.location;
     const baseUrl = getUrl.protocol + "//" + getUrl.host;
@@ -306,7 +307,6 @@ document.addEventListener("DOMContentLoaded", function (event) {
         taskData.location = addForm.querySelector("input[name='location']").value;
         taskData.desc = addForm.querySelector("textarea[name='desc']").value;
         taskData.dep = addForm.querySelector("select[name='dep']").value;
-        taskData.urgent = false;
     });
     
     checkBox.addEventListener("click", function(){

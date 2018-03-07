@@ -87,12 +87,25 @@ document.addEventListener("DOMContentLoaded", function (event) {
         let desc = d.description ? d.description : "";
         let loc = Object.keys(d.location).length !== 0 ? d.location.replace(/\b\w/g, l => l.toUpperCase()) : "";
         let crt = d.creationTime ? convertTime(d.creationTime) : "";
-        let ct = d.completionTime ? convertTime(d.completionTime) : "";
+        let ct = d.completionTime ? `<p>${convertTime(d.completionTime)}</p>` : "";
         let cu = d.completionUser ? d.completionUser : "";
         let fl = d.fileName ? "<a href=http://teampower.fun/download?id="+ d.fileId + ">" + d.fileName + "</a>" : "";
         let img = d.fileData ? `<img src="data:image/png;base64,${d.fileData}">`: "";
         let name = d.name ? d.name.toUpperCase() : "";
         let status = checkStatus(d);
+        let creationUser = d.creationUser ? d.creationUser.firstName + " " + d.creationUser.lastName : "";
+        let completionUser = d.completionUser ? d.completionUser.firstName + " " + d.completionUser.lastName : "";
+        let usr = "";
+        if(status === "PROCESS"){
+            usr = `<p>Processed By: <span>${completionUser}</span></p>`;
+        }else if(status === "DONE"){
+            usr = `<p>Completed By: <span>${completionUser}</span></p>`;
+        }else if(status === "CANCELED"){
+            if(completionUser !== "")
+                usr = `<p>Canceled By: <span>${completionUser}</span></p>`;
+            else
+                usr = `<p>Canceled By: <span>${creationUser}</span></p>`;
+        }
         let result =  `
             <div class="task">
               <p class="task-name">${name}</p>
@@ -101,7 +114,11 @@ document.addEventListener("DOMContentLoaded", function (event) {
               </div>
               <p>Place: <span>${loc}</span></p>
               <p>${crt}</p>
-              <p>${ct}</p>
+              ${ct}
+              <div class="tasker">
+                <p>Created By: <span>${creationUser}</span></p>
+                ${usr}
+              </div>
               <div class="down">
                 <i class="fa fa-chevron-down"></i>
               </div>
