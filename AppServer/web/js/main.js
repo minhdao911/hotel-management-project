@@ -32,7 +32,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
     console.log(userObj);
     
     const currentUrl = window.location;
-    const wsUrl = "ws://" + currentUrl.hostname + "/AppServer/actions/" + userObj.employee.department.id;
+    const wsUrl = "wss://" + currentUrl.hostname + "/actions/" + userObj.employee.department.id;
     
     var socket = new WebSocket(wsUrl);
     socket.onmessage = onMessage;

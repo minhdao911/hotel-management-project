@@ -40,7 +40,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
     const getUrl = window.location;
     const baseUrl = getUrl.protocol + "//" + getUrl.host;
     const url = baseUrl + "/ws/task";
-    const wsUrl = "ws://" + getUrl.host + "/AppServer/actions/" + userObj.employee.department.id;
+    const wsUrl = "wss://" + getUrl.host + "/actions/" + userObj.employee.department.id;
     
     var socket = new WebSocket(wsUrl);
     socket.onmessage = onMessage;
