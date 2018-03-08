@@ -50,11 +50,11 @@
   }
   
   .main-container{
-      height: 80vh;
+      height: 75vh;
   }
   
-  .main{
-    height: 75vh;
+  #main{
+    height: 80vh;
   }
   
   #process{
