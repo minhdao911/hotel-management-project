@@ -49,12 +49,16 @@
     grid-template-columns: 1fr;
   }
   
+  .main-container{
+      height: 80vh;
+  }
+  
   .main{
-    height: 85vh;
+    height: 75vh;
   }
   
   #process{
-    height: 85vh;
+    height: 75vh;
   }
   
   .nav{
