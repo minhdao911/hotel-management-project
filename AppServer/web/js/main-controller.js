@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
     const checkNewBtn = document.querySelectorAll("#new .task .fa-check-circle");
     const cancelNewBtn = document.querySelectorAll("#new .task .fa-times-circle");
     const checkProcessBtn = document.querySelectorAll("#process .task .fa-check-circle");
-    const closeBtn = document.querySelector("#close");
+    const closeBtn = document.querySelectorAll(".fa-times");
     const addBtn = document.querySelector("#add");
     const overlay = document.querySelector("#overlay");
     const newTaskDiv = document.querySelector("#new");
@@ -24,9 +24,12 @@ document.addEventListener("DOMContentLoaded", function (event) {
     const taskBtn = document.querySelector(".nav li:nth-child(6)");
     const processBtn = document.querySelector(".nav li:nth-child(7)");
     const taskDiv = document.querySelector("#main");
-    
-    console.log(taskBtn);
-    console.log(processBtn);
+    const pswBtn = document.querySelector(".nav li:nth-child(8)");
+    const pswDiv = document.querySelector("#pswDiv");
+    const pswForm = document.querySelector("#pswForm");
+    const taskForm = document.querySelector("#taskForm");
+    const addForm = document.querySelector("#addForm");
+    const changePswBtn = document.querySelector("#changePswBtn");
     
     document.querySelector("#main").addEventListener("click", function(e){
         if(e.target && e.target.className === "fa fa-chevron-down"){
@@ -92,12 +95,25 @@ document.addEventListener("DOMContentLoaded", function (event) {
       });
     }
 
-    closeBtn.addEventListener("click", function(){
-      overlay.classList.add("hidden");
-    });
+    for(let i=0; i<closeBtn.length; i++){
+        closeBtn[i].addEventListener("click", function(){
+          overlay.classList.add("hidden");
+          pswForm.reset();
+          addForm.reset();
+        });
+    }
     
     submitBtn.addEventListener("click", function(){
-      overlay.classList.add("hidden");
+        closeForm();
+    });
+    
+    pswForm.addEventListener("submit", function(){
+        if(document.querySelector("input[name='oldpsw']").classList.contains("correct") &&
+                document.querySelector("input[name='verifypsw']").classList.contains("correct")){
+            document.querySelector("input[name='oldpsw']").classList.remove("correct");
+            document.querySelector("input[name='verifypsw']").classList.remove("correct");
+            closeForm();
+        }
     });
 
     addBtn.addEventListener("click", function(){
@@ -156,6 +172,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
         processTaskDiv.classList.add("hidden");
         taskBtn.classList.add("current");
         processBtn.classList.remove("current");
+        pswBtn.classList.remove("current");
     });
 
     processBtn.addEventListener("click", function(){
@@ -163,6 +180,16 @@ document.addEventListener("DOMContentLoaded", function (event) {
         processTaskDiv.classList.remove("hidden");
         taskBtn.classList.remove("current");
         processBtn.classList.add("current");
+        pswBtn.classList.remove("current");
+    });
+
+    pswBtn.addEventListener("click", function(){
+        taskBtn.classList.remove("current");
+        processBtn.classList.remove("current");
+        pswBtn.classList.add("current");
+        overlay.classList.remove("hidden");
+        taskForm.classList.add("hidden");
+        pswDiv.classList.remove("hidden");
     });
 
     window.addEventListener("resize", function(){
@@ -181,5 +208,18 @@ document.addEventListener("DOMContentLoaded", function (event) {
             }
         }
     });
+    
+    function closeForm(){
+        overlay.classList.add("hidden");
+        pswBtn.classList.remove("current");
+        taskBtn.classList.add("current");
+        if(taskDiv.classList.contains("hidden")){
+          processBtn.classList.add("current");
+        }else{
+          taskBtn.classList.add("current");
+        }
+    }
 });
+
+
 

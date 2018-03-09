@@ -27,6 +27,7 @@ and open the template in the editor.
                 <li id="userTitle"></li>
                 <li class="current">Tasks</li>
                 <li>Process</li> 
+                <li>Change Password</li>
                 <li id="logoutBtn">Log out</li>
               </ul>
             </div>
@@ -107,9 +108,9 @@ and open the template in the editor.
             <i class="fa fa-plus-circle"></i>
           </div>
           <div id="overlay" class="hidden">
-            <div>
+            <div id="taskForm">
               <h3>ADD NEW TASK</h3>
-              <i class="fa fa-times" id="close"></i>
+              <i class="fa fa-times"></i>
               <form action="upload" method="post" enctype="multipart/form-data" id="addForm">
                 Name <br>
                 <input type="text" name="name" required><br>
@@ -131,6 +132,20 @@ and open the template in the editor.
                 Attachment <br>
                 <input type="file" name="file" id="file" >
                 <button id="submitBtn">SUBMIT</button>
+              </form>
+            </div>
+            <div id="pswDiv" class="hidden">
+              <h3>Change Password</h3>
+              <i class="fa fa-times"></i>
+              <p class="hidden">Cannot change new password</p>
+              <form id="pswForm">
+                Current Password: <br>
+                <input type="password" name="oldpsw" required> <br>
+                New Password: <br>
+                <input type="password" name="newpsw" required> <br>
+                Confirm New Password: <br>
+                <input type="password" name="verifypsw" required>
+                <button id="changePswBtn">SAVE</button>
               </form>
             </div>
           </div>

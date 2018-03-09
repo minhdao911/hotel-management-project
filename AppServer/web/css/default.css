@@ -314,6 +314,10 @@ input:focus, textarea:focus, select:focus, option:focus {
   outline: none;
 }
 
+button:focus{
+    outline: none;
+}
+
 .urgent .task{
   border: 2px solid red;
 }

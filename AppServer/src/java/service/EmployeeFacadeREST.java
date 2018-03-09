@@ -90,6 +90,15 @@ public class EmployeeFacadeREST extends AbstractFacade<Employee> {
     public void edit(@PathParam("id") Integer id, Employee entity) {
         super.edit(entity);
     }
+    
+    @PUT
+    @Path("{id}/{newpass}")
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public void editPass(@PathParam("id") int id, @PathParam("newpass") String newPass) {
+        Employee e = super.find(id);
+        e.setPassword(newPass);
+        super.edit(e);
+    }
 
     @DELETE
     @Path("{id}")
