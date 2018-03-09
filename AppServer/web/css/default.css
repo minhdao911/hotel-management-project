@@ -355,7 +355,7 @@ button:focus{
   padding: 20px;
 }
 
-#pswDiv p {
+#pswDiv p, #pswDiv h5 {
   font-size: 0.8em;
   color: white;
   background-color: #d84848;

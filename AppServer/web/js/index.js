@@ -46,6 +46,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
                 .then(str => (new window.DOMParser()).parseFromString(str, "text/xml"))
                 .then(data => xmlToJson(data))
                 .then(json => {
+                    json.employee.password = userData.password;
                     storeData(JSON.stringify(json));
                     return json;
                 })

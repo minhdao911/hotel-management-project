@@ -30,6 +30,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
     const taskForm = document.querySelector("#taskForm");
     const addForm = document.querySelector("#addForm");
     const changePswBtn = document.querySelector("#changePswBtn");
+    const success = document.querySelector("#pswDiv h5");
     
     document.querySelector("#main").addEventListener("click", function(e){
         if(e.target && e.target.className === "fa fa-chevron-down"){
@@ -104,6 +105,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
 	  }else{		
 	    taskBtn.classList.add("current");		
 	  }
+          pswFormReset();
           pswForm.reset();
           addForm.reset();
         });
@@ -116,9 +118,15 @@ document.addEventListener("DOMContentLoaded", function (event) {
     pswForm.addEventListener("submit", function(){
         if(document.querySelector("input[name='oldpsw']").classList.contains("correct") &&
                 document.querySelector("input[name='verifypsw']").classList.contains("correct")){
-            document.querySelector("input[name='oldpsw']").classList.remove("correct");
-            document.querySelector("input[name='verifypsw']").classList.remove("correct");
-            closeForm();
+            pswFormReset();
+            success.classList.remove("hidden");
+            success.style.opacity = 1;
+            setTimeout(function(){
+                fade(success);
+            }, 1000);
+            setTimeout(function(){
+              closeForm();
+            }, 2000);
         }
     });
 
@@ -228,6 +236,19 @@ document.addEventListener("DOMContentLoaded", function (event) {
         }else{
           taskBtn.classList.add("current");
         }
+    }
+    
+    function pswFormReset(){
+        document.querySelector("input[name='oldpsw']").classList.remove("correct");
+        document.querySelector("input[name='verifypsw']").classList.remove("correct");
+        document.querySelector("input[name='oldpsw']").classList.remove("wrong");
+        document.querySelector("input[name='verifypsw']").classList.remove("wrong");
+    }
+    
+    function fade(elem){
+	(elem.style.opacity-=.1)<0?elem.classList.add("hidden"):setTimeout(function(){
+            fade(elem);
+        },100);
     }
 });
 

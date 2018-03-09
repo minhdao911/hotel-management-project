@@ -5,7 +5,10 @@
  */
 package service;
 
+import Utilities.PBKDF2;
 import Utilities.UPGenerator;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -47,7 +50,9 @@ public class EmployeeFacadeREST extends AbstractFacade<Employee> {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces({MediaType.APPLICATION_XML})
     public Employee login(@PathParam("username") String usrname, 
-            @PathParam("password") String pass) {
+            @PathParam("password") String pass) throws NoSuchAlgorithmException, InvalidKeySpecException {
+        
+        PBKDF2 pbkdf2 = new PBKDF2();
         
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Employee> cq = cb.createQuery(Employee.class);
@@ -55,32 +60,42 @@ public class EmployeeFacadeREST extends AbstractFacade<Employee> {
         cq.select(emp);
         cq.where(
             cb.and(
-                cb.equal(emp.get("userName"), usrname),
-                cb.equal(emp.get("password"), pass)
+                cb.equal(emp.get("userName"), usrname)
+//                cb.equal(emp.get("password"), pass)
             )
         );
         TypedQuery<Employee> q = em.createQuery(cq);
-        if (q.getResultList().isEmpty()){
-            return null;
+        if (!q.getResultList().isEmpty()){
+            List<Employee> ems = q.getResultList();
+            for(Employee e : ems){
+                if(pbkdf2.validatePassword(pass, e.getPassword()))
+                    return e;
+            }
         }
-        return q.getSingleResult();
+        return null;
     }
     
     @POST
     @Path("{firstName}/{lastName}/{dep}/{title}")
     @Consumes(MediaType.APPLICATION_JSON)
     public void createUser(@PathParam("firstName") String fn, @PathParam("lastName") String ln,
-            @PathParam("dep") int dep, @PathParam("title") int title){
+            @PathParam("dep") int dep, @PathParam("title") int title) 
+            throws NoSuchAlgorithmException, InvalidKeySpecException{
         Employee e = new Employee();
         UPGenerator up = new UPGenerator();
+        PBKDF2 pbkdf2 = new PBKDF2();
+        
         e.setFirstName(fn);
         e.setLastName(ln);
         e.setUserName(up.generateUsername(fn, ln));
-        e.setPassword(up.generatePassword(fn, ln));
+        e.setPassword(pbkdf2.generateStorngPasswordHash(up.generatePassword(fn, ln)));
+        
         Department d = em.getReference(Department.class, dep);
         EmployeeTitle et = em.getReference(EmployeeTitle.class, title);
+        
         e.setDepartment(d);
         e.setEmployeeTitle(et);
+        
         super.create(e);
     }
 
@@ -94,9 +109,12 @@ public class EmployeeFacadeREST extends AbstractFacade<Employee> {
     @PUT
     @Path("{id}/{newpass}")
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public void editPass(@PathParam("id") int id, @PathParam("newpass") String newPass) {
+    public void editPass(@PathParam("id") int id, @PathParam("newpass") String newPass) 
+            throws NoSuchAlgorithmException, InvalidKeySpecException {
+        PBKDF2 pbkdf2 = new PBKDF2();
+        
         Employee e = super.find(id);
-        e.setPassword(newPass);
+        e.setPassword(pbkdf2.generateStorngPasswordHash(newPass));
         super.edit(e);
     }
 

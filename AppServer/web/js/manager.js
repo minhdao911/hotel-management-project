@@ -177,7 +177,13 @@ document.addEventListener("DOMContentLoaded", function (event) {
         `;
         if(data.employees.employee === undefined) return;
         else{
-            for(let d of data.employees.employee){
+            if(data.employees.employee.length > 1){
+                for(let d of data.employees.employee){
+                    div.innerHTML += displayUser(d, div);
+                }
+            }
+            else{
+                let d = data.employees.employee;
                 div.innerHTML += displayUser(d, div);
             }
         }
@@ -247,8 +253,32 @@ document.addEventListener("DOMContentLoaded", function (event) {
         userFormData.firstName = form.querySelector("input[name='fn']").value;
         userFormData.lastName = form.querySelector("input[name='ln']").value;
         userFormData.dep = form.querySelector("select[name='dep']").value;
-        userFormData.title = form.querySelector("select[name='title']").value;
+        switch(userFormData.dep){
+            case "1":
+                userFormData.title = "1";
+                break;
+            case "2":
+                userFormData.title = "2";
+                break;
+            case "3":
+                userFormData.title = "6";
+                break;
+            case "4":
+                userFormData.title = "8";
+                break;
+        }
+        console.log(userFormData);
     }
+    
+    userFormS.querySelector("select[name='title']").addEventListener("change", function(){
+        userFormData.title = this.value;
+        console.log(userFormData);
+    });
+    
+    userForm.querySelector("select[name='title']").addEventListener("change", function(){
+        userFormData.title = this.value;
+        console.log(userFormData);
+    });
     
     function sendTaskData(data, form) {
         const formData = new FormData();
