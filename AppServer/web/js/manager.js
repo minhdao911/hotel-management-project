@@ -24,6 +24,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
     const userFormS = document.querySelector("#form-user-smallscreen");
     const checkBox = document.querySelectorAll(".checkBox");
     const loader = document.querySelector(".loader");
+    const pswForm = document.querySelector("#pswForm");
 
     let userObj = JSON.parse(userData);
     console.log(userObj);
@@ -36,6 +37,8 @@ document.addEventListener("DOMContentLoaded", function (event) {
     let userFormData = {};
     
     let taskData = {};
+    
+    let newPass = "";
     
     const getUrl = window.location;
     const baseUrl = getUrl.protocol + "//" + getUrl.host;
@@ -323,6 +326,49 @@ document.addEventListener("DOMContentLoaded", function (event) {
                 })
             .catch(error => console.log(error));
     }
+    
+    document.querySelector("input[name='oldpsw']").addEventListener("input", function(){
+        let pass = this.value;
+        if(pass === userObj.employee.password){
+          this.classList.add("correct");
+          this.classList.remove("wrong");
+        }else{
+          this.classList.remove("correct");
+          this.classList.add("wrong");
+        }
+    });
+
+    document.querySelector("input[name='newpsw']").addEventListener("input", function(){
+        newPass = this.value; 
+    });
+
+    document.querySelector("input[name='verifypsw']").addEventListener("input", function(){
+        let pass = this.value;
+        if(pass === newPass){
+          this.classList.add("correct");
+          this.classList.remove("wrong");
+        }else{
+          this.classList.remove("correct");
+          this.classList.add("wrong");
+        }
+    });
+
+    pswForm.addEventListener("submit", function(e){
+        e.preventDefault();
+        if(document.querySelector("input[name='oldpsw']").classList.contains("wrong") || 
+                document.querySelector("input[name='verifypsw']").classList.contains("wrong")){
+          document.querySelector("#pswDiv p").classList.remove("hidden");
+        }else{
+          document.querySelector("#pswDiv p").classList.add("hidden");
+          
+          let putUrl = baseUrl+`/ws/employee/${userObj.employee.id}/${newPass}`;
+          
+          fetch(putUrl, {method: "PUT"})
+            .then(response => console.log(response))
+            .then(res => pswForm.reset())
+            .catch(error => console.log(error));
+        }
+    });
     
     showUserData(userObj);
     

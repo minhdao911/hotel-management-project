@@ -351,3 +351,25 @@ button:focus{
   animation-delay: 0.75s;
 }
 
+#pswDiv {
+  padding: 20px;
+}
+
+#pswDiv p {
+  font-size: 0.8em;
+  color: white;
+  background-color: #d84848;
+  margin-top: 0;
+  padding: 5px;
+  text-align: center;
+  border-radius: 50px;
+}
+
+.correct{
+  border: 1px solid #009f45;
+}
+
+.wrong{
+  border: 1px solid red;
+}
+

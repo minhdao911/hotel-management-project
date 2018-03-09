@@ -98,6 +98,12 @@ document.addEventListener("DOMContentLoaded", function (event) {
     for(let i=0; i<closeBtn.length; i++){
         closeBtn[i].addEventListener("click", function(){
           overlay.classList.add("hidden");
+          pswBtn.classList.remove("current");	
+	  if(taskDiv.classList.contains("hidden")){	
+            processBtn.classList.add("current");
+	  }else{		
+	    taskBtn.classList.add("current");		
+	  }
           pswForm.reset();
           addForm.reset();
         });
@@ -118,6 +124,8 @@ document.addEventListener("DOMContentLoaded", function (event) {
 
     addBtn.addEventListener("click", function(){
       overlay.classList.remove("hidden");
+      pswDiv.classList.add("hidden");
+      taskForm.classList.remove("hidden");
     });
 
     for(let i=0; i<taskLis.length; i++){
@@ -173,6 +181,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
         taskBtn.classList.add("current");
         processBtn.classList.remove("current");
         pswBtn.classList.remove("current");
+        overlay.classList.add("hidden");
     });
 
     processBtn.addEventListener("click", function(){
@@ -181,6 +190,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
         taskBtn.classList.remove("current");
         processBtn.classList.add("current");
         pswBtn.classList.remove("current");
+        overlay.classList.add("hidden");
     });
 
     pswBtn.addEventListener("click", function(){

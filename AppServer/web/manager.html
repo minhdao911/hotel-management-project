@@ -27,6 +27,7 @@ and open the template in the editor.
                 <li id="userTitle"></li>
                 <li id="taskBtn" class="current">Tasks</li>
                 <li id="userBtn">Users</li>
+                <li id="pswBtn">Change Password</li>
                 <li id="logoutBtn">Log out</li>
               </ul>
             </div>
@@ -48,6 +49,20 @@ and open the template in the editor.
                   <table>
                     
                   </table>
+                </div>
+                  
+                <div id="pswDiv" class="hidden">
+                  <h3>Change Password</h3>
+                  <p class="hidden">Cannot change new password</p>
+                  <form id="pswForm">
+                    Current Password: <br>
+                    <input type="password" name="oldpsw" required> <br>
+                    New Password: <br>
+                    <input type="password" name="newpsw" required> <br>
+                    Confirm New Password: <br>
+                    <input type="password" name="verifypsw" required>
+                    <button id="changePswBtn">SAVE</button>
+                  </form>
                 </div>
               </div>
             </div>

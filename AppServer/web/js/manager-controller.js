@@ -25,6 +25,9 @@ document.addEventListener("DOMContentLoaded", function (event) {
     const titleSelectionS = document.querySelector("#titleS");
     const bar = document.querySelector(".fa-bars");
     const nav = document.querySelector(".nav");
+    const pswBtn = document.querySelector("#pswBtn");
+    const pswDiv = document.querySelector("#pswDiv");
+    const pswForm = document.querySelector("#pswForm");
 
     document.querySelector("#main").addEventListener("click", function(e){
         if(e.target && e.target.className === "fa fa-chevron-down"){
@@ -93,6 +96,8 @@ document.addEventListener("DOMContentLoaded", function (event) {
         userBtn.classList.remove("current");
         taskDiv.classList.remove("hidden");
         userDiv.classList.add("hidden");
+        pswBtn.classList.remove("current");
+        pswDiv.classList.add("hidden");
     });
 
     userBtn.addEventListener("click", function(){
@@ -100,6 +105,25 @@ document.addEventListener("DOMContentLoaded", function (event) {
         taskBtn.classList.remove("current");
         userDiv.classList.remove("hidden");
         taskDiv.classList.add("hidden");
+        pswBtn.classList.remove("current");
+        pswDiv.classList.add("hidden");
+    });
+    
+    pswBtn.addEventListener("click", function(){
+        this.classList.add("current");
+        taskBtn.classList.remove("current");
+        userBtn.classList.remove("current");
+        userDiv.classList.add("hidden");
+        taskDiv.classList.add("hidden");
+        pswDiv.classList.remove("hidden");
+    });
+    
+    pswForm.addEventListener("submit", function(){
+        if(document.querySelector("input[name='oldpsw']").classList.contains("correct") &&
+                document.querySelector("input[name='verifypsw']").classList.contains("correct")){
+            document.querySelector("input[name='oldpsw']").classList.remove("correct");
+            document.querySelector("input[name='verifypsw']").classList.remove("correct");
+        }
     });
     
     depSelection.addEventListener("change", function(){
