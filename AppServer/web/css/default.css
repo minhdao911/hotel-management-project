@@ -9,7 +9,7 @@ and open the template in the editor.
 */
 
 
-@import url('https://fonts.googleapis.com/css?family=Nanum+Gothic:400,700');
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:400,600');
 
 body {
   margin: 0;
@@ -17,7 +17,7 @@ body {
   background-image: url("https://78.media.tumblr.com/95883a12753d02eb173bd48bfff35d69/tumblr_p4lprp6Mbs1sdrgn9o1_1280.png");
   background-repeat: no-repeat;
   background-size: cover;
-  font-family: 'Nanum Gothic', sans-serif;
+  font-family: 'Open Sans', sans-serif;
 }
 
 * {
@@ -94,7 +94,7 @@ img {
 
 .nav li:nth-child(3), .nav li:nth-child(4), .nav li:nth-child(5){
   color: black;
-  font-weight: 700;
+  font-weight: 600;
 }
 
 .nav li:nth-child(4) {
@@ -173,7 +173,7 @@ img {
 }
 
 .task p{
-  font-weight: 700;
+  font-weight: 600;
   margin: 0;
 }
 
@@ -209,7 +209,6 @@ img {
 
 .task .buttons{
   text-align: right;
-  font-size: 1.5em;
 }
 
 .fa-check-circle{
@@ -222,7 +221,7 @@ img {
 
 .label{
   text-align: right;
-  font-weight: 700;
+  font-weight: 600;
 }
 
 .new-label{
@@ -373,3 +372,27 @@ button:focus{
   border: 1px solid red;
 }
 
+.buttons span{
+  font-size: 0.6em;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 50px;
+}
+
+.accept {
+  background-color: #009f45;
+}
+
+.accept:hover{
+  cursor: pointer;
+  background-color: #00873a;
+}
+
+.cancel {
+  background-color: #ff4d4d;
+}
+
+.cancel:hover{
+  cursor: pointer;
+  background-color: #cc0000;
+}

@@ -40,6 +40,52 @@
     background-color: #009f45;
 }
 
+#addBtn{
+  font-size: 2.5em;
+  background: #fe0084;
+  color: white;
+  padding: 0px 15px;
+  border-radius: 50px;
+}
+
+#addBtn:hover{
+  cursor: pointer;
+  background-color: #c90068;
+}
+
+.tooltip {
+    position: relative;
+}
+
+.tooltiptext {
+    visibility: hidden;
+    width: 120px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    padding: 5px 0;
+    border-radius: 6px;
+    position: absolute;
+    z-index: 1;
+    width: 90px;
+    bottom: 100%;
+    left: 50%; 
+    margin-left: -45px;
+}
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+}
+.tooltip .tooltiptext::after {
+    content: " ";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: black transparent transparent transparent;
+}
+
 @media (max-width: 1000px) {
   .container {
     grid-template-columns: 180px 1fr;

@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
     const cancelNewBtn = document.querySelectorAll("#new .task .fa-times-circle");
     const checkProcessBtn = document.querySelectorAll("#process .task .fa-check-circle");
     const closeBtn = document.querySelectorAll(".fa-times");
-    const addBtn = document.querySelector("#add");
+    const addBtn = document.querySelector("#addBtn");
     const overlay = document.querySelector("#overlay");
     const newTaskDiv = document.querySelector("#new");
     const allTaskDiv = document.querySelector("#all");

@@ -180,8 +180,8 @@ document.addEventListener("DOMContentLoaded", function (event) {
             <div class="task" id="${d.id}">
               <p class="task-name">${name}</p>
               <div class="buttons">
-                <i class="fa fa-check-circle" style="display: ${display};"></i>
-                <i class="fa fa-times-circle"></i>
+                <span class="accept" style="display: ${display};">ACCEPT</span>
+                <span class="cancel">CANCEL</span>
               </div>
               <p>Place: <span>${loc}</span></p>
               <p>${crt}</p>
@@ -213,8 +213,8 @@ document.addEventListener("DOMContentLoaded", function (event) {
             <div class="task" id="${d.id}">
               <p class="task-name">${name}</p>
               <div class="buttons" style="visibility: ${visibility};">
-                <i class="fa fa-check-circle"></i>
-                <i class="fa fa-times-circle"></i>
+                <span class="accept">COMPLETE</span>
+                <span class="cancel">CANCEL</span>
               </div>
               <p>Place: <span>${loc}</span></p>
               <p>${crt}</p>
@@ -324,7 +324,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
     });
     
     document.querySelector("#main").addEventListener("click", function(e){
-        if(e.target && e.target.className === "fa fa-check-circle"){
+        if(e.target && e.target.className === "accept"){
             let id = e.target.parentNode.parentNode.id;
             let putUrl = baseUrl + "/ws/task/" + id + "/" + userObj.employee.userName;
             
@@ -354,7 +354,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
     });
     
     document.querySelector("#main").addEventListener("click", function(e){
-        if(e.target && e.target.className === "fa fa-times-circle"){
+        if(e.target && e.target.className === "cancel"){
             let id = e.target.parentNode.parentNode.id;
             let putUrl = baseUrl + "/ws/task/cancel/" + id;
             
@@ -379,7 +379,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
     });
     
     document.querySelector("#process").addEventListener("click", function(e){
-        if(e.target && e.target.className === "fa fa-check-circle"){
+        if(e.target && e.target.className === "accept"){
             let id = e.target.parentNode.parentNode.id;
             let putUrl = baseUrl + "/ws/task/" + id;
             
@@ -404,7 +404,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
     });
     
     document.querySelector("#process").addEventListener("click", function(e){
-        if(e.target && e.target.className === "fa fa-times-circle"){
+        if(e.target && e.target.className === "cancel"){
             let id = e.target.parentNode.parentNode.id;
             let putUrl = baseUrl + "/ws/task/cancel/" + id;
             
