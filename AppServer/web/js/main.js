@@ -445,7 +445,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
 
     document.querySelector("input[name='verifypsw']").addEventListener("input", function(){
         let pass = this.value;
-        if(pass === newPass){
+        if(pass === newPass && pass !== ""){
           this.classList.add("correct");
           this.classList.remove("wrong");
         }else{
