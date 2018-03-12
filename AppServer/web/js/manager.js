@@ -82,7 +82,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
     
     let convertTime = function(d){
         let DateArr = d.split("T");
-        let TimeArr = DateArr[1].split("Z");
+        let TimeArr = DateArr[1].split("Z")[0].split(".");
         return TimeArr[0] + " " + DateArr[0];
     };
     
@@ -98,6 +98,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
         let status = checkStatus(d);
         let creationUser = d.creationUser ? d.creationUser.firstName + " " + d.creationUser.lastName : "";
         let completionUser = d.completionUser ? d.completionUser.firstName + " " + d.completionUser.lastName : "";
+        let dep = d.department.name.replace(/\b\w/g, l => l.toUpperCase());
         let usr = "";
         if(status === "PROCESS"){
             usr = `<p>Processed By: <span>${completionUser}</span></p>`;
@@ -119,6 +120,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
               <p>${crt}</p>
               ${ct}
               <div class="tasker">
+                <p>Department: <span>${dep}</span></p>
                 <p>Created By: <span>${creationUser}</span></p>
                 ${usr}
               </div>
