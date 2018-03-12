@@ -348,7 +348,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
                     }else{
                         taskData.tasks.task[attachments.task.id-1].fileName = attachments.fileName;
                         taskData.tasks.task[attachments.task.id-1].fileId = attachments.id;
-                        taskData.tasks.task[a.task.id-1].fileData = a.fileData;
+                        taskData.tasks.task[attachments.task.id-1].fileData = attachments.fileData;
                     }
                     console.log(taskData);
                 })
