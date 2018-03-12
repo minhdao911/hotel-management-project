@@ -340,7 +340,7 @@ public class TaskFacadeREST extends AbstractFacade<Task> {
     
     public List<TaskWithAttachment> getResults(List<Tuple> results){
         List<TaskWithAttachment> tasks = new ArrayList<>();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss yyyy-MM-dd");
         for(Tuple t : results){
             Task tk = t.get(0, Task.class);
             Attachment a = t.get(1, Attachment.class);

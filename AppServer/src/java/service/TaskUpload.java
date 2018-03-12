@@ -15,6 +15,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.Base64;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -54,6 +55,8 @@ public class TaskUpload extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
+        SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss yyyy-MM-dd");
         
         TaskWithAttachment t = new TaskWithAttachment();
         
@@ -101,7 +104,7 @@ public class TaskUpload extends HttpServlet {
             int row = statement.executeUpdate();
             if (row > 0) {
                 t.setId(taskId);
-                t.setCreationTime(creationTime.toString());
+                t.setCreationTime(dateFormat.format(creationTime));
                 t.setDepartment(Integer.parseInt(dep));
                 t.setCreationUser(userName);
             }
