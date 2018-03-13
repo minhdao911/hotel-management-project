@@ -338,6 +338,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
                     console.log("attachments");
                     console.log(json);
                     let attachments = json.attachments.attachment;
+                    console.log(taskData);
                     if(attachments === undefined) return;
                     if(attachments.length > 1){
                         for(let a of attachments){
@@ -346,9 +347,15 @@ document.addEventListener("DOMContentLoaded", function (event) {
                             taskData.tasks.task[a.task.id-1].fileData = a.fileData;
                         }
                     }else{
-                        taskData.tasks.task[attachments.task.id-1].fileName = attachments.fileName;
-                        taskData.tasks.task[attachments.task.id-1].fileId = attachments.id;
-                        taskData.tasks.task[attachments.task.id-1].fileData = attachments.fileData;
+                        if(taskData.tasks.task.length > 1){
+                            taskData.tasks.task[attachments.task.id-1].fileName = attachments.fileName;
+                            taskData.tasks.task[attachments.task.id-1].fileId = attachments.id;
+                            taskData.tasks.task[attachments.task.id-1].fileData = attachments.fileData;
+                        }else{
+                            taskData.tasks.task.fileName = attachments.fileName;
+                            taskData.tasks.task.fileId = attachments.id;
+                            taskData.tasks.task.fileData = attachments.fileData;
+                        }
                     }
                     console.log(taskData);
                 })
