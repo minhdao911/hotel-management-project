@@ -80,6 +80,14 @@ document.addEventListener("DOMContentLoaded", function (event) {
         return result;
     };
     
+    let checkImgAttachment = function(data){
+        let fileType = data.fileName.substring(data.fileName.length-3);
+        if(fileType === "png" || fileType === "jpg" || fileType === "gif"){
+            return `<img src="data:image/png;base64,${data.fileData}">`;
+        }
+        return "";
+    };
+    
     let convertTime = function(d){
         let DateArr = d.split("T");
         let TimeArr = DateArr[1].split("Z")[0].split(".");
@@ -93,7 +101,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
         let ct = d.completionTime ? `<p>${convertTime(d.completionTime)}</p>` : "";
         let cu = d.completionUser ? d.completionUser : "";
         let fl = d.fileName ? "<a href=http://teampower.fun/download?id="+ d.fileId + ">" + d.fileName + "</a>" : "";
-        let img = d.fileData ? `<img src="data:image/png;base64,${d.fileData}">`: "";
+        let img = d.filePath ? checkImgAttachment(d) : "";
         let name = d.name ? d.name.toUpperCase() : "";
         let status = checkStatus(d);
         let creationUser = d.creationUser ? d.creationUser.firstName + " " + d.creationUser.lastName : "";
